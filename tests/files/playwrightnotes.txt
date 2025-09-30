@@ -1,0 +1,39 @@
+==> What is framework ?
+
+Playwright framework is the structured setup we build around it for:
+
+Test organization
+Reusability
+Configurations (environments, browsers, retries, etc.)
+Reporting (Allure, HTML)
+Utilities (API calls, DB connections, Page Objects)
+
+==> Core Components of a Playwright Framework
+
+Playwright Test Runner
+Built-in test runner (@playwright/test) handles test execution, assertions, fixtures.
+Configuration File (playwright.config.ts)
+Central place for environment setup:
+i) baseURL
+ii) Browsers (Chromium, Firefox, WebKit)
+iii) Parallel execution
+iv) Retries
+v) Reporters (HTML/Allure)
+Page Object Model (POM)
+Reusable classes for each page (loginPage, dashboardPage, etc.)
+Keeps tests clean and maintainable.
+Fixtures
+Pre/post conditions (e.g., login before each test).
+Test Data Management
+Externalize data (JSON, CSV, API-driven).
+Reporting
+Built-in HTML reports or external ones (like Allure).
+Utilities / Helpers
+Custom functions (API helpers, DB queries, environment handlers).
+
+
+***************************************************************************
+To install csv and access it :-
+
+npm install --save csv-parse
+

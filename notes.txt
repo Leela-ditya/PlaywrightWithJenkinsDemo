@@ -1,0 +1,174 @@
+Verify Specific Row Data (BookName → Author mapping) :-
+------------------------------------------------------
+async function getAuthorByBook(bookName: string) {
+  const row = page.locator(`table tbody tr:has(td:text-is("${bookName}"))`);
+  return row.locator('td').nth(1).innerText();
+}
+
+const author = await getAuthorByBook('Master In Java');
+expect(author).toBe('Amod');
+
+==============================================================================================
+
+Instead of any[], you can define a proper type for clarity:
+
+	type BookRow = {
+  BookName: string;
+  Author: string;
+  Subject: string;
+  Price: string;
+};
+
+const tableData: BookRow[] = [];
+
+==============================================================================================
+
+// Wait for popup event while clicking "New Tab"
+
+const [newTab] = await Promise.all([
+  this.page.waitForEvent("popup"),
+  this.locators.newTab.click()
+]);
+
+// Wait until new tab is loaded
+await newTab.waitForLoadState("domcontentloaded");
+
+// Verify URL
+const nextPageURL = newTab.url();
+await expect(nextPageURL).toBe("https://www.pavantestingtools.com/");
+
+// Close new tab
+await newTab.close();
+
+==========================================================================================
+
+// Read a CSV File :-
+
+import fs from "fs";
+import { parse } from "csv-parse/sync";
+
+interface UserRecord {
+  test_case: string;
+  username: string;
+  password: string;
+}
+
+const records = parse(fs.readFileSync("utilis/users.csv"), {
+  columns: true,
+  skip_empty_lines: true,
+}) as UserRecord[];
+
+// Using forEach Loop
+
+records.forEach((record) => {
+  test(`Login test for ${record.test_case}`, async ({ page }) => {
+    // console.log(`Running test for user: ${record.username} and password: ${record.password}`);
+  });
+});
+
+// Using for...of Loop
+
+  for (const record of records) {
+    test(`Login test for ${record.username}`, async ({}) => {
+        console.log(`Running test for user: ${record.username} and password: ${record.password}`);
+    });
+  }
+
+==========================================================================================
+
+Viewport Size :-
+-------------
+
+await page.setViewportSize({width:1600, height:700});
+
+await page.viewportSize()?.width;
+await page.viewportSize()?.height;
+console.log(`The Viewport size is ${page.viewportSize()?.width} and ${page.viewportSize()?.height}`);
+
+
+**************************************** EXCEL *********************************************************
+// 1. Write into Excel
+
+      const worksheet = XLSX.utils.json_to_sheet(valueTable);
+      const workbook = XLSX.utils.book_new();
+      XLSX.utils.book_append_sheet(workbook, worksheet, "Sheet1");
+      XLSX.writeFile(workbook, filePath);
+
+// 2. Save to Excel (Price Offered All Loans)
+      const workbook1 = new ExcelJS.Workbook();
+      const sheet1 = workbook1.addWorksheet('PriceOfferedLoans');
+      sheet1.addRow(['Index', 'LoanDetails']);
+      loanDetails_ValueList.forEach((val, idx) => {
+          sheet1.addRow([idx + 1, val]);
+      });
+      await workbook1.xlsx.writeFile('utilis/LoanDetails_Offered.xlsx');
+
+=============================================================================================
+
+ // 1. Read from Excel
+ 
+      const readFile = XLSX.readFile(filePath);
+      const sheetName = readFile.SheetNames[0];
+      const sheet = readFile.Sheets[sheetName];
+      const excelData = XLSX.utils.sheet_to_json(sheet);
+      console.log("Data read from Excel file:");
+      console.table(excelData);
+      await this.locators.closeButton.click();
+
+ // 2. Read from 
+      const readWorkBook2 = new ExcelJS.Workbook();
+      await readWorkBook2.xlsx.readFile('utilis/LoanDetails_Locked.xlsx');
+      const lockedSheet = readWorkBook2.getWorksheet('LockedLoans');
+      let lockedValues: string[] = [];
+      if (lockedSheet) {
+          lockedSheet.eachRow((row, rowNum) => {
+              if (rowNum > 1) lockedValues.push(row.getCell(2).value?.toString() || 'Null Value');
+          });
+      }
+
+// 3. read from CSV
+
+      import fs from "fs";
+      import { parse } from "csv-parse/sync";
+
+      interface UserRecord {
+        test_case: string;
+        username: string;
+        password: string;
+      }
+
+      const records = parse(fs.readFileSync("utilis/users.csv"), {
+        columns: true,
+        skip_empty_lines: true,
+      }) as UserRecord[];
+
+// 4. read file from Excel using xlsx package
+
+// Create method to read data from Excel file
+export function readExcelFile(filePath: string){
+
+    // Read the Excel file as binary string
+    const file = fs.readFileSync(filePath);
+
+    // parse into workbook
+    const workbook = Excel.read(file, { type: 'buffer' });
+
+    // Get the first sheet name
+    const sheet = workbook.Sheets[workbook.SheetNames[0]];
+
+    // Convert sheet to JSON
+    const rawData: any[] = Excel.utils.sheet_to_json(sheet, {header: 1});
+
+    // convert rawData into TestRecord
+    const records = rawData.slice(1).map((column : any[])=> ({
+        Skill1 : column[0],
+        Skill2 : column[1],
+    }));
+    return records;
+
+    // Log the data to console
+    console.log(rawData);
+
+
+}
+

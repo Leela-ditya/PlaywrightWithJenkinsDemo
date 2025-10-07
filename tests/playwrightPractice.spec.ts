@@ -18,7 +18,7 @@ test.beforeEach('GotoURL "Automation Testing Practice" for each test', async ({p
     await openGivenURL.gotoURL();
 });
 
-test('Playwright built-in locators', async({page})=> {
+test('Playwright built-in locators',{tag : ['@playwrightBuiltinLocators']}, async({page})=> {
     
     const getByRoleSection = new GetByRoleLocators(page);
     await getByRoleSection.getByRoleLocator("Paarivel Kannan");

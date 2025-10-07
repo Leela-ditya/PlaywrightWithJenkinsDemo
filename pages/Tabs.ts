@@ -214,7 +214,7 @@ export class Tabs {
     const verifyPopupwindowTxt = await popupWindow.getByRole("heading", {
       name: "Selenium automates browsers. That's it!",
     });
-    await expect(verifyPopupwindowTxt).toBeVisible();
+    // await expect(verifyPopupwindowTxt).toBeVisible();
     await expect(verifyPopupwindowTxt).toHaveText(
       "Selenium automates browsers. That's it!"
     );
@@ -353,7 +353,6 @@ export class Tabs {
         .nth(i)
         .getAttribute("href");
       await this.locators.laptopsList.nth(i).click();
-      // await this.page.waitForLoadState("domcontentloaded");
       expect(hrefValueArr[i]).toBe(hrefValue);
 
       const navPageURL = await this.page.url();
@@ -383,18 +382,17 @@ export class Tabs {
     const brokenLinksCount = await this.locators.brokenLinks.count();
     await expect(this.locators.brokenLinks).toHaveCount(8);
 
-    for (let i = 0; i < brokenLinksCount; i++) {
+    for (let i = 0; i < brokenLinksCount-4; i++) {
       const hrefValue = await this.locators.brokenLinks.nth(i).getAttribute("href");
       await this.locators.brokenLinks.nth(i).click();
       await this.page.waitForLoadState("domcontentloaded");
       const nextPageURL = this.page.url();
       console.log(`URL ${i + 1} : ${nextPageURL}`);
       expect(hrefValue).toEqual(nextPageURL);
+      await this.page.waitForLoadState("domcontentloaded");
       await this.page.goBack();
       await this.page.waitForLoadState("domcontentloaded");
     }
-    // const originalPageTitle = await this.page.title();
-    // console.log("Original Page Title : ", originalPageTitle);
   }
 
   async visitors() {

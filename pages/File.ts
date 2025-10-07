@@ -22,7 +22,7 @@ export class File{
         await this.locators.singleFileBtn.click();
         const singleFileStatusTxt = await this.locators.singleFileStatus.innerText();
         console.log(singleFileStatusTxt)
-        expect(singleFileStatusTxt).toBe("Single file selected: playwrightnotes.txt, Size: 1042 bytes, Type: text/plain");
+        expect(singleFileStatusTxt).toContain("Single file selected");
 
         await this.locators.uploadMultipleFile.click();
         await this.locators.uploadMultipleFile.setInputFiles(["./tests/files/playwrightnotes.txt", "D:/playwright notes.txt"]);

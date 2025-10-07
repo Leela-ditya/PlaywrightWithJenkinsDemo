@@ -1,0 +1,943 @@
+{
+  "config": {
+    "configFile": "D:\\playwright\\playwright.config.ts",
+    "rootDir": "D:/playwright/tests",
+    "forbidOnly": false,
+    "fullyParallel": true,
+    "globalSetup": null,
+    "globalTeardown": null,
+    "globalTimeout": 0,
+    "grep": {},
+    "grepInvert": null,
+    "maxFailures": 0,
+    "metadata": {
+      "actualWorkers": 6
+    },
+    "preserveOutput": "always",
+    "reporter": [
+      [
+        "html",
+        null
+      ],
+      [
+        "list",
+        null
+      ],
+      [
+        "dot",
+        null
+      ],
+      [
+        "json",
+        {
+          "outputFile": "json-test-report.json"
+        }
+      ],
+      [
+        "junit",
+        {
+          "outputFile": "junit-test-report.xml"
+        }
+      ],
+      [
+        "D:\\playwright\\node_modules\\allure-playwright\\dist\\cjs\\index.js",
+        null
+      ]
+    ],
+    "reportSlowTests": {
+      "max": 5,
+      "threshold": 300000
+    },
+    "quiet": false,
+    "projects": [
+      {
+        "outputDir": "D:/playwright/test-results",
+        "repeatEach": 1,
+        "retries": 0,
+        "metadata": {
+          "actualWorkers": 6
+        },
+        "id": "chromium",
+        "name": "chromium",
+        "testDir": "D:/playwright/tests",
+        "testIgnore": [],
+        "testMatch": [
+          "**/*.@(spec|test).?(c|m)[jt]s?(x)"
+        ],
+        "timeout": 30000
+      }
+    ],
+    "shard": null,
+    "updateSnapshots": "missing",
+    "updateSourceMethod": "patch",
+    "version": "1.56.0",
+    "workers": 6,
+    "webServer": null
+  },
+  "suites": [
+    {
+      "title": "createExcelFile.spec.ts",
+      "file": "createExcelFile.spec.ts",
+      "column": 0,
+      "line": 0,
+      "specs": [
+        {
+          "title": "Create Excel File",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 30000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "chromium",
+              "projectName": "chromium",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 3652,
+                  "errors": [],
+                  "stdout": [
+                    {
+                      "text": "Table Rows Count is: 7\n"
+                    },
+                    {
+                      "text": "Excel file created at: tableData.xlsx\n"
+                    },
+                    {
+                      "text": "┌─────────┬──────────────────────┬───────────┬──────────────┬────────┐\n│ (index) │ BookName             │ Author    │ Subject      │ Price  │\n├─────────┼──────────────────────┼───────────┼──────────────┼────────┤\n│ 0       │ \u001b[32m'Learn Selenium'\u001b[39m     │ \u001b[32m'Amit'\u001b[39m    │ \u001b[32m'Selenium'\u001b[39m   │ \u001b[32m'300'\u001b[39m  │\n│ 1       │ \u001b[32m'Learn Java'\u001b[39m         │ \u001b[32m'Mukesh'\u001b[39m  │ \u001b[32m'Java'\u001b[39m       │ \u001b[32m'500'\u001b[39m  │\n│ 2       │ \u001b[32m'Learn JS'\u001b[39m           │ \u001b[32m'Animesh'\u001b[39m │ \u001b[32m'Javascript'\u001b[39m │ \u001b[32m'300'\u001b[39m  │\n│ 3       │ \u001b[32m'Master In Selenium'\u001b[39m │ \u001b[32m'Mukesh'\u001b[39m  │ \u001b[32m'Selenium'\u001b[39m   │ \u001b[32m'3000'\u001b[39m │\n│ 4       │ \u001b[32m'Master In Java'\u001b[39m     │ \u001b[32m'Amod'\u001b[39m    │ \u001b[32m'JAVA'\u001b[39m       │ \u001b[32m'2000'\u001b[39m │\n│ 5       │ \u001b[32m'Master In JS'\u001b[39m       │ \u001b[32m'Amit'\u001b[39m    │ \u001b[32m'Javascript'\u001b[39m │ \u001b[32m'1000'\u001b[39m │\n└─────────┴──────────────────────┴───────────┴──────────────┴────────┘\n"
+                    }
+                  ],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2025-10-07T13:13:31.008Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "b2c9f3a974606f9a5328-779d85b6a62b566e1f5d",
+          "file": "createExcelFile.spec.ts",
+          "line": 4,
+          "column": 5
+        }
+      ]
+    },
+    {
+      "title": "csvFile.spec.ts",
+      "file": "csvFile.spec.ts",
+      "column": 0,
+      "line": 0,
+      "specs": [
+        {
+          "title": "Login test for 1",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 30000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "chromium",
+              "projectName": "chromium",
+              "results": [
+                {
+                  "workerIndex": 1,
+                  "parallelIndex": 1,
+                  "status": "passed",
+                  "duration": 311,
+                  "errors": [],
+                  "stdout": [
+                    {
+                      "text": "Running test for user: paarivel and password: Paari11\n"
+                    }
+                  ],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2025-10-07T13:13:30.882Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "c6aa30f97cc6ec558151-c791b98787a2a34fb1af",
+          "file": "csvFile.spec.ts",
+          "line": 26,
+          "column": 7
+        },
+        {
+          "title": "Login test for 2",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 30000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "chromium",
+              "projectName": "chromium",
+              "results": [
+                {
+                  "workerIndex": 2,
+                  "parallelIndex": 2,
+                  "status": "passed",
+                  "duration": 232,
+                  "errors": [],
+                  "stdout": [
+                    {
+                      "text": "Running test for user: rukumini and password: Ruku29\n"
+                    }
+                  ],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2025-10-07T13:13:30.827Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "c6aa30f97cc6ec558151-743afba57dc9ad2e8cb2",
+          "file": "csvFile.spec.ts",
+          "line": 26,
+          "column": 7
+        }
+      ]
+    },
+    {
+      "title": "ExcelFileJSON.spec.ts",
+      "file": "ExcelFileJSON.spec.ts",
+      "column": 0,
+      "line": 0,
+      "specs": [
+        {
+          "title": "JSON to Excel",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 30000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "chromium",
+              "projectName": "chromium",
+              "results": [
+                {
+                  "workerIndex": 3,
+                  "parallelIndex": 3,
+                  "status": "passed",
+                  "duration": 51,
+                  "errors": [],
+                  "stdout": [
+                    {
+                      "text": "[ { name: \u001b[32m'Harish'\u001b[39m, email: \u001b[32m'harish@gmail.com'\u001b[39m, phone: \u001b[32m'1234567809'\u001b[39m } ]\n"
+                    }
+                  ],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2025-10-07T13:13:31.641Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "4d02477737ad0565136c-b53d0037e07af434c79f",
+          "file": "ExcelFileJSON.spec.ts",
+          "line": 11,
+          "column": 5
+        }
+      ]
+    },
+    {
+      "title": "jsonFile.spec.ts",
+      "file": "jsonFile.spec.ts",
+      "column": 0,
+      "line": 0,
+      "specs": [
+        {
+          "title": "JSON File Test Data Lender Price Credentials ",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 30000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "chromium",
+              "projectName": "chromium",
+              "results": [
+                {
+                  "workerIndex": 4,
+                  "parallelIndex": 4,
+                  "status": "passed",
+                  "duration": 6,
+                  "errors": [],
+                  "stdout": [
+                    {
+                      "text": "Fecthing data from json file testsigma_internal and Welcome@1\n"
+                    }
+                  ],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2025-10-07T13:13:30.943Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "046c52ba05dab623a6e9-34b1ed8c52d52120ade6",
+          "file": "jsonFile.spec.ts",
+          "line": 8,
+          "column": 7
+        },
+        {
+          "title": "JSON File Test Data Bluecopa Credentials ",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 30000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "chromium",
+              "projectName": "chromium",
+              "results": [
+                {
+                  "workerIndex": 5,
+                  "parallelIndex": 5,
+                  "status": "passed",
+                  "duration": 9,
+                  "errors": [],
+                  "stdout": [
+                    {
+                      "text": "Fecthing data from json file bluecopa_internal and Welcome@2025\n"
+                    }
+                  ],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2025-10-07T13:13:31.085Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "046c52ba05dab623a6e9-04780374f89d679601ff",
+          "file": "jsonFile.spec.ts",
+          "line": 8,
+          "column": 7
+        }
+      ]
+    },
+    {
+      "title": "lenderPrice.spec.ts",
+      "file": "lenderPrice.spec.ts",
+      "column": 0,
+      "line": 0,
+      "specs": [
+        {
+          "title": "Navigate to Lender Price Website",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 30000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "chromium",
+              "projectName": "chromium",
+              "results": [
+                {
+                  "workerIndex": 4,
+                  "parallelIndex": 4,
+                  "status": "passed",
+                  "duration": 17928,
+                  "errors": [],
+                  "stdout": [
+                    {
+                      "text": "The Bid Request Id with Committed Status is : 87U16F48453D\n"
+                    },
+                    {
+                      "text": "The Bid Request Id in Price Offered Page is : 87U16F48453D\n"
+                    },
+                    {
+                      "text": "The Corresponding Loan Id is : DEN_20251006_10001_TPO_Y\n"
+                    },
+                    {
+                      "text": "✅ Loan details (Price Offered) saved to LoanDetails_Offered.xlsx\n"
+                    },
+                    {
+                      "text": "Corr Loan Number List : DEN_20251006_10001_TPO_Y,DEN_20251006_10002_TPO_N,DEN_20251006_10003_TPO_Blank\n"
+                    },
+                    {
+                      "text": "✅ Loan details (Locked Loans) saved to LoanDetails_Locked.xlsx\n"
+                    },
+                    {
+                      "text": "✅ Loan details matched between Offered and Locked Loans!\n"
+                    }
+                  ],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2025-10-07T13:13:31.885Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "d89473421e5eec4fdac2-3d21614d53a978c266fd",
+          "file": "lenderPrice.spec.ts",
+          "line": 5,
+          "column": 5
+        }
+      ]
+    },
+    {
+      "title": "playwrightPractice.spec.ts",
+      "file": "playwrightPractice.spec.ts",
+      "column": 0,
+      "line": 0,
+      "specs": [
+        {
+          "title": "Playwright built-in locators",
+          "ok": true,
+          "tags": [
+            "playwrightBuiltinLocators"
+          ],
+          "tests": [
+            {
+              "timeout": 30000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "chromium",
+              "projectName": "chromium",
+              "results": [
+                {
+                  "workerIndex": 5,
+                  "parallelIndex": 5,
+                  "status": "passed",
+                  "duration": 4242,
+                  "errors": [],
+                  "stdout": [
+                    {
+                      "text": "Tags with getByRoleLocators\n"
+                    }
+                  ],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2025-10-07T13:13:31.187Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "c32d81ce54752e4a735c-2c617ba18baf0aeb5124",
+          "file": "playwrightPractice.spec.ts",
+          "line": 21,
+          "column": 5
+        },
+        {
+          "title": "Files uploading test",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 30000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "chromium",
+              "projectName": "chromium",
+              "results": [
+                {
+                  "workerIndex": 2,
+                  "parallelIndex": 2,
+                  "status": "passed",
+                  "duration": 3827,
+                  "errors": [],
+                  "stdout": [
+                    {
+                      "text": "Single file selected: playwrightnotes.txt, Size: 1186 bytes, Type: text/plain\n"
+                    },
+                    {
+                      "text": "Multiple files selected:\nplaywrightnotes.txt, Size: 1186 bytes, Type: text/plain\nplaywright notes.txt, Size: 378 bytes, Type: text/plain\n\n"
+                    }
+                  ],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2025-10-07T13:13:31.338Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "c32d81ce54752e4a735c-13204084d71ce2635f02",
+          "file": "playwrightPractice.spec.ts",
+          "line": 46,
+          "column": 5
+        },
+        {
+          "title": "Static Table",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 30000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "chromium",
+              "projectName": "chromium",
+              "results": [
+                {
+                  "workerIndex": 1,
+                  "parallelIndex": 1,
+                  "status": "passed",
+                  "duration": 6243,
+                  "errors": [],
+                  "stdout": [
+                    {
+                      "text": "Table Name : Static Web Table\n"
+                    },
+                    {
+                      "text": "[ \u001b[32m'BookName'\u001b[39m, \u001b[32m'Author'\u001b[39m, \u001b[32m'Subject'\u001b[39m, \u001b[32m'Price'\u001b[39m ]\n"
+                    },
+                    {
+                      "text": "[ \u001b[32m'Learn JS'\u001b[39m, \u001b[32m'Animesh'\u001b[39m, \u001b[32m'Javascript'\u001b[39m, \u001b[32m'300'\u001b[39m ]\n"
+                    },
+                    {
+                      "text": "Table Rows Count is: 7\n"
+                    },
+                    {
+                      "text": "Table Name : \" Static Web Table \"\n"
+                    },
+                    {
+                      "text": "┌─────────┬──────────────────────┬───────────┬──────────────┬────────┐\n│ (index) │ BookName             │ Author    │ Subject      │ Price  │\n├─────────┼──────────────────────┼───────────┼──────────────┼────────┤\n│ 0       │ \u001b[32m'Learn Selenium'\u001b[39m     │ \u001b[32m'Amit'\u001b[39m    │ \u001b[32m'Selenium'\u001b[39m   │ \u001b[32m'300'\u001b[39m  │\n│ 1       │ \u001b[32m'Learn Java'\u001b[39m         │ \u001b[32m'Mukesh'\u001b[39m  │ \u001b[32m'Java'\u001b[39m       │ \u001b[32m'500'\u001b[39m  │\n│ 2       │ \u001b[32m'Learn JS'\u001b[39m           │ \u001b[32m'Animesh'\u001b[39m │ \u001b[32m'Javascript'\u001b[39m │ \u001b[32m'300'\u001b[39m  │\n│ 3       │ \u001b[32m'Master In Selenium'\u001b[39m │ \u001b[32m'Mukesh'\u001b[39m  │ \u001b[32m'Selenium'\u001b[39m   │ \u001b[32m'3000'\u001b[39m │\n│ 4       │ \u001b[32m'Master In Java'\u001b[39m     │ \u001b[32m'Amod'\u001b[39m    │ \u001b[32m'JAVA'\u001b[39m       │ \u001b[32m'2000'\u001b[39m │\n│ 5       │ \u001b[32m'Master In JS'\u001b[39m       │ \u001b[32m'Amit'\u001b[39m    │ \u001b[32m'Javascript'\u001b[39m │ \u001b[32m'1000'\u001b[39m │\n└─────────┴──────────────────────┴───────────┴──────────────┴────────┘\n"
+                    }
+                  ],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2025-10-07T13:13:31.492Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "c32d81ce54752e4a735c-93b28a609b40d9365141",
+          "file": "playwrightPractice.spec.ts",
+          "line": 51,
+          "column": 5
+        },
+        {
+          "title": "Dynamic Table",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 30000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "chromium",
+              "projectName": "chromium",
+              "results": [
+                {
+                  "workerIndex": 3,
+                  "parallelIndex": 3,
+                  "status": "passed",
+                  "duration": 4638,
+                  "errors": [],
+                  "stdout": [
+                    {
+                      "text": "Table Name: Dynamic Web Table\n"
+                    },
+                    {
+                      "text": "Table Headers :  [ \u001b[32m'Name'\u001b[39m, \u001b[32m'CPU (%)'\u001b[39m, \u001b[32m'Network (Mbps)'\u001b[39m, \u001b[32m'Memory (MB)'\u001b[39m, \u001b[32m'Disk (MB/s)'\u001b[39m ]\n"
+                    },
+                    {
+                      "text": "table data 4 :  89.7 MB\n"
+                    }
+                  ],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2025-10-07T13:13:31.761Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "c32d81ce54752e4a735c-f2501affa11f4bde2cc3",
+          "file": "playwrightPractice.spec.ts",
+          "line": 60,
+          "column": 5
+        },
+        {
+          "title": "Pagination Web Table",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 30000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "chromium",
+              "projectName": "chromium",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 3729,
+                  "errors": [],
+                  "stdout": [
+                    {
+                      "text": "Pagination Web Table\n"
+                    },
+                    {
+                      "text": "Table Headers : [ \u001b[32m'ID'\u001b[39m, \u001b[32m'Name'\u001b[39m, \u001b[32m'Price'\u001b[39m ]\n"
+                    },
+                    {
+                      "text": "Tables Count:  \u001b[33m4\u001b[39m\n"
+                    },
+                    {
+                      "text": "Rows count from table : \u001b[33m5\u001b[39m\n"
+                    },
+                    {
+                      "text": "┌─────────┬─────┬────────────────────┬──────────┬────────┐\n│ (index) │ ID  │ Name               │ Price    │ Select │\n├─────────┼─────┼────────────────────┼──────────┼────────┤\n│ 0       │ \u001b[32m'1'\u001b[39m │ \u001b[32m'Smartphone'\u001b[39m       │ \u001b[32m'$10.99'\u001b[39m │ \u001b[32m''\u001b[39m     │\n│ 1       │ \u001b[32m'2'\u001b[39m │ \u001b[32m'Laptop'\u001b[39m           │ \u001b[32m'$19.99'\u001b[39m │ \u001b[32m''\u001b[39m     │\n│ 2       │ \u001b[32m'3'\u001b[39m │ \u001b[32m'Tablet'\u001b[39m           │ \u001b[32m'$5.99'\u001b[39m  │ \u001b[32m''\u001b[39m     │\n│ 3       │ \u001b[32m'4'\u001b[39m │ \u001b[32m'Smartwatch'\u001b[39m       │ \u001b[32m'$7.99'\u001b[39m  │ \u001b[32m''\u001b[39m     │\n│ 4       │ \u001b[32m'5'\u001b[39m │ \u001b[32m'Wireless Earbuds'\u001b[39m │ \u001b[32m'$8.99'\u001b[39m  │ \u001b[32m''\u001b[39m     │\n└─────────┴─────┴────────────────────┴──────────┴────────┘\n"
+                    },
+                    {
+                      "text": "┌─────────┬──────┬─────────────────────┬──────────┬────────┐\n│ (index) │ ID   │ Name                │ Price    │ Select │\n├─────────┼──────┼─────────────────────┼──────────┼────────┤\n│ 0       │ \u001b[32m'6'\u001b[39m  │ \u001b[32m'Bluetooth Speaker'\u001b[39m │ \u001b[32m'$9.99'\u001b[39m  │ \u001b[32m''\u001b[39m     │\n│ 1       │ \u001b[32m'7'\u001b[39m  │ \u001b[32m'Television'\u001b[39m        │ \u001b[32m'$20.99'\u001b[39m │ \u001b[32m''\u001b[39m     │\n│ 2       │ \u001b[32m'8'\u001b[39m  │ \u001b[32m'Action Camera'\u001b[39m     │ \u001b[32m'$15.99'\u001b[39m │ \u001b[32m''\u001b[39m     │\n│ 3       │ \u001b[32m'9'\u001b[39m  │ \u001b[32m'Gaming Console'\u001b[39m    │ \u001b[32m'$5.99'\u001b[39m  │ \u001b[32m''\u001b[39m     │\n│ 4       │ \u001b[32m'10'\u001b[39m │ \u001b[32m'Digital Camera'\u001b[39m    │ \u001b[32m'$16.99'\u001b[39m │ \u001b[32m''\u001b[39m     │\n└─────────┴──────┴─────────────────────┴──────────┴────────┘\n"
+                    },
+                    {
+                      "text": "┌─────────┬──────┬────────────────────┬──────────┬────────┐\n│ (index) │ ID   │ Name               │ Price    │ Select │\n├─────────┼──────┼────────────────────┼──────────┼────────┤\n│ 0       │ \u001b[32m'11'\u001b[39m │ \u001b[32m'Smart Home Hub'\u001b[39m   │ \u001b[32m'$20.99'\u001b[39m │ \u001b[32m''\u001b[39m     │\n│ 1       │ \u001b[32m'12'\u001b[39m │ \u001b[32m'Router'\u001b[39m           │ \u001b[32m'$24.99'\u001b[39m │ \u001b[32m''\u001b[39m     │\n│ 2       │ \u001b[32m'13'\u001b[39m │ \u001b[32m'Portable Charger'\u001b[39m │ \u001b[32m'$30.99'\u001b[39m │ \u001b[32m''\u001b[39m     │\n│ 3       │ \u001b[32m'14'\u001b[39m │ \u001b[32m'Fitness Tracker'\u001b[39m  │ \u001b[32m'$19.99'\u001b[39m │ \u001b[32m''\u001b[39m     │\n│ 4       │ \u001b[32m'15'\u001b[39m │ \u001b[32m'Desktop Computer'\u001b[39m │ \u001b[32m'$2.99'\u001b[39m  │ \u001b[32m''\u001b[39m     │\n└─────────┴──────┴────────────────────┴──────────┴────────┘\n"
+                    },
+                    {
+                      "text": "┌─────────┬──────┬─────────────────────┬──────────┬────────┐\n│ (index) │ ID   │ Name                │ Price    │ Select │\n├─────────┼──────┼─────────────────────┼──────────┼────────┤\n│ 0       │ \u001b[32m'16'\u001b[39m │ \u001b[32m'E-Reader'\u001b[39m          │ \u001b[32m'$10.99'\u001b[39m │ \u001b[32m''\u001b[39m     │\n│ 1       │ \u001b[32m'17'\u001b[39m │ \u001b[32m'VR Headset'\u001b[39m        │ \u001b[32m'$11.99'\u001b[39m │ \u001b[32m''\u001b[39m     │\n│ 2       │ \u001b[32m'18'\u001b[39m │ \u001b[32m'Streaming Device'\u001b[39m  │ \u001b[32m'$13.99'\u001b[39m │ \u001b[32m''\u001b[39m     │\n│ 3       │ \u001b[32m'19'\u001b[39m │ \u001b[32m'Soundbar'\u001b[39m          │ \u001b[32m'$16.99'\u001b[39m │ \u001b[32m''\u001b[39m     │\n│ 4       │ \u001b[32m'20'\u001b[39m │ \u001b[32m'Wireless Mouse 20'\u001b[39m │ \u001b[32m'$17.99'\u001b[39m │ \u001b[32m''\u001b[39m     │\n└─────────┴──────┴─────────────────────┴──────────┴────────┘\n"
+                    }
+                  ],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2025-10-07T13:13:35.074Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "c32d81ce54752e4a735c-c4288da2c5c12e9d1b3d",
+          "file": "playwrightPractice.spec.ts",
+          "line": 70,
+          "column": 5
+        },
+        {
+          "title": "Form and ShadowDOM",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 30000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "chromium",
+              "projectName": "chromium",
+              "results": [
+                {
+                  "workerIndex": 2,
+                  "parallelIndex": 2,
+                  "status": "passed",
+                  "duration": 15296,
+                  "errors": [],
+                  "stdout": [
+                    {
+                      "text": "Section 1 para is : This is a paragraph in Section 1.\n"
+                    },
+                    {
+                      "text": "Section 2 para is : This is a paragraph in Section 2.\n"
+                    },
+                    {
+                      "text": "Section 3 para is : This is a paragraph in Section 3.\n"
+                    },
+                    {
+                      "text": "Footer link 1: http://testautomationpractice.blogspot.com/\n"
+                    },
+                    {
+                      "text": "Visited Page Title: Automation Testing Practice\n"
+                    },
+                    {
+                      "text": "Current Page Title: Automation Testing Practice: PlaywrightPractice\n"
+                    },
+                    {
+                      "text": "Footer link 2: https://testautomationpractice.blogspot.com/p/gui-elements-ajax-hidden.html\n"
+                    },
+                    {
+                      "text": "Visited Page Title: Automation Testing Practice: Hidden Elements & AJAX\n"
+                    },
+                    {
+                      "text": "Current Page Title: Automation Testing Practice: PlaywrightPractice\n"
+                    },
+                    {
+                      "text": "Footer link 3: https://testautomationpractice.blogspot.com/p/download-files_25.html\n"
+                    },
+                    {
+                      "text": "Visited Page Title: Automation Testing Practice: Download Files\n"
+                    },
+                    {
+                      "text": "Current Page Title: Automation Testing Practice: PlaywrightPractice\n"
+                    },
+                    {
+                      "text": "ShadowDOM\n"
+                    },
+                    {
+                      "text": "Shadow DOM Text : \n"
+                    },
+                    {
+                      "text": "Mobiles\n"
+                    },
+                    {
+                      "text": "Laptops\n"
+                    }
+                  ],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2025-10-07T13:13:35.200Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "c32d81ce54752e4a735c-489dcae15c008387047e",
+          "file": "playwrightPractice.spec.ts",
+          "line": 77,
+          "column": 5
+        },
+        {
+          "title": "Tabs section test",
+          "ok": false,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 30000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "chromium",
+              "projectName": "chromium",
+              "results": [
+                {
+                  "workerIndex": 5,
+                  "parallelIndex": 5,
+                  "status": "failed",
+                  "duration": 28592,
+                  "error": {
+                    "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoHaveText\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m failed\n\nLocator: getByRole('heading', { name: 'Selenium automates browsers. That\\'s it!' })\nExpected: \u001b[32m\"Selenium automates browsers. That's it!\"\u001b[39m\nTimeout: 5000ms\nError: element(s) not found\n\nCall log:\n\u001b[2m  - Expect \"toHaveText\" with timeout 5000ms\u001b[22m\n\u001b[2m  - waiting for getByRole('heading', { name: 'Selenium automates browsers. That\\'s it!' })\u001b[22m\n",
+                    "stack": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoHaveText\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m failed\n\nLocator: getByRole('heading', { name: 'Selenium automates browsers. That\\'s it!' })\nExpected: \u001b[32m\"Selenium automates browsers. That's it!\"\u001b[39m\nTimeout: 5000ms\nError: element(s) not found\n\nCall log:\n\u001b[2m  - Expect \"toHaveText\" with timeout 5000ms\u001b[22m\n\u001b[2m  - waiting for getByRole('heading', { name: 'Selenium automates browsers. That\\'s it!' })\u001b[22m\n\n    at Tabs.popupWindow (D:\\playwright\\pages\\Tabs.ts:218:40)\n    at D:\\playwright\\tests\\playwrightPractice.spec.ts:99:5",
+                    "location": {
+                      "file": "D:\\playwright\\pages\\Tabs.ts",
+                      "column": 40,
+                      "line": 218
+                    },
+                    "snippet": "\u001b[90m   at \u001b[39m..\\pages\\Tabs.ts:218\n\n\u001b[0m \u001b[90m 216 |\u001b[39m     })\u001b[33m;\u001b[39m\n \u001b[90m 217 |\u001b[39m     \u001b[90m// await expect(verifyPopupwindowTxt).toBeVisible();\u001b[39m\n\u001b[31m\u001b[1m>\u001b[22m\u001b[39m\u001b[90m 218 |\u001b[39m     \u001b[36mawait\u001b[39m expect(verifyPopupwindowTxt)\u001b[33m.\u001b[39mtoHaveText(\n \u001b[90m     |\u001b[39m                                        \u001b[31m\u001b[1m^\u001b[22m\u001b[39m\n \u001b[90m 219 |\u001b[39m       \u001b[32m\"Selenium automates browsers. That's it!\"\u001b[39m\n \u001b[90m 220 |\u001b[39m     )\u001b[33m;\u001b[39m\n \u001b[90m 221 |\u001b[39m\u001b[0m"
+                  },
+                  "errors": [
+                    {
+                      "location": {
+                        "file": "D:\\playwright\\pages\\Tabs.ts",
+                        "column": 40,
+                        "line": 218
+                      },
+                      "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoHaveText\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m failed\n\nLocator: getByRole('heading', { name: 'Selenium automates browsers. That\\'s it!' })\nExpected: \u001b[32m\"Selenium automates browsers. That's it!\"\u001b[39m\nTimeout: 5000ms\nError: element(s) not found\n\nCall log:\n\u001b[2m  - Expect \"toHaveText\" with timeout 5000ms\u001b[22m\n\u001b[2m  - waiting for getByRole('heading', { name: 'Selenium automates browsers. That\\'s it!' })\u001b[22m\n\n\n\u001b[90m   at \u001b[39m..\\pages\\Tabs.ts:218\n\n\u001b[0m \u001b[90m 216 |\u001b[39m     })\u001b[33m;\u001b[39m\n \u001b[90m 217 |\u001b[39m     \u001b[90m// await expect(verifyPopupwindowTxt).toBeVisible();\u001b[39m\n\u001b[31m\u001b[1m>\u001b[22m\u001b[39m\u001b[90m 218 |\u001b[39m     \u001b[36mawait\u001b[39m expect(verifyPopupwindowTxt)\u001b[33m.\u001b[39mtoHaveText(\n \u001b[90m     |\u001b[39m                                        \u001b[31m\u001b[1m^\u001b[22m\u001b[39m\n \u001b[90m 219 |\u001b[39m       \u001b[32m\"Selenium automates browsers. That's it!\"\u001b[39m\n \u001b[90m 220 |\u001b[39m     )\u001b[33m;\u001b[39m\n \u001b[90m 221 |\u001b[39m\u001b[0m\n\u001b[2m    at Tabs.popupWindow (D:\\playwright\\pages\\Tabs.ts:218:40)\u001b[22m\n\u001b[2m    at D:\\playwright\\tests\\playwrightPractice.spec.ts:99:5\u001b[22m"
+                    }
+                  ],
+                  "stdout": [
+                    {
+                      "text": "Count \u001b[33m5\u001b[39m\n"
+                    },
+                    {
+                      "text": "Search texts:  Playwright\n"
+                    },
+                    {
+                      "text": "Search texts:  Playwright (software)\n"
+                    },
+                    {
+                      "text": "Search texts:  Playwrights Horizons\n"
+                    },
+                    {
+                      "text": "Search texts:  Playwrights Guild of Canada\n"
+                    },
+                    {
+                      "text": "Search texts:  Playwrights' Company\n"
+                    },
+                    {
+                      "text": "stop\n"
+                    },
+                    {
+                      "text": "alert\n"
+                    },
+                    {
+                      "text": "I am an alert box!\n"
+                    },
+                    {
+                      "text": "confirm\n"
+                    },
+                    {
+                      "text": "Press a button!\n"
+                    },
+                    {
+                      "text": "prompt\n"
+                    },
+                    {
+                      "text": "Please enter your name:\n"
+                    },
+                    {
+                      "text": "Harry Potter\n"
+                    },
+                    {
+                      "text": "Next Page Title :  SDET-QA Blog\n"
+                    },
+                    {
+                      "text": "Next Page URL :  https://www.pavantestingtools.com/\n"
+                    },
+                    {
+                      "text": "Original Page URL : https://testautomationpractice.blogspot.com/p/playwrightpractice.html\n"
+                    },
+                    {
+                      "text": "Automation Testing Practice: PlaywrightPractice\n"
+                    },
+                    {
+                      "text": "Field1 input value :  Hello World!\n"
+                    },
+                    {
+                      "text": "Field2 input value :  Hello World!\n"
+                    },
+                    {
+                      "text": "Dropped Text :  Dropped!\n"
+                    },
+                    {
+                      "text": "Scrolling Dropdown is successfully Completed\n"
+                    },
+                    {
+                      "text": "Labels and Links Heading :  Labels And Links\n"
+                    },
+                    {
+                      "text": "Mobile Label Heading :  Mobile Labels\n"
+                    },
+                    {
+                      "text": "Mobile Label Texts :  Samsung\n"
+                    },
+                    {
+                      "text": "Mobile Label Texts :  Real Me\n"
+                    },
+                    {
+                      "text": "Mobile Label Texts :  Moto\n"
+                    },
+                    {
+                      "text": "Laptop Heading :  Laptop Links\n"
+                    },
+                    {
+                      "text": "Laptop Lists Count :  \u001b[33m3\u001b[39m\n"
+                    },
+                    {
+                      "text": "Automation :  Apple\n"
+                    },
+                    {
+                      "text": "Laptop Original Page Title :  Automation Testing Practice: PlaywrightPractice\n"
+                    },
+                    {
+                      "text": "Automation :  Lenovo® Official India Site | Laptops, Tablets, Desktops & Servers | Lenovo IN\n"
+                    },
+                    {
+                      "text": "Laptop Original Page Title :  Automation Testing Practice: PlaywrightPractice\n"
+                    },
+                    {
+                      "text": "Automation :  Computers, Monitors & Technology Solutions | Dell India\n"
+                    },
+                    {
+                      "text": "Laptop Original Page Title :  Automation Testing Practice: PlaywrightPractice\n"
+                    },
+                    {
+                      "text": "Display :  Broken Links\n"
+                    },
+                    {
+                      "text": "URL 1 : http://www.deadlinkcity.com/error-page.asp?e=400\n"
+                    },
+                    {
+                      "text": "URL 2 : http://www.deadlinkcity.com/error-page.asp?e=401\n"
+                    },
+                    {
+                      "text": "URL 3 : http://www.deadlinkcity.com/error-page.asp?e=403\n"
+                    },
+                    {
+                      "text": "URL 4 : http://www.deadlinkcity.com/error-page.asp?e=404\n"
+                    },
+                    {
+                      "text": "Visitors\n"
+                    },
+                    {
+                      "text": "Raw visitors count text: 5,011,321\n"
+                    },
+                    {
+                      "text": "Visitors Total Count: \u001b[33m5011321\u001b[39m\n"
+                    },
+                    {
+                      "text": "Popup Window Title :  Fast and reliable end-to-end testing for modern web apps | Playwright\n"
+                    }
+                  ],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2025-10-07T13:13:35.833Z",
+                  "annotations": [],
+                  "attachments": [
+                    {
+                      "name": "error-context",
+                      "contentType": "text/markdown",
+                      "path": "D:\\playwright\\test-results\\playwrightPractice-Tabs-section-test-chromium\\error-context.md"
+                    }
+                  ],
+                  "errorLocation": {
+                    "file": "D:\\playwright\\pages\\Tabs.ts",
+                    "column": 40,
+                    "line": 218
+                  }
+                }
+              ],
+              "status": "unexpected"
+            }
+          ],
+          "id": "c32d81ce54752e4a735c-aff981d7b85dd667379b",
+          "file": "playwrightPractice.spec.ts",
+          "line": 84,
+          "column": 5
+        }
+      ]
+    }
+  ],
+  "errors": [],
+  "stats": {
+    "startTime": "2025-10-07T13:13:27.896Z",
+    "duration": 36675.646,
+    "expected": 13,
+    "skipped": 0,
+    "unexpected": 1,
+    "flaky": 0
+  }
+}

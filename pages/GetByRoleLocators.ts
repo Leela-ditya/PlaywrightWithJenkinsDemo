@@ -41,5 +41,6 @@ export class GetByRoleLocators {
     const roleTextUI = await this.roleText.textContent();
     const trimRoleText = roleTextUI?.trim();
     expect(trimRoleText).toEqual("This is an important alert message!");
+    console.log("Tags with getByRoleLocators")
   }
 }

@@ -3,11 +3,11 @@ import fs from "fs";
 import path from "path";
 import { parse } from "csv-parse/sync";
 
-// interface UserRecord {
-//   test_case: string;
-//   username: string;
-//   password: string;
-// }
+interface UserRecord {
+  test_case: string;
+  username: string;
+  password: string;
+}
 
 // const records = parse(fs.readFileSync("utilis/users.csv"), {
 //   columns: true,
@@ -18,7 +18,7 @@ const records = parse(fs.readFileSync(path.join(__dirname,"../utilis/users.csv")
     columns: true,
     skip_empty_lines: true,
     // delimiter: ',',
-});
+}) as UserRecord[];
 
 // Using forEach Loop
 

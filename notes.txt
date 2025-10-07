@@ -172,3 +172,107 @@ export function readExcelFile(filePath: string){
 
 }
 
+
+======================================================================
+
+
+API Testing :-
+-----------
+
+import { test, expect } from '@playwright/test';
+
+test('Get API testing', async ({ page }) => {
+    await page.goto('https://conduit.bondaracademy.com/');
+
+    const response = await page.request.get('https://conduit-api.bondaracademy.com/api/tags');
+    const body = await response.json();
+    console.log(body);
+    expect(response.status()).toBe(200);
+    expect(body.tags.length).toBe(10);
+    expect(body.tags[1]).toEqual('Git')
+});
+
+test('Post API testing', async ({ page }) => {
+
+    const response = await page.request.post('https://conduit-api.bondaracademy.com/api/articles/', {
+        headers: {
+            Authorization: 'Token eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjp7ImlkIjozNjIwNH0sImlhdCI6MTc1OTc0NTk2MywiZXhwIjoxNzY0OTI5OTYzfQ.OXm1VVRKAL3AXWu9qD4k2DCBAr0K8sHQPK9yFdSsx6Q'
+        },
+        data: { "article": { "title": "TEST TEST", "description": "new article ", "body": "new article  for conduit", "tagList": [] } },
+    });
+    const body = await response.json();
+    console.log(body);
+
+});
+
+
+============================================= Dummy excel file =========================================================
+
+readExcelFile
+
+// import xlsx
+import * as Excel from 'xlsx';
+import * as fs from 'fs';
+
+// Define test data structure
+interface TestRecord {
+    Skill1 : string;
+    Skill2 : string;
+}
+
+// Create method to read data from Excel file
+export function readExcelFile(filePath: string){
+
+    // Read the Excel file as binary string
+    const file = fs.readFileSync(filePath);
+
+    // parse into workbook
+    const workbook = Excel.read(file, { type: 'buffer' });
+
+    // Get the first sheet name
+    const sheet = workbook.Sheets[workbook.SheetNames[0]];
+
+    // Convert sheet to JSON
+    const rawData: any[] = Excel.utils.sheet_to_json(sheet, {header: 1});
+
+    // convert rawData into TestRecord
+    const records = rawData.slice(1).map((column : any[])=> ({
+        Skill1 : column[0],
+        Skill2 : column[1],
+    }));
+    return records;
+
+    // Log the data to console
+    console.log(rawData);
+
+}
+
+==========
+
+DataDrivenTestingUsingExcel.spec
+
+import {test, expect} from '@playwright/test';
+import path from 'path';
+import { readExcelFile } from '../utilis/readExcelFile';
+
+const filePath = path.join(__dirname, 'utilis/TestData.xlsx');
+const records = readExcelFile(filePath);
+
+for(const record of records){
+    test(`Testing with Excel data: ${record.Skill1} and ${record.Skill2}`, async ({page})=>{
+        // Go to the url
+        await page.goto('https://www.google.com/');
+
+        // Type in the search box
+        await page.getByLabel('Search', {exact: true}).fill(record.Skill1);
+        await page.getByLabel('Search', {exact: true}).press('Enter');
+
+        // click on playlist
+        await page.getByRole('link', {name: record.Skill1}).first().click();
+
+        // validate web page title
+        await expect(page).toHaveTitle(record.Skill2 + ' - Youtube');
+    });
+}
+
+

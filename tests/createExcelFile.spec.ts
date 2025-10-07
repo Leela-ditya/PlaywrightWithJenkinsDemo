@@ -7,7 +7,8 @@ test('Create Excel File', async({page})=>{
     await excelPractice.verifyTableName();
     await excelPractice.verifyTableHeaders();
     await excelPractice.verify3RowData();
-    // await excelPractice.collectTableData();
+
+    // static table data export to excel
     await excelPractice.collectTableDataAndExportToExcel();
 
 })

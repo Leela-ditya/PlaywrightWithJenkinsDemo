@@ -1,0 +1,384 @@
+# Page snapshot
+
+```yaml
+- generic [ref=e2]:
+  - banner [ref=e4]:
+    - generic [ref=e6]:
+      - generic [ref=e7]:
+        - button "Guide" [ref=e9] [cursor=pointer]
+        - generic [ref=e11]:
+          - link "YouTube Home" [ref=e12] [cursor=pointer]:
+            - /url: /
+          - generic [ref=e16]: IN
+        - button "Skip navigation" [ref=e20] [cursor=pointer]:
+          - generic [ref=e21]: Skip navigation
+      - generic [ref=e25]:
+        - search [ref=e26]:
+          - combobox "Search" [expanded] [ref=e29]
+          - button "Search" [ref=e30] [cursor=pointer]
+        - generic [ref=e33]:
+          - button "Search with your voice" [ref=e35] [cursor=pointer]
+          - tooltip "tooltip"
+      - generic [ref=e42]:
+        - button "Settings" [ref=e47] [cursor=pointer]
+        - link "Sign in" [ref=e51] [cursor=pointer]:
+          - /url: https://accounts.google.com/ServiceLogin?service=youtube&uilel=3&passive=true&continue=https%3A%2F%2Fwww.youtube.com%2Fsignin%3Faction_handle_signin%3Dtrue%26app%3Ddesktop%26hl%3Den%26next%3Dhttps%253A%252F%252Fwww.youtube.com%252F%2540sdetpavan%252Fvideos&hl=en&ec=65620
+          - generic [ref=e54]: Sign in
+  - navigation [ref=e58]
+  - main [ref=e60]:
+    - generic [ref=e67]:
+      - generic [ref=e80]:
+        - heading "SDET- QA, Verified" [level=1] [ref=e82]:
+          - generic [ref=e83]:
+            - text: SDET- QA
+            - img [ref=e86]
+        - generic [ref=e87]:
+          - generic [ref=e89]: "@sdetpavan"
+          - generic [ref=e90]: •
+          - generic [ref=e91]:
+            - generic [ref=e92]: 802K subscribers
+            - generic [ref=e93]: •
+            - generic [ref=e94]: 1K videos
+        - generic [ref=e96] [cursor=pointer]:
+          - generic [ref=e97]: Welcome to the SDET-QA Channel!
+          - button "Description. Welcome to the SDET-QA Channel!...tap for more." [ref=e98]:
+            - generic [ref=e99]: ...more
+        - generic [ref=e100]:
+          - link "linkedin.com/in/pavan-kumar-bhimavarapu-4aa7a332" [ref=e103] [cursor=pointer]:
+            - /url: https://www.youtube.com/redirect?event=channel_header&redir_token=QUFFLUhqbGk1Z21LbHg1aVd0ZlNCV3JjWkRDa1lyZW5CUXxBQ3Jtc0tuSHo0RzYxb0dJeHVrZ3BLbUwtbVpyQXNIcjJmcE9ZQ01FdlExSHR4NndSTTg4TWJYeHlJb1Q5SWp1S1JHNFdYbDMxVDAzWklnVG1xamljUFdRT2tzWVZscDF4UUQxTGI2dTBsOHZsWGZiX2Q5ZXJ1cw&q=https%3A%2F%2Fwww.linkedin.com%2Fin%2Fpavan-kumar-bhimavarapu-4aa7a332%2F
+          - button "and 3 more links" [ref=e106] [cursor=pointer]
+        - generic [ref=e107]:
+          - button "Subscribe" [ref=e110] [cursor=pointer]:
+            - generic [ref=e111]: Subscribe
+          - button "Join this channel" [ref=e117] [cursor=pointer]:
+            - generic [ref=e118]: Join
+      - tablist [ref=e125]:
+        - tablist [ref=e129]:
+          - tab "Home" [ref=e130] [cursor=pointer]:
+            - generic [ref=e131]: Home
+          - tab "Videos" [selected] [ref=e132] [cursor=pointer]:
+            - generic [ref=e133]: Videos
+          - tab "Playlists" [ref=e134] [cursor=pointer]:
+            - generic [ref=e135]: Playlists
+          - tab "Posts" [ref=e136] [cursor=pointer]:
+            - generic [ref=e137]: Posts
+          - button "Search" [ref=e141] [cursor=pointer]
+    - generic [ref=e148]:
+      - tablist [ref=e154]:
+        - tab "Latest" [selected] [ref=e158] [cursor=pointer]:
+          - generic [ref=e159]: Latest
+        - tab "Popular" [ref=e166] [cursor=pointer]:
+          - generic [ref=e167]: Popular
+        - tab "Oldest" [ref=e174] [cursor=pointer]:
+          - generic [ref=e175]: Oldest
+      - generic [ref=e179]:
+        - generic [ref=e183]:
+          - link [ref=e186] [cursor=pointer]:
+            - /url: /watch?v=ziuIDwX18h4
+          - generic [ref=e189] [cursor=pointer]:
+            - heading "Playwright with TypeScript | Setup Environment & Writing Tests ( Session 1) 1 hour, 37 minutes" [level=3] [ref=e190]:
+              - link "Playwright with TypeScript | Setup Environment & Writing Tests ( Session 1) 1 hour, 37 minutes" [ref=e191]:
+                - /url: /watch?v=ziuIDwX18h4
+                - generic [ref=e192]: Playwright with TypeScript | Setup Environment & Writing Tests ( Session 1)
+            - generic [ref=e195]:
+              - generic [ref=e196]: 2.1K views
+              - generic [ref=e197]: •1 day ago
+        - generic [ref=e201]:
+          - link [ref=e204] [cursor=pointer]:
+            - /url: /watch?v=m9rXZh8zLeY
+          - generic [ref=e207] [cursor=pointer]:
+            - heading "TypeScript for Playwright | TypeScript Interfaces and Modules (Session 16) 1 hour, 18 minutes" [level=3] [ref=e208]:
+              - link "TypeScript for Playwright | TypeScript Interfaces and Modules (Session 16) 1 hour, 18 minutes" [ref=e209]:
+                - /url: /watch?v=m9rXZh8zLeY
+                - generic [ref=e210]: TypeScript for Playwright | TypeScript Interfaces and Modules (Session 16)
+            - generic [ref=e213]:
+              - generic [ref=e214]: 4.2K views
+              - generic [ref=e215]: •4 weeks ago
+        - generic [ref=e219]:
+          - link [ref=e222] [cursor=pointer]:
+            - /url: /watch?v=7CyvyhJF2Tk&pp=0gcJCfwJAYcqIYzv
+          - generic [ref=e225] [cursor=pointer]:
+            - heading "TypeScript for Playwright | Inheritance | Method Overriding | Access Modifiers (Session 15) 1 hour, 36 minutes" [level=3] [ref=e226]:
+              - link "TypeScript for Playwright | Inheritance | Method Overriding | Access Modifiers (Session 15) 1 hour, 36 minutes" [ref=e227]:
+                - /url: /watch?v=7CyvyhJF2Tk&pp=0gcJCfwJAYcqIYzv
+                - generic [ref=e228]: TypeScript for Playwright | Inheritance | Method Overriding | Access Modifiers (Session 15)
+            - generic [ref=e231]:
+              - generic [ref=e232]: 2K views
+              - generic [ref=e233]: •1 month ago
+        - generic [ref=e237]:
+          - link [ref=e240] [cursor=pointer]:
+            - /url: /watch?v=rcFtQ3fq84s
+          - generic [ref=e243] [cursor=pointer]:
+            - heading "TypeScript for Playwright | TypeScript Class, Types of Properties & Methods (Session 14) 1 hour, 12 minutes" [level=3] [ref=e244]:
+              - link "TypeScript for Playwright | TypeScript Class, Types of Properties & Methods (Session 14) 1 hour, 12 minutes" [ref=e245]:
+                - /url: /watch?v=rcFtQ3fq84s
+                - generic [ref=e246]: TypeScript for Playwright | TypeScript Class, Types of Properties & Methods (Session 14)
+            - generic [ref=e249]:
+              - generic [ref=e250]: 1.4K views
+              - generic [ref=e251]: •1 month ago
+        - generic [ref=e255]:
+          - link [ref=e258] [cursor=pointer]:
+            - /url: /watch?v=ns5pAIVnMsM
+          - generic [ref=e261] [cursor=pointer]:
+            - heading "TypeScript for Playwright | TypeScript Objects | Different ways to Create Objects in TS (Session 13) 1 hour, 42 minutes" [level=3] [ref=e262]:
+              - link "TypeScript for Playwright | TypeScript Objects | Different ways to Create Objects in TS (Session 13) 1 hour, 42 minutes" [ref=e263]:
+                - /url: /watch?v=ns5pAIVnMsM
+                - generic [ref=e264]: TypeScript for Playwright | TypeScript Objects | Different ways to Create Objects in TS (Session 13)
+            - generic [ref=e267]:
+              - generic [ref=e268]: 2.1K views
+              - generic [ref=e269]: •1 month ago
+        - generic [ref=e273]:
+          - link [ref=e276] [cursor=pointer]:
+            - /url: /watch?v=BnC6B-fRVCM
+          - generic [ref=e279] [cursor=pointer]:
+            - heading "TypeScript for Playwright | Strings | String Methods | String Immutability | (Session 12) 58 minutes" [level=3] [ref=e280]:
+              - link "TypeScript for Playwright | Strings | String Methods | String Immutability | (Session 12) 58 minutes" [ref=e281]:
+                - /url: /watch?v=BnC6B-fRVCM
+                - generic [ref=e282]: TypeScript for Playwright | Strings | String Methods | String Immutability | (Session 12)
+            - generic [ref=e285]:
+              - generic [ref=e286]: 1.3K views
+              - generic [ref=e287]: •1 month ago
+        - generic [ref=e291]:
+          - link [ref=e294] [cursor=pointer]:
+            - /url: /watch?v=2f66STWjgI4
+          - generic [ref=e297] [cursor=pointer]:
+            - heading "TypeScript for Playwright | forEach(), map(), filter() reduce(), some() and every() | (Session 11) 1 hour, 23 minutes" [level=3] [ref=e298]:
+              - link "TypeScript for Playwright | forEach(), map(), filter() reduce(), some() and every() | (Session 11) 1 hour, 23 minutes" [ref=e299]:
+                - /url: /watch?v=2f66STWjgI4
+                - generic [ref=e300]: TypeScript for Playwright | forEach(), map(), filter() reduce(), some() and every() | (Session 11)
+            - generic [ref=e303]:
+              - generic [ref=e304]: 1.3K views
+              - generic [ref=e305]: •1 month ago
+        - generic [ref=e309]:
+          - link [ref=e312] [cursor=pointer]:
+            - /url: /watch?v=bUWFAQN7kSo
+          - generic [ref=e315] [cursor=pointer]:
+            - heading "TypeScript for Playwright | TypeScript Array Methods (Session 10) 1 hour, 3 minutes" [level=3] [ref=e316]:
+              - link "TypeScript for Playwright | TypeScript Array Methods (Session 10) 1 hour, 3 minutes" [ref=e317]:
+                - /url: /watch?v=bUWFAQN7kSo
+                - generic [ref=e318]: TypeScript for Playwright | TypeScript Array Methods (Session 10)
+            - generic [ref=e321]:
+              - generic [ref=e322]: 1.3K views
+              - generic [ref=e323]: •1 month ago
+        - generic [ref=e327]:
+          - link [ref=e330] [cursor=pointer]:
+            - /url: /watch?v=yVaRSbSL2dU&pp=0gcJCfwJAYcqIYzv
+          - generic [ref=e333] [cursor=pointer]:
+            - heading "TypeScript for Playwright | TypeScript Arrays & Tuples (Session 9) 1 hour, 28 minutes" [level=3] [ref=e334]:
+              - link "TypeScript for Playwright | TypeScript Arrays & Tuples (Session 9) 1 hour, 28 minutes" [ref=e335]:
+                - /url: /watch?v=yVaRSbSL2dU&pp=0gcJCfwJAYcqIYzv
+                - generic [ref=e336]: TypeScript for Playwright | TypeScript Arrays & Tuples (Session 9)
+            - generic [ref=e339]:
+              - generic [ref=e340]: 1.6K views
+              - generic [ref=e341]: •1 month ago
+        - generic [ref=e345]:
+          - link [ref=e348] [cursor=pointer]:
+            - /url: /watch?v=1T1-NMEhRec
+          - generic [ref=e351] [cursor=pointer]:
+            - heading "TypeScript for Playwright | Functions in TypeScript Part-2 (Session 8) 1 hour, 28 minutes" [level=3] [ref=e352]:
+              - link "TypeScript for Playwright | Functions in TypeScript Part-2 (Session 8) 1 hour, 28 minutes" [ref=e353]:
+                - /url: /watch?v=1T1-NMEhRec
+                - generic [ref=e354]: TypeScript for Playwright | Functions in TypeScript Part-2 (Session 8)
+            - generic [ref=e357]:
+              - generic [ref=e358]: 1.7K views
+              - generic [ref=e359]: •1 month ago
+        - generic [ref=e363]:
+          - link [ref=e366] [cursor=pointer]:
+            - /url: /watch?v=UmAXej3U9dI
+          - generic [ref=e369] [cursor=pointer]:
+            - heading "TypeScript for Playwright | Functions in TypeScript Part-1 (Session 7) 1 hour, 25 minutes" [level=3] [ref=e370]:
+              - link "TypeScript for Playwright | Functions in TypeScript Part-1 (Session 7) 1 hour, 25 minutes" [ref=e371]:
+                - /url: /watch?v=UmAXej3U9dI
+                - generic [ref=e372]: TypeScript for Playwright | Functions in TypeScript Part-1 (Session 7)
+            - generic [ref=e375]:
+              - generic [ref=e376]: 2.2K views
+              - generic [ref=e377]: •1 month ago
+        - generic [ref=e381]:
+          - link [ref=e384] [cursor=pointer]:
+            - /url: /watch?v=5NRXKzi-0HY
+          - generic [ref=e387] [cursor=pointer]:
+            - heading "TypeScript for Playwright | Looping Statements| while, do-while, for loops (Session 6) 1 hour, 17 minutes" [level=3] [ref=e388]:
+              - link "TypeScript for Playwright | Looping Statements| while, do-while, for loops (Session 6) 1 hour, 17 minutes" [ref=e389]:
+                - /url: /watch?v=5NRXKzi-0HY
+                - generic [ref=e390]: TypeScript for Playwright | Looping Statements| while, do-while, for loops (Session 6)
+            - generic [ref=e393]:
+              - generic [ref=e394]: 1.7K views
+              - generic [ref=e395]: •1 month ago
+        - generic [ref=e399]:
+          - link [ref=e402] [cursor=pointer]:
+            - /url: /watch?v=jI_WrjcEVO4
+          - generic [ref=e405] [cursor=pointer]:
+            - heading "TypeScript for Playwright | Conditional Statements | If, if-else & if-else if (Session 5) 55 minutes" [level=3] [ref=e406]:
+              - link "TypeScript for Playwright | Conditional Statements | If, if-else & if-else if (Session 5) 55 minutes" [ref=e407]:
+                - /url: /watch?v=jI_WrjcEVO4
+                - generic [ref=e408]: TypeScript for Playwright | Conditional Statements | If, if-else & if-else if (Session 5)
+            - generic [ref=e411]:
+              - generic [ref=e412]: 1.9K views
+              - generic [ref=e413]: •2 months ago
+        - generic [ref=e417]:
+          - link [ref=e420] [cursor=pointer]:
+            - /url: /watch?v=XJEys6mZ0zE
+          - generic [ref=e423] [cursor=pointer]:
+            - heading "TypeScript for Playwright | Operators | Equal Vs Strict Equality (Session 4) 1 hour, 3 minutes" [level=3] [ref=e424]:
+              - link "TypeScript for Playwright | Operators | Equal Vs Strict Equality (Session 4) 1 hour, 3 minutes" [ref=e425]:
+                - /url: /watch?v=XJEys6mZ0zE
+                - generic [ref=e426]: TypeScript for Playwright | Operators | Equal Vs Strict Equality (Session 4)
+            - generic [ref=e429]:
+              - generic [ref=e430]: 2.2K views
+              - generic [ref=e431]: •2 months ago
+        - generic [ref=e435]:
+          - link [ref=e438] [cursor=pointer]:
+            - /url: /watch?v=HqVq-uYH1Ls
+          - generic [ref=e441] [cursor=pointer]:
+            - heading "TypeScript for Playwright | Data Types | Type Safety | Annotations & Type Inference (Session 3) 1 hour, 18 minutes" [level=3] [ref=e442]:
+              - link "TypeScript for Playwright | Data Types | Type Safety | Annotations & Type Inference (Session 3) 1 hour, 18 minutes" [ref=e443]:
+                - /url: /watch?v=HqVq-uYH1Ls
+                - generic [ref=e444]: TypeScript for Playwright | Data Types | Type Safety | Annotations & Type Inference (Session 3)
+            - generic [ref=e447]:
+              - generic [ref=e448]: 3.7K views
+              - generic [ref=e449]: •2 months ago
+        - generic [ref=e453]:
+          - link [ref=e456] [cursor=pointer]:
+            - /url: /watch?v=3QfDU4zd42Y
+          - generic [ref=e459] [cursor=pointer]:
+            - heading "Auto Data Filler | Chrome Extension | Free Tool to fill the data in one click | From SelectorsHub 7 minutes, 55 seconds" [level=3] [ref=e460]:
+              - link "Auto Data Filler | Chrome Extension | Free Tool to fill the data in one click | From SelectorsHub 7 minutes, 55 seconds" [ref=e461]:
+                - /url: /watch?v=3QfDU4zd42Y
+                - generic [ref=e462]: Auto Data Filler | Chrome Extension | Free Tool to fill the data in one click | From SelectorsHub
+            - generic [ref=e465]:
+              - generic [ref=e466]: 2.6K views
+              - generic [ref=e467]: •2 months ago
+        - generic [ref=e471]:
+          - link [ref=e474] [cursor=pointer]:
+            - /url: /watch?v=5jz9tWBMAt4
+          - generic [ref=e477] [cursor=pointer]:
+            - heading "TypeScript for Playwright | Type Script Variables var | let | const (Session 2) 1 hour, 21 minutes" [level=3] [ref=e478]:
+              - link "TypeScript for Playwright | Type Script Variables var | let | const (Session 2) 1 hour, 21 minutes" [ref=e479]:
+                - /url: /watch?v=5jz9tWBMAt4
+                - generic [ref=e480]: TypeScript for Playwright | Type Script Variables var | let | const (Session 2)
+            - generic [ref=e483]:
+              - generic [ref=e484]: 5K views
+              - generic [ref=e485]: •2 months ago
+        - generic [ref=e489]:
+          - link [ref=e492] [cursor=pointer]:
+            - /url: /watch?v=pRYZCwXbwKc
+          - generic [ref=e495] [cursor=pointer]:
+            - heading "TypeScript for Playwright | Introduction & Environment Setup (Session 1) 53 minutes" [level=3] [ref=e496]:
+              - link "TypeScript for Playwright | Introduction & Environment Setup (Session 1) 53 minutes" [ref=e497]:
+                - /url: /watch?v=pRYZCwXbwKc
+                - generic [ref=e498]: TypeScript for Playwright | Introduction & Environment Setup (Session 1)
+            - generic [ref=e501]:
+              - generic [ref=e502]: 7.7K views
+              - generic [ref=e503]: •2 months ago
+        - generic [ref=e507]:
+          - link [ref=e510] [cursor=pointer]:
+            - /url: /watch?v=Iy3JU4UyD9o
+          - generic [ref=e513] [cursor=pointer]:
+            - heading "API Testing with Python Request Module | Data Driven Testing with Excel, JSON & CSV by Mr. Madan 1 hour, 8 minutes" [level=3] [ref=e514]:
+              - link "API Testing with Python Request Module | Data Driven Testing with Excel, JSON & CSV by Mr. Madan 1 hour, 8 minutes" [ref=e515]:
+                - /url: /watch?v=Iy3JU4UyD9o
+                - generic [ref=e516]: API Testing with Python Request Module | Data Driven Testing with Excel, JSON & CSV by Mr. Madan
+            - generic [ref=e519]:
+              - generic [ref=e520]: 5.2K views
+              - generic [ref=e521]: •2 months ago
+        - generic [ref=e525]:
+          - link [ref=e528] [cursor=pointer]:
+            - /url: /watch?v=S_j8ZAvBREE
+          - generic [ref=e531] [cursor=pointer]:
+            - heading "API Testing with Python Request Module | Chaining of API Requests| by Mr. Madan 48 minutes" [level=3] [ref=e532]:
+              - link "API Testing with Python Request Module | Chaining of API Requests| by Mr. Madan 48 minutes" [ref=e533]:
+                - /url: /watch?v=S_j8ZAvBREE
+                - generic [ref=e534]: API Testing with Python Request Module | Chaining of API Requests| by Mr. Madan
+            - generic [ref=e537]:
+              - generic [ref=e538]: 1.6K views
+              - generic [ref=e539]: •2 months ago
+        - generic [ref=e543]:
+          - link [ref=e546] [cursor=pointer]:
+            - /url: /watch?v=DikVD9niZI8
+          - generic [ref=e549] [cursor=pointer]:
+            - heading "API Testing with Python Request Module | Parsing XML Response & Schema Validations | by Mr. Madan 1 hour, 19 minutes" [level=3] [ref=e550]:
+              - link "API Testing with Python Request Module | Parsing XML Response & Schema Validations | by Mr. Madan 1 hour, 19 minutes" [ref=e551]:
+                - /url: /watch?v=DikVD9niZI8
+                - generic [ref=e552]: API Testing with Python Request Module | Parsing XML Response & Schema Validations | by Mr. Madan
+            - generic [ref=e555]:
+              - generic [ref=e556]: 1.3K views
+              - generic [ref=e557]: •2 months ago
+        - generic [ref=e561]:
+          - link [ref=e564] [cursor=pointer]:
+            - /url: /watch?v=cLk3RDQZTKw&pp=0gcJCfwJAYcqIYzv
+          - generic [ref=e567] [cursor=pointer]:
+            - heading "API Testing with Python Request Module | Parsing Complex JSON Response Payload | by Mr. Madan 1 hour, 4 minutes" [level=3] [ref=e568]:
+              - link "API Testing with Python Request Module | Parsing Complex JSON Response Payload | by Mr. Madan 1 hour, 4 minutes" [ref=e569]:
+                - /url: /watch?v=cLk3RDQZTKw&pp=0gcJCfwJAYcqIYzv
+                - generic [ref=e570]: API Testing with Python Request Module | Parsing Complex JSON Response Payload | by Mr. Madan
+            - generic [ref=e573]:
+              - generic [ref=e574]: 1.6K views
+              - generic [ref=e575]: •2 months ago
+        - generic [ref=e579]:
+          - link [ref=e582] [cursor=pointer]:
+            - /url: /watch?v=49sP6iP6Ymk
+          - generic [ref=e585] [cursor=pointer]:
+            - heading "API Testing with Python Request Module | File Upload & Download | Cookies and Headers | by Mr. Madan 1 hour, 3 minutes" [level=3] [ref=e586]:
+              - link "API Testing with Python Request Module | File Upload & Download | Cookies and Headers | by Mr. Madan 1 hour, 3 minutes" [ref=e587]:
+                - /url: /watch?v=49sP6iP6Ymk
+                - generic [ref=e588]: API Testing with Python Request Module | File Upload & Download | Cookies and Headers | by Mr. Madan
+            - generic [ref=e591]:
+              - generic [ref=e592]: 1.5K views
+              - generic [ref=e593]: •2 months ago
+        - generic [ref=e597]:
+          - link [ref=e600] [cursor=pointer]:
+            - /url: /watch?v=k13iYIUsZ4A
+          - generic [ref=e603] [cursor=pointer]:
+            - heading "API Testing with Python Request Module | Types Of Authentications in Request Library | by Mr. Madan 1 hour, 16 minutes" [level=3] [ref=e604]:
+              - link "API Testing with Python Request Module | Types Of Authentications in Request Library | by Mr. Madan 1 hour, 16 minutes" [ref=e605]:
+                - /url: /watch?v=k13iYIUsZ4A
+                - generic [ref=e606]: API Testing with Python Request Module | Types Of Authentications in Request Library | by Mr. Madan
+            - generic [ref=e609]:
+              - generic [ref=e610]: 2K views
+              - generic [ref=e611]: •2 months ago
+        - generic [ref=e615]:
+          - link [ref=e618] [cursor=pointer]:
+            - /url: /watch?v=UPjrJgQa0QI
+          - generic [ref=e621] [cursor=pointer]:
+            - heading "API Testing with Python Request Module| Different Ways to Create Request Body(Part2) | by Mr. Madan 1 hour, 2 minutes" [level=3] [ref=e622]:
+              - link "API Testing with Python Request Module| Different Ways to Create Request Body(Part2) | by Mr. Madan 1 hour, 2 minutes" [ref=e623]:
+                - /url: /watch?v=UPjrJgQa0QI
+                - generic [ref=e624]: API Testing with Python Request Module| Different Ways to Create Request Body(Part2) | by Mr. Madan
+            - generic [ref=e627]:
+              - generic [ref=e628]: 2K views
+              - generic [ref=e629]: •2 months ago
+        - generic [ref=e633]:
+          - link [ref=e636] [cursor=pointer]:
+            - /url: /watch?v=SAw1gfoB9pM
+          - generic [ref=e639] [cursor=pointer]:
+            - heading "API Testing with Python Request Module| Different Ways to Create Request Body(Part1) | by Mr. Madan 51 minutes" [level=3] [ref=e640]:
+              - link "API Testing with Python Request Module| Different Ways to Create Request Body(Part1) | by Mr. Madan 51 minutes" [ref=e641]:
+                - /url: /watch?v=SAw1gfoB9pM
+                - generic [ref=e642]: API Testing with Python Request Module| Different Ways to Create Request Body(Part1) | by Mr. Madan
+            - generic [ref=e645]:
+              - generic [ref=e646]: 2.5K views
+              - generic [ref=e647]: •2 months ago
+        - generic [ref=e651]:
+          - link [ref=e654] [cursor=pointer]:
+            - /url: /watch?v=aBwoEx1CZX8
+          - generic [ref=e657] [cursor=pointer]:
+            - heading "API Testing with Python Request Module| Introduction & HTTP Methods by Mr. Madan 1 hour, 35 minutes" [level=3] [ref=e658]:
+              - link "API Testing with Python Request Module| Introduction & HTTP Methods by Mr. Madan 1 hour, 35 minutes" [ref=e659]:
+                - /url: /watch?v=aBwoEx1CZX8
+                - generic [ref=e660]: API Testing with Python Request Module| Introduction & HTTP Methods by Mr. Madan
+            - generic [ref=e663]:
+              - generic [ref=e664]: 6.4K views
+              - generic [ref=e665]: •2 months ago
+        - generic [ref=e669]:
+          - link [ref=e672] [cursor=pointer]:
+            - /url: /watch?v=paSwmp-z9wc&pp=0gcJCfwJAYcqIYzv
+          - generic [ref=e675] [cursor=pointer]:
+            - 'heading "AI-Powered Test Automation: Playwright MCP (Model Context Protocol) with GitHub Copilot in Action 1 hour, 25 minutes" [level=3] [ref=e676]':
+              - 'link "AI-Powered Test Automation: Playwright MCP (Model Context Protocol) with GitHub Copilot in Action 1 hour, 25 minutes" [ref=e677]':
+                - /url: /watch?v=paSwmp-z9wc&pp=0gcJCfwJAYcqIYzv
+                - generic [ref=e678]: "AI-Powered Test Automation: Playwright MCP (Model Context Protocol) with GitHub Copilot in Action"
+            - generic [ref=e681]:
+              - generic [ref=e682]: 95K views
+              - generic [ref=e683]: •3 months ago
+        - text: • •
+```

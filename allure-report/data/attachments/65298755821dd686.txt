@@ -1,0 +1,3 @@
+Table Name: Dynamic Web Table
+Table Headers :  [ 'Name', 'Disk (MB/s)', 'Network (Mbps)', 'CPU (%)', 'Memory (MB)' ]
+table data 4 :  5.7%

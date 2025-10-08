@@ -27,5 +27,4 @@ export class GetByPlaceholderLocaters {
         expect(this.locators.searchBtn).toBeVisible();
         await this.locators.searchBtn.click();
     }
-
 }

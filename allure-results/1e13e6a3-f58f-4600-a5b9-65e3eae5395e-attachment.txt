@@ -1,0 +1,7 @@
+The Bid Request Id with Committed Status is : 87XEA716A622
+The Bid Request Id in Price Offered Page is : 87XEA716A622
+The Corresponding Loan Id is : TestSigma_07-10-2025_SC1_87_246
+✅ Loan details (Price Offered) saved to LoanDetails_Offered.xlsx
+Corr Loan Number List : TestSigma_07-10-2025_SC1_87_246,TestSigma_07-10-2025_SC1_id_161,TestSigma_07-10-2025_SC1_ot_392,TestSigma_07-10-2025_SC1_sd_590
+✅ Loan details (Locked Loans) saved to LoanDetails_Locked.xlsx
+✅ Loan details matched between Offered and Locked Loans!

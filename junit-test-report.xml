@@ -1,9 +1,8 @@
-<testsuites id="" name="" tests="14" failures="1" skipped="0" errors="0" time="36.675646">
-<testsuite name="createExcelFile.spec.ts" timestamp="2025-10-07T13:13:28.326Z" hostname="chromium" tests="1" failures="0" skipped="0" time="3.652" errors="0">
-<testcase name="Create Excel File" classname="createExcelFile.spec.ts" time="3.652">
+<testsuites id="" name="" tests="14" failures="4" skipped="0" errors="0" time="137.361849">
+<testsuite name="createExcelFile.spec.ts" timestamp="2025-10-08T10:31:55.377Z" hostname="webkit" tests="1" failures="0" skipped="0" time="3.049" errors="0">
+<testcase name="Create Excel File" classname="createExcelFile.spec.ts" time="3.049">
 <system-out>
-<![CDATA[Table Rows Count is: 7
-Excel file created at: tableData.xlsx
+<![CDATA[Excel file created at: tableData.xlsx
 ┌─────────┬──────────────────────┬───────────┬──────────────┬────────┐
 │ (index) │ BookName             │ Author    │ Subject      │ Price  │
 ├─────────┼──────────────────────┼───────────┼──────────────┼────────┤
@@ -18,81 +17,133 @@ Excel file created at: tableData.xlsx
 </system-out>
 </testcase>
 </testsuite>
-<testsuite name="csvFile.spec.ts" timestamp="2025-10-07T13:13:28.326Z" hostname="chromium" tests="2" failures="0" skipped="0" time="0.543" errors="0">
-<testcase name="Login test for 1" classname="csvFile.spec.ts" time="0.311">
+<testsuite name="csvFile.spec.ts" timestamp="2025-10-08T10:31:55.377Z" hostname="webkit" tests="2" failures="0" skipped="0" time="1.364" errors="0">
+<testcase name="Login test for 1" classname="csvFile.spec.ts" time="0.665">
 <system-out>
 <![CDATA[Running test for user: paarivel and password: Paari11
 ]]>
 </system-out>
 </testcase>
-<testcase name="Login test for 2" classname="csvFile.spec.ts" time="0.232">
+<testcase name="Login test for 2" classname="csvFile.spec.ts" time="0.699">
 <system-out>
 <![CDATA[Running test for user: rukumini and password: Ruku29
 ]]>
 </system-out>
 </testcase>
 </testsuite>
-<testsuite name="ExcelFileJSON.spec.ts" timestamp="2025-10-07T13:13:28.326Z" hostname="chromium" tests="1" failures="0" skipped="0" time="0.051" errors="0">
-<testcase name="JSON to Excel" classname="ExcelFileJSON.spec.ts" time="0.051">
+<testsuite name="ExcelFileJSON.spec.ts" timestamp="2025-10-08T10:31:55.377Z" hostname="webkit" tests="1" failures="0" skipped="0" time="0.027" errors="0">
+<testcase name="JSON to Excel" classname="ExcelFileJSON.spec.ts" time="0.027">
 <system-out>
 <![CDATA[[ { name: [32m'Harish'[39m, email: [32m'harish@gmail.com'[39m, phone: [32m'1234567809'[39m } ]
 ]]>
 </system-out>
 </testcase>
 </testsuite>
-<testsuite name="jsonFile.spec.ts" timestamp="2025-10-07T13:13:28.326Z" hostname="chromium" tests="2" failures="0" skipped="0" time="0.015" errors="0">
-<testcase name="JSON File Test Data Lender Price Credentials " classname="jsonFile.spec.ts" time="0.006">
+<testsuite name="jsonFile.spec.ts" timestamp="2025-10-08T10:31:55.377Z" hostname="webkit" tests="2" failures="0" skipped="0" time="0.002" errors="0">
+<testcase name="JSON File Test Data Lender Price Credentials " classname="jsonFile.spec.ts" time="0.001">
 <system-out>
 <![CDATA[Fecthing data from json file testsigma_internal and Welcome@1
 ]]>
 </system-out>
 </testcase>
-<testcase name="JSON File Test Data Bluecopa Credentials " classname="jsonFile.spec.ts" time="0.009">
+<testcase name="JSON File Test Data Bluecopa Credentials " classname="jsonFile.spec.ts" time="0.001">
 <system-out>
 <![CDATA[Fecthing data from json file bluecopa_internal and Welcome@2025
 ]]>
 </system-out>
 </testcase>
 </testsuite>
-<testsuite name="lenderPrice.spec.ts" timestamp="2025-10-07T13:13:28.326Z" hostname="chromium" tests="1" failures="0" skipped="0" time="17.928" errors="0">
-<testcase name="Navigate to Lender Price Website" classname="lenderPrice.spec.ts" time="17.928">
+<testsuite name="lenderPrice.spec.ts" timestamp="2025-10-08T10:31:55.377Z" hostname="webkit" tests="1" failures="1" skipped="0" time="30.336" errors="0">
+<testcase name="Navigate to Lender Price Website" classname="lenderPrice.spec.ts" time="30.336">
+<failure message="lenderPrice.spec.ts:5:5 Navigate to Lender Price Website" type="FAILURE">
+<![CDATA[  [webkit] › lenderPrice.spec.ts:5:5 › Navigate to Lender Price Website @lenderPrice ───────────────
+
+    Test timeout of 30000ms exceeded.
+
+    Error: locator.scrollIntoViewIfNeeded: Test timeout of 30000ms exceeded.
+    Call log:
+      - waiting for locator('//app-common-modal[@class="component-host-scrollable"]//div[@class="apply-grid"]/div/following-sibling::div[@class="border-bottom p-2 tr-value"]').nth(53)
+
+
+       at ..\LenderPages\DashboardPage.ts:64
+
+      62 |
+      63 |                 for (let j = 0; j < totalLoanDetails; j++) {
+    > 64 |                     await this.locators.loanDetails_ValueColumn.nth(j).scrollIntoViewIfNeeded();
+         |                                                                        ^
+      65 |                     let loanDetails = await this.locators.loanDetails_ValueColumn.nth(j).innerText();
+      66 |                     if (loanDetails === '') loanDetails = 'Null Value';
+      67 |                     // console.log(`Loan Details List ${j + 1} : ` + loanDetails);
+        at DashboardPage.CommitmentsPriceOffered (C:\Users\leela\OneDrive\Desktop\PWCode\playwright\LenderPages\DashboardPage.ts:64:72)
+        at C:\Users\leela\OneDrive\Desktop\PWCode\playwright\tests\lenderPrice.spec.ts:12:5
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    ..\test-results\lenderPrice-Navigate-to-Lender-Price-Website-webkit\test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    attachment #2: video (video/webm) ──────────────────────────────────────────────────────────────
+    ..\test-results\lenderPrice-Navigate-to-Lender-Price-Website-webkit\video.webm
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: ..\test-results\lenderPrice-Navigate-to-Lender-Price-Website-webkit\error-context.md
+]]>
+</failure>
 <system-out>
-<![CDATA[The Bid Request Id with Committed Status is : 87U16F48453D
-The Bid Request Id in Price Offered Page is : 87U16F48453D
-The Corresponding Loan Id is : DEN_20251006_10001_TPO_Y
-✅ Loan details (Price Offered) saved to LoanDetails_Offered.xlsx
-Corr Loan Number List : DEN_20251006_10001_TPO_Y,DEN_20251006_10002_TPO_N,DEN_20251006_10003_TPO_Blank
-✅ Loan details (Locked Loans) saved to LoanDetails_Locked.xlsx
-✅ Loan details matched between Offered and Locked Loans!
+<![CDATA[The Bid Request Id with Committed Status is : 57AQ73BCD5A6
+The Bid Request Id in Price Offered Page is : 57AQ73BCD5A6
+The Corresponding Loan Id is : Deepika_JULY_16_11
+
+[[ATTACHMENT|test-results\lenderPrice-Navigate-to-Lender-Price-Website-webkit\test-failed-1.png]]
+
+[[ATTACHMENT|test-results\lenderPrice-Navigate-to-Lender-Price-Website-webkit\video.webm]]
+
+[[ATTACHMENT|test-results\lenderPrice-Navigate-to-Lender-Price-Website-webkit\error-context.md]]
 ]]>
 </system-out>
 </testcase>
 </testsuite>
-<testsuite name="playwrightPractice.spec.ts" timestamp="2025-10-07T13:13:28.326Z" hostname="chromium" tests="7" failures="1" skipped="0" time="66.567" errors="0">
-<testcase name="Playwright built-in locators" classname="playwrightPractice.spec.ts" time="4.242">
+<testsuite name="playwrightPractice.spec.ts" timestamp="2025-10-08T10:31:55.377Z" hostname="webkit" tests="7" failures="3" skipped="0" time="88.024" errors="0">
+<testcase name="Playwright built-in locators" classname="playwrightPractice.spec.ts" time="5.892">
 <system-out>
 <![CDATA[Tags with getByRoleLocators
 ]]>
 </system-out>
 </testcase>
-<testcase name="Files uploading test" classname="playwrightPractice.spec.ts" time="3.827">
-<system-out>
-<![CDATA[Single file selected: playwrightnotes.txt, Size: 1186 bytes, Type: text/plain
-Multiple files selected:
-playwrightnotes.txt, Size: 1186 bytes, Type: text/plain
-playwright notes.txt, Size: 378 bytes, Type: text/plain
+<testcase name="Files uploading test" classname="playwrightPractice.spec.ts" time="2.672">
+<failure message="playwrightPractice.spec.ts:46:5 Files uploading test" type="FAILURE">
+<![CDATA[  [webkit] › playwrightPractice.spec.ts:46:5 › Files uploading test @FilesUploading ────────────────
 
+    Error: page.goto: Target page, context or browser has been closed
+    Call log:
+      - navigating to "https://testautomationpractice.blogspot.com/p/playwrightpractice.html", waiting until "load"
+
+
+       at ..\pages\GetByRoleLocators.ts:26
+
+      24 |
+      25 |   async gotoURL() {
+    > 26 |     await this.page.goto(`${process.env.GOTO_URL}`);
+         |                     ^
+      27 |   }
+      28 |
+      29 |   // Web Elements from getByRole Locators
+        at GetByRoleLocators.gotoURL (C:\Users\leela\OneDrive\Desktop\PWCode\playwright\pages\GetByRoleLocators.ts:26:21)
+        at C:\Users\leela\OneDrive\Desktop\PWCode\playwright\tests\playwrightPractice.spec.ts:18:24
+
+    attachment #1: video (video/webm) ──────────────────────────────────────────────────────────────
+    ..\test-results\playwrightPractice-Files-uploading-test-webkit\video.webm
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+]]>
+</failure>
+<system-out>
+<![CDATA[
+[[ATTACHMENT|test-results\playwrightPractice-Files-uploading-test-webkit\video.webm]]
 ]]>
 </system-out>
 </testcase>
-<testcase name="Static Table" classname="playwrightPractice.spec.ts" time="6.243">
+<testcase name="Static Table" classname="playwrightPractice.spec.ts" time="3.69">
 <system-out>
-<![CDATA[Table Name : Static Web Table
-[ [32m'BookName'[39m, [32m'Author'[39m, [32m'Subject'[39m, [32m'Price'[39m ]
-[ [32m'Learn JS'[39m, [32m'Animesh'[39m, [32m'Javascript'[39m, [32m'300'[39m ]
-Table Rows Count is: 7
-Table Name : " Static Web Table "
-┌─────────┬──────────────────────┬───────────┬──────────────┬────────┐
+<![CDATA[┌─────────┬──────────────────────┬───────────┬──────────────┬────────┐
 │ (index) │ BookName             │ Author    │ Subject      │ Price  │
 ├─────────┼──────────────────────┼───────────┼──────────────┼────────┤
 │ 0       │ [32m'Learn Selenium'[39m     │ [32m'Amit'[39m    │ [32m'Selenium'[39m   │ [32m'300'[39m  │
@@ -105,21 +156,17 @@ Table Name : " Static Web Table "
 ]]>
 </system-out>
 </testcase>
-<testcase name="Dynamic Table" classname="playwrightPractice.spec.ts" time="4.638">
+<testcase name="Dynamic Table" classname="playwrightPractice.spec.ts" time="4.722">
 <system-out>
 <![CDATA[Table Name: Dynamic Web Table
-Table Headers :  [ [32m'Name'[39m, [32m'CPU (%)'[39m, [32m'Network (Mbps)'[39m, [32m'Memory (MB)'[39m, [32m'Disk (MB/s)'[39m ]
-table data 4 :  89.7 MB
+Table Headers :  [ [32m'Name'[39m, [32m'Memory (MB)'[39m, [32m'Network (Mbps)'[39m, [32m'Disk (MB/s)'[39m, [32m'CPU (%)'[39m ]
+table data 4 :  0.30 MB/s
 ]]>
 </system-out>
 </testcase>
-<testcase name="Pagination Web Table" classname="playwrightPractice.spec.ts" time="3.729">
+<testcase name="Pagination Web Table" classname="playwrightPractice.spec.ts" time="5.034">
 <system-out>
-<![CDATA[Pagination Web Table
-Table Headers : [ [32m'ID'[39m, [32m'Name'[39m, [32m'Price'[39m ]
-Tables Count:  [33m4[39m
-Rows count from table : [33m5[39m
-┌─────────┬─────┬────────────────────┬──────────┬────────┐
+<![CDATA[┌─────────┬─────┬────────────────────┬──────────┬────────┐
 │ (index) │ ID  │ Name               │ Price    │ Select │
 ├─────────┼─────┼────────────────────┼──────────┼────────┤
 │ 0       │ [32m'1'[39m │ [32m'Smartphone'[39m       │ [32m'$10.99'[39m │ [32m''[39m     │
@@ -158,105 +205,100 @@ Rows count from table : [33m5[39m
 ]]>
 </system-out>
 </testcase>
-<testcase name="Form and ShadowDOM" classname="playwrightPractice.spec.ts" time="15.296">
-<system-out>
-<![CDATA[Section 1 para is : This is a paragraph in Section 1.
-Section 2 para is : This is a paragraph in Section 2.
-Section 3 para is : This is a paragraph in Section 3.
-Footer link 1: http://testautomationpractice.blogspot.com/
-Visited Page Title: Automation Testing Practice
-Current Page Title: Automation Testing Practice: PlaywrightPractice
-Footer link 2: https://testautomationpractice.blogspot.com/p/gui-elements-ajax-hidden.html
-Visited Page Title: Automation Testing Practice: Hidden Elements & AJAX
-Current Page Title: Automation Testing Practice: PlaywrightPractice
-Footer link 3: https://testautomationpractice.blogspot.com/p/download-files_25.html
-Visited Page Title: Automation Testing Practice: Download Files
-Current Page Title: Automation Testing Practice: PlaywrightPractice
-ShadowDOM
-Shadow DOM Text : 
-Mobiles
-Laptops
-]]>
-</system-out>
-</testcase>
-<testcase name="Tabs section test" classname="playwrightPractice.spec.ts" time="28.592">
-<failure message="playwrightPractice.spec.ts:84:5 Tabs section test" type="FAILURE">
-<![CDATA[  [chromium] › playwrightPractice.spec.ts:84:5 › Tabs section test ─────────────────────────────────
+<testcase name="Form and ShadowDOM" classname="playwrightPractice.spec.ts" time="30.806">
+<failure message="playwrightPractice.spec.ts:77:5 Form and ShadowDOM" type="FAILURE">
+<![CDATA[  [webkit] › playwrightPractice.spec.ts:77:5 › Form and ShadowDOM ──────────────────────────────────
 
-    Error: expect(locator).toHaveText(expected) failed
+    Test timeout of 30000ms exceeded.
 
-    Locator: getByRole('heading', { name: 'Selenium automates browsers. That\'s it!' })
-    Expected: "Selenium automates browsers. That's it!"
-    Timeout: 5000ms
-    Error: element(s) not found
-
+    Error: locator.fill: Test timeout of 30000ms exceeded.
     Call log:
-      - Expect "toHaveText" with timeout 5000ms
-      - waiting for getByRole('heading', { name: 'Selenium automates browsers. That\'s it!' })
+      - waiting for locator('#footer-2-2').getByRole('textbox')
 
 
-       at ..\pages\Tabs.ts:218
+       at ..\pages\FormandShadowDOM.ts:124
 
-      216 |     });
-      217 |     // await expect(verifyPopupwindowTxt).toBeVisible();
-    > 218 |     await expect(verifyPopupwindowTxt).toHaveText(
-          |                                        ^
-      219 |       "Selenium automates browsers. That's it!"
-      220 |     );
-      221 |
-        at Tabs.popupWindow (D:\playwright\pages\Tabs.ts:218:40)
-        at D:\playwright\tests\playwrightPractice.spec.ts:99:5
+      122 |     // input field 
+      123 |     await expect(this.locators.textField).toBeEmpty();
+    > 124 |     await this.locators.textField.fill("ShadowDOM section input field");
+          |                                   ^
+      125 |     await expect(this.locators.textField).not.toBeEmpty();
+      126 |
+      127 |     // checkbox field
+        at FormandShadowDOM.verifyshadowDomSection (C:\Users\leela\OneDrive\Desktop\PWCode\playwright\pages\FormandShadowDOM.ts:124:35)
+        at C:\Users\leela\OneDrive\Desktop\PWCode\playwright\tests\playwrightPractice.spec.ts:81:5
 
-    Error Context: ..\test-results\playwrightPractice-Tabs-section-test-chromium\error-context.md
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    ..\test-results\playwrightPractice-Form-and-ShadowDOM-webkit\test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    attachment #2: video (video/webm) ──────────────────────────────────────────────────────────────
+    ..\test-results\playwrightPractice-Form-and-ShadowDOM-webkit\video.webm
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: ..\test-results\playwrightPractice-Form-and-ShadowDOM-webkit\error-context.md
 ]]>
 </failure>
 <system-out>
-<![CDATA[Count [33m5[39m
-Search texts:  Playwright
-Search texts:  Playwright (software)
-Search texts:  Playwrights Horizons
-Search texts:  Playwrights Guild of Canada
-Search texts:  Playwrights' Company
-stop
-alert
+<![CDATA[
+[[ATTACHMENT|test-results\playwrightPractice-Form-and-ShadowDOM-webkit\test-failed-1.png]]
+
+[[ATTACHMENT|test-results\playwrightPractice-Form-and-ShadowDOM-webkit\video.webm]]
+
+[[ATTACHMENT|test-results\playwrightPractice-Form-and-ShadowDOM-webkit\error-context.md]]
+]]>
+</system-out>
+</testcase>
+<testcase name="Tabs section test" classname="playwrightPractice.spec.ts" time="35.208">
+<failure message="playwrightPractice.spec.ts:84:5 Tabs section test" type="FAILURE">
+<![CDATA[  [webkit] › playwrightPractice.spec.ts:84:5 › Tabs section test ───────────────────────────────────
+
+    Test timeout of 30000ms exceeded.
+
+    Error: page.goBack: Test timeout of 30000ms exceeded.
+    Call log:
+      - waiting for navigation until "load"
+        - navigated to "https://testautomationpractice.blogspot.com/p/playwrightpractice.html"
+
+
+       at ..\pages\Tabs.ts:368
+
+      366 |         // console.log("Automation : ", await this.page.title());
+      367 |       }
+    > 368 |       await this.page.goBack();
+          |                       ^
+      369 |       await this.page.waitForLoadState("domcontentloaded");
+      370 |       // console.log("Laptop Original Page Title : ", await this.page.title());
+      371 |     }
+        at Tabs.labelsAndLinks (C:\Users\leela\OneDrive\Desktop\PWCode\playwright\pages\Tabs.ts:368:23)
+        at C:\Users\leela\OneDrive\Desktop\PWCode\playwright\tests\playwrightPractice.spec.ts:96:5
+
+    attachment #1: video (video/webm) ──────────────────────────────────────────────────────────────
+    ..\test-results\playwrightPractice-Tabs-section-test-webkit\video-1.webm
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    attachment #2: video (video/webm) ──────────────────────────────────────────────────────────────
+    ..\test-results\playwrightPractice-Tabs-section-test-webkit\video.webm
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: ..\test-results\playwrightPractice-Tabs-section-test-webkit\error-context.md
+]]>
+</failure>
+<system-out>
+<![CDATA[alert
 I am an alert box!
 confirm
 Press a button!
 prompt
 Please enter your name:
 Harry Potter
-Next Page Title :  SDET-QA Blog
-Next Page URL :  https://www.pavantestingtools.com/
-Original Page URL : https://testautomationpractice.blogspot.com/p/playwrightpractice.html
 Automation Testing Practice: PlaywrightPractice
-Field1 input value :  Hello World!
-Field2 input value :  Hello World!
-Dropped Text :  Dropped!
-Scrolling Dropdown is successfully Completed
-Labels and Links Heading :  Labels And Links
-Mobile Label Heading :  Mobile Labels
-Mobile Label Texts :  Samsung
-Mobile Label Texts :  Real Me
-Mobile Label Texts :  Moto
-Laptop Heading :  Laptop Links
-Laptop Lists Count :  [33m3[39m
-Automation :  Apple
-Laptop Original Page Title :  Automation Testing Practice: PlaywrightPractice
-Automation :  Lenovo® Official India Site | Laptops, Tablets, Desktops & Servers | Lenovo IN
-Laptop Original Page Title :  Automation Testing Practice: PlaywrightPractice
-Automation :  Computers, Monitors & Technology Solutions | Dell India
-Laptop Original Page Title :  Automation Testing Practice: PlaywrightPractice
-Display :  Broken Links
-URL 1 : http://www.deadlinkcity.com/error-page.asp?e=400
-URL 2 : http://www.deadlinkcity.com/error-page.asp?e=401
-URL 3 : http://www.deadlinkcity.com/error-page.asp?e=403
-URL 4 : http://www.deadlinkcity.com/error-page.asp?e=404
-Visitors
-Raw visitors count text: 5,011,321
-Visitors Total Count: [33m5011321[39m
-Popup Window Title :  Fast and reliable end-to-end testing for modern web apps | Playwright
 
-[[ATTACHMENT|test-results\playwrightPractice-Tabs-section-test-chromium\error-context.md]]
+[[ATTACHMENT|test-results\playwrightPractice-Tabs-section-test-webkit\video-1.webm]]
+
+[[ATTACHMENT|test-results\playwrightPractice-Tabs-section-test-webkit\video.webm]]
+
+[[ATTACHMENT|test-results\playwrightPractice-Tabs-section-test-webkit\error-context.md]]
 ]]>
 </system-out>
 </testcase>

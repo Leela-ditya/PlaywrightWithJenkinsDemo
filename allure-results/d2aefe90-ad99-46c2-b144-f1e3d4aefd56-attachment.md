@@ -1,0 +1,381 @@
+# Page snapshot
+
+```yaml
+- generic [ref=e1]:
+  - generic [ref=e6]:
+    - banner [ref=e9]:
+      - img [ref=e12] [cursor=pointer]
+      - navigation [ref=e13]:
+        - list [ref=e14]:
+          - listitem [ref=e15]:
+            - link [ref=e16] [cursor=pointer]:
+              - /url: "#/dashboard"
+              - generic [ref=e17]: 
+              - generic [ref=e18]: Dashboard
+          - listitem [ref=e19]:
+            - link [ref=e20] [cursor=pointer]:
+              - /url: "#/bid-requests"
+              - generic [ref=e21]: 
+              - generic [ref=e22]: Bid Requests
+          - listitem [ref=e23]:
+            - button [ref=e24] [cursor=pointer]:
+              - generic [ref=e25]: 
+              - generic [ref=e26]: Commitments
+          - listitem [ref=e27]:
+            - button [ref=e28] [cursor=pointer]:
+              - generic [ref=e29]: 
+              - generic [ref=e30]: Administration
+          - listitem [ref=e31]:
+            - button [ref=e32] [cursor=pointer]:
+              - generic [ref=e33]: 
+              - generic [ref=e34]: Reports
+          - listitem [ref=e35]:
+            - generic [ref=e36] [cursor=pointer]:
+              - generic [ref=e37]: 
+              - generic [ref=e38]: EXT
+        - generic [ref=e39]:
+          - generic [ref=e42]: testsigma_internal
+          - generic [ref=e44] [cursor=pointer]: Logout
+    - generic [ref=e46]:
+      - generic [ref=e49]:
+        - generic [ref=e51] [cursor=pointer]:
+          - generic [ref=e52]: 
+          - text: Price Offered
+        - generic [ref=e53]:
+          - generic [ref=e55]:
+            - generic [ref=e56]:
+              - button [disabled]:
+                - generic: 
+                - text: Get Price
+            - generic [ref=e57]:
+              - generic [ref=e58]: Bid Req. ID
+              - heading [level=5] [ref=e59]: 57AQ73BCD5A6
+            - generic [ref=e60]:
+              - generic [ref=e61]: Execution Type
+              - heading [level=5] [ref=e62]: STANDARD
+            - generic [ref=e63]:
+              - generic [ref=e64]: CCode
+              - heading [level=5] [ref=e65]: A4257
+            - generic [ref=e66]:
+              - generic [ref=e67]: Company
+              - heading [level=5] [ref=e68]: American Pacific Com - A4257
+            - generic [ref=e69]:
+              - generic [ref=e70]: Product
+              - heading [level=5] [ref=e71]: FN30
+            - generic [ref=e72]:
+              - generic [ref=e73]: Coupon
+              - heading [level=5] [ref=e74]: "3.5"
+            - generic [ref=e75]:
+              - generic [ref=e76]: Sec. Month
+              - heading [level=5] [ref=e77]: Nov
+            - generic [ref=e78]:
+              - generic [ref=e79]: Current Market
+              - heading [level=5] [ref=e80]: "91.578"
+            - generic [ref=e81]:
+              - generic [ref=e82]: Current Market Diff
+              - heading [level=5] [ref=e83]: "-25.422"
+            - generic [ref=e84]:
+              - generic [ref=e85]: Min/Max Threshold
+              - heading [level=5] [ref=e86]: 1 / 120
+          - generic [ref=e87]:
+            - generic [ref=e89]:
+              - generic [ref=e90]:
+                - generic [ref=e91] [cursor=pointer]: All Loans
+                - generic [ref=e92] [cursor=pointer]:
+                  - text: Locked/Committed Loans
+                  - generic [ref=e93]: "3"
+              - generic [ref=e94]:
+                - generic [ref=e95]:
+                  - generic [ref=e96]: "Open Auth Limit:"
+                  - generic [ref=e97]: $92,427,589 (92.43%)
+                - generic [ref=e98]:
+                  - generic [ref=e99]: "Auth Limit:"
+                  - generic [ref=e100]: $100,000,000
+                - generic [ref=e101]:
+                  - generic [ref=e102]: "Last Committed Bid:"
+                  - generic [ref=e103]: 10/8/25 1:32 PM | $150,025
+            - table [ref=e108]:
+              - rowgroup [ref=e109]:
+                - row [ref=e110]:
+                  - columnheader [ref=e111]:
+                    - checkbox [ref=e114]
+                  - columnheader [ref=e115]:
+                    - generic [ref=e118]: 
+                  - columnheader [ref=e119]:
+                    - generic [ref=e120]:
+                      - button [ref=e121] [cursor=pointer]: Corr. Loan#
+                      - generic [ref=e122]: 
+                  - columnheader [ref=e123]:
+                    - generic [ref=e124]:
+                      - button [ref=e125] [cursor=pointer]: Last Name
+                      - generic [ref=e126]: 
+                  - columnheader [ref=e127]:
+                    - generic [ref=e128]:
+                      - button [ref=e129] [cursor=pointer]: Loan Amount
+                      - generic [ref=e130]: 
+                  - columnheader [ref=e131]:
+                    - generic [ref=e132]:
+                      - button [ref=e133] [cursor=pointer]: Int. Rate
+                      - generic [ref=e134]: 
+                  - columnheader [ref=e135]:
+                    - generic [ref=e136]:
+                      - button [ref=e137] [cursor=pointer]: Ref Sec Prod.
+                      - generic [ref=e138]: 
+                  - columnheader [ref=e139]:
+                    - generic [ref=e140]:
+                      - button [ref=e141] [cursor=pointer]: Ref Sec Price
+                      - generic [ref=e142]: 
+                  - columnheader [ref=e143]:
+                    - generic [ref=e144]:
+                      - button [ref=e145] [cursor=pointer]: Gross Price
+                      - generic [ref=e146]: 
+                  - columnheader [ref=e147]:
+                    - generic [ref=e148]:
+                      - button [ref=e149] [cursor=pointer]: Hedge Ratio
+                      - generic [ref=e150]: 
+                  - columnheader [ref=e151]:
+                    - generic [ref=e152]:
+                      - button [ref=e153] [cursor=pointer]: Mark Adj
+                      - generic [ref=e154]: 
+                  - columnheader [ref=e155]:
+                    - generic [ref=e156]:
+                      - button [ref=e157] [cursor=pointer]: Curr Gross
+                      - generic [ref=e158]: 
+              - rowgroup [ref=e159]:
+                - row [ref=e160]:
+                  - cell [ref=e161]:
+                    - img [ref=e162]: 
+                  - cell [ref=e163]:
+                    - img [ref=e164]: "1"
+                  - cell [ref=e165]:
+                    - group [ref=e166]:
+                      - button [ref=e167] [cursor=pointer]: Deepika_JULY_16_11
+                      - text: "|"
+                      - button [ref=e168] [cursor=pointer]: PQ
+                      - text: "|"
+                      - button [ref=e169] [cursor=pointer]: PS
+                  - cell [ref=e170]:
+                    - generic [ref=e171]: LN_Deepika_JULY_16_11
+                  - cell [ref=e172]:
+                    - generic [ref=e173]: $150,023
+                  - cell [ref=e174]:
+                    - generic [ref=e175]: 6.500%
+                  - cell [ref=e176]:
+                    - generic [ref=e177]: FN30
+                  - cell [ref=e178]:
+                    - generic [ref=e179]: "117.000"
+                  - cell [ref=e180]:
+                    - generic [ref=e181]: "125.250"
+                  - cell [ref=e182]:
+                    - generic [ref=e183]: "1.590"
+                  - cell [ref=e184]:
+                    - generic [ref=e185]: "-40.421"
+                  - cell [ref=e186]:
+                    - generic [ref=e187]: "84.829"
+                - row [ref=e188]:
+                  - cell [ref=e189]:
+                    - img [ref=e190]: 
+                  - cell [ref=e191]:
+                    - img [ref=e192]: "1"
+                  - cell [ref=e193]:
+                    - group [ref=e194]:
+                      - button [ref=e195] [cursor=pointer]: Deepika_JULY_16_12
+                      - text: "|"
+                      - button [ref=e196] [cursor=pointer]: PQ
+                      - text: "|"
+                      - button [ref=e197] [cursor=pointer]: PS
+                  - cell [ref=e198]:
+                    - generic [ref=e199]: LN_Deepika_JULY_16_12
+                  - cell [ref=e200]:
+                    - generic [ref=e201]: $150,025
+                  - cell [ref=e202]:
+                    - generic [ref=e203]: 6.500%
+                  - cell [ref=e204]:
+                    - generic [ref=e205]: FN30
+                  - cell [ref=e206]:
+                    - generic [ref=e207]: "117.000"
+                  - cell [ref=e208]:
+                    - generic [ref=e209]: "125.250"
+                  - cell [ref=e210]:
+                    - generic [ref=e211]: "1.590"
+                  - cell [ref=e212]:
+                    - generic [ref=e213]: "-40.421"
+                  - cell [ref=e214]:
+                    - generic [ref=e215]: "84.829"
+                - row [ref=e216]:
+                  - cell [ref=e217]:
+                    - img [ref=e218]: 
+                  - cell [ref=e219]:
+                    - img [ref=e220]: "2"
+                  - cell [ref=e221]:
+                    - group [ref=e222]:
+                      - button [ref=e223] [cursor=pointer]: Deepika_JULY_16_13
+                      - text: "|"
+                      - button [ref=e224] [cursor=pointer]: PQ
+                      - text: "|"
+                      - button [ref=e225] [cursor=pointer]: PS
+                  - cell [ref=e226]:
+                    - generic [ref=e227]: LN_Deepika_JULY_16_13
+                  - cell [ref=e228]:
+                    - generic [ref=e229]: $150,025
+                  - cell [ref=e230]:
+                    - generic [ref=e231]: 6.500%
+                  - cell [ref=e232]:
+                    - generic [ref=e233]: FN30
+                  - cell [ref=e234]:
+                    - generic [ref=e235]: "117.000"
+                  - cell [ref=e236]:
+                    - generic [ref=e237]: "125.250"
+                  - cell [ref=e238]:
+                    - generic [ref=e239]: "1.590"
+                  - cell [ref=e240]:
+                    - generic [ref=e241]: "-40.421"
+                  - cell [ref=e242]:
+                    - generic [ref=e243]: "84.829"
+      - generic [ref=e246]:
+        - generic [ref=e247]:
+          - button [disabled]:
+            - generic: 
+            - text: Commit Selected
+          - button [ref=e248] [cursor=pointer]:
+            - generic [ref=e249]: 
+            - text: Paste Loans
+        - generic [ref=e251] [cursor=pointer]:
+          - generic [ref=e252]: 
+          - text: Download File
+  - dialog [ref=e254]:
+    - document:
+      - generic [ref=e256]:
+        - dialog "Loan Details" [ref=e257]:
+          - heading "Loan Details" [level=5] [ref=e259]
+          - button "Close modal" [active] [ref=e260] [cursor=pointer]:
+            - generic [ref=e261]: 
+        - generic "Loan details" [ref=e263]:
+          - generic [ref=e264]:
+            - generic [ref=e265]:
+              - generic [ref=e266]:
+                - generic [ref=e267]:
+                  - generic [ref=e268]: Bid Request ID
+                  - heading "57AQ73BCD5A6" [level=5] [ref=e269]
+                - generic [ref=e270]:
+                  - generic [ref=e271]: Bid Loan Number
+                  - heading "Deepika_JULY_16_11" [level=5] [ref=e272]
+                - generic [ref=e273]:
+                  - generic [ref=e274]: Errors Check
+                  - heading "0" [level=5] [ref=e275]
+              - generic [ref=e276]:
+                - searchbox "Search Fields" [ref=e277]
+                - generic [ref=e278]: 
+            - generic [ref=e279]:
+              - generic [ref=e280]:
+                - generic [ref=e281]: Chase Field Name
+                - generic [ref=e282]: Value
+                - generic [ref=e283]: Chase Field Name
+                - generic [ref=e284]: Value
+              - generic [ref=e285]:
+                - generic [ref=e286]: Loan Term
+                - generic [ref=e287]: "360"
+                - generic [ref=e288]: Amortization Term
+                - generic [ref=e290]: Amortization Type
+                - generic [ref=e291]: Fixed
+                - generic [ref=e292]: Appraisal Waiver
+                - generic [ref=e294]: Appraised Value
+                - generic [ref=e295]: "425000"
+                - generic [ref=e296]: Base Loan Amount
+                - generic [ref=e297]: "150011"
+                - generic [ref=e298]: Borrower First Name
+                - generic [ref=e299]: FN_Deepika_JULY_16_11
+                - generic [ref=e300]: Borrower Last Name
+                - generic [ref=e301]: LN_Deepika_JULY_16_11
+                - generic [ref=e302]: Borrower Last Name
+                - generic [ref=e304]: CLTV
+                - generic [ref=e305]: "75.00"
+                - generic [ref=e306]: Cash Out Amount
+                - generic [ref=e308]: Correspondent Loan Number
+                - generic [ref=e309]: Deepika_JULY_16_11
+                - generic [ref=e310]: DTI
+                - generic [ref=e311]: "50.0"
+                - generic [ref=e312]: Doc Type
+                - generic [ref=e314]: FICO Score
+                - generic [ref=e315]: "794"
+                - generic [ref=e316]: FTHB Waiver
+                - generic [ref=e317]: "false"
+                - generic [ref=e318]: First Payment Date
+                - generic [ref=e320]: Harp Indicator
+                - generic [ref=e322]: High Balance Indicator
+                - generic [ref=e324]: Impound Type
+                - generic [ref=e325]: T
+                - generic [ref=e326]: Income (Monthly)
+                - generic [ref=e327]: "2001.00"
+                - generic [ref=e328]: Interest Only
+                - generic [ref=e329]: "false"
+                - generic [ref=e330]: LTV
+                - generic [ref=e331]: "75.00"
+                - generic [ref=e332]: Loan Purpose
+                - generic [ref=e333]: Refinance
+                - generic [ref=e334]: Loan Type
+                - generic [ref=e335]: Conventional
+                - generic [ref=e336]: Note Date
+                - generic [ref=e338]: Note Rate
+                - generic [ref=e339]: "6.500"
+                - generic [ref=e340]: Occupancy Type
+                - generic [ref=e341]: SecondaryVacation
+                - generic [ref=e342]: Original Loan Amount
+                - generic [ref=e343]: "150023"
+                - generic [ref=e344]: Product Code
+                - generic [ref=e345]: 214_25/30 Yr Freddie Mac Fixed
+                - generic [ref=e346]: Property Address
+                - generic [ref=e347]: 14436 Andover Birch Drive
+                - generic [ref=e348]: Property City
+                - generic [ref=e349]: Rosharon
+                - generic [ref=e350]: Property Indicator
+                - generic [ref=e351]: Attached
+                - generic [ref=e352]: Property State
+                - generic [ref=e353]: TX
+                - generic [ref=e354]: Property Type
+                - generic [ref=e355]: PlannedUnitDevelopment
+                - generic [ref=e356]: Property Zip Code
+                - generic [ref=e357]: "77583"
+                - generic [ref=e358]: Purpose of Refinance
+                - generic [ref=e360]: Sales Price
+                - generic [ref=e361]: "425000"
+                - generic [ref=e362]: Subordinate Amount
+                - generic [ref=e363]: "168727"
+                - generic [ref=e364]: TPO
+                - generic [ref=e365]: "false"
+                - generic [ref=e366]: Underwriting System Code
+                - generic [ref=e367]: LP
+                - generic [ref=e368]: Units
+                - generic [ref=e369]: "1"
+                - generic [ref=e370]: Unpaid Principal Balance
+                - generic [ref=e371]: "318750"
+                - generic [ref=e372]: PRODUCT_CODE
+                - generic [ref=e373]: "214"
+                - generic [ref=e374]: Ccode
+                - generic [ref=e375]: A4257
+                - generic [ref=e376]: Day Lock
+                - generic [ref=e377]: "15"
+                - generic [ref=e378]: Day Lock List
+                - generic [ref=e379]: "[15]"
+                - generic [ref=e380]: ADDRESS_CENSUS_TRACT
+                - generic [ref=e381]: "6708.01"
+                - generic [ref=e382]: ADDRESS_MSA
+                - generic [ref=e383]: "26420"
+                - generic [ref=e384]: ADDRESS_STATE_FIPS
+                - generic [ref=e385]: "48"
+                - generic [ref=e386]: ADDRESS_COUNTY_FIPS
+                - generic [ref=e387]: "157"
+                - generic [ref=e388]: ADDRESS_COUNTY
+                - generic [ref=e389]: "48157"
+                - generic [ref=e390]: ADDRESS_COUNTY_NAME
+                - generic [ref=e391]: FORT BEND
+                - generic [ref=e392]: ADDRESS_GEOCODE_STATUS
+                - generic [ref=e393]: "true"
+                - generic [ref=e394]: LMI_TYPE
+                - generic [ref=e395]: B
+                - generic [ref=e396]: LMI_INCENTIVE_PRICE
+                - generic [ref=e397]: "0.0"
+                - generic [ref=e398]: CHASE_AA
+                - generic [ref=e399]: "true"
+        - button "Close" [ref=e401] [cursor=pointer]
+```

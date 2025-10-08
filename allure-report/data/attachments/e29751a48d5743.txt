@@ -1,0 +1,7 @@
+The Bid Request Id with Committed Status is : 87U16F48453D
+The Bid Request Id in Price Offered Page is : 87U16F48453D
+The Corresponding Loan Id is : DEN_20251006_10001_TPO_Y
+✅ Loan details (Price Offered) saved to LoanDetails_Offered.xlsx
+Corr Loan Number List : DEN_20251006_10001_TPO_Y,DEN_20251006_10002_TPO_N,DEN_20251006_10003_TPO_Blank
+✅ Loan details (Locked Loans) saved to LoanDetails_Locked.xlsx
+✅ Loan details matched between Offered and Locked Loans!

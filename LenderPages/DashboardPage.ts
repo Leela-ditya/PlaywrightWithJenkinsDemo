@@ -76,7 +76,7 @@ export class DashboardPage {
                     sheet1.addRow([idx + 1, val]);
                 });
                 await workbook1.xlsx.writeFile('utilis/LoanDetails_Offered.xlsx');
-                console.log("✅ Loan details (Price Offered) saved to LoanDetails_Offered.xlsx");
+                console.log("Loan details (Price Offered) saved to LoanDetails_Offered.xlsx");
 
                 await this.locators.closeButton.click();
                 await this.page.waitForLoadState('domcontentloaded');
@@ -110,7 +110,7 @@ export class DashboardPage {
                             sheet2.addRow([idx + 1, val]);
                         });
                         await workbook2.xlsx.writeFile('utilis/LoanDetails_Locked.xlsx');
-                        console.log("✅ Loan details (Locked Loans) saved to LoanDetails_Locked.xlsx");
+                        console.log("Loan details (Locked Loans) saved to LoanDetails_Locked.xlsx");
 
                         // -------- Comparison --------
                         const readWorkBook1 = new ExcelJS.Workbook();
@@ -140,7 +140,7 @@ export class DashboardPage {
                         expect(offeredValues).toEqual(lockedValues);
 
                         // console.log comparison result
-                        console.log("✅ Loan details matched between Offered and Locked Loans!");
+                        console.log("Loan details matched between Offered and Locked Loans!");
 
                         await this.locators.closeButton.click();
                     }   

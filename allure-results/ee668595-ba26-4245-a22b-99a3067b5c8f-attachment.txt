@@ -1,0 +1,7 @@
+The Bid Request Id with Committed Status is : 57AQ73BCD5A6
+The Bid Request Id in Price Offered Page is : 57AQ73BCD5A6
+The Corresponding Loan Id is : Deepika_JULY_16_11
+Loan details (Price Offered) saved to LoanDetails_Offered.xlsx
+Corr Loan Number List : Deepika_JULY_16_11,Deepika_JULY_16_12,Deepika_JULY_16_13
+Loan details (Locked Loans) saved to LoanDetails_Locked.xlsx
+Loan details matched between Offered and Locked Loans!

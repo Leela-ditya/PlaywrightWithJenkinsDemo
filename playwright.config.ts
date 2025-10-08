@@ -23,7 +23,8 @@ export default defineConfig({
   workers: process.env.CI ? 1 : undefined,
   /* Reporter to use. See https://playwright.dev/docs/test-reporters */
   reporter: [
-    ["html"], 
+    // ["html"], 
+    ['html', { outputFolder: 'playwright-report', open: 'never' }],
     ["list"], 
     ["dot"], 
     ['json', { outputFile: 'json-test-report.json' }], 
@@ -37,7 +38,8 @@ export default defineConfig({
 
     /* Collect trace when retrying the failed test. See https://playwright.dev/docs/trace-viewer */
     trace: "on-first-retry",
-    // video: 'on',
+    screenshot: 'only-on-failure',
+    video: 'retain-on-failure',
     testIdAttribute: "data-testid",
   },
 
@@ -49,15 +51,15 @@ export default defineConfig({
       // , viewport : {width: 1920, height: 1080}
     },
 
-    // {
-    //   name: "firefox",
-    //   use: { ...devices["Desktop Firefox"] },
-    // },
+    {
+      name: "firefox",
+      use: { ...devices["Desktop Firefox"] },
+    },
 
-    // {
-    //   name: "webkit",
-    //   use: { ...devices["Desktop Safari"] },
-    // },
+    {
+      name: "webkit",
+      use: { ...devices["Desktop Safari"] },
+    },
 
     /* Test against mobile viewports. */
     // {

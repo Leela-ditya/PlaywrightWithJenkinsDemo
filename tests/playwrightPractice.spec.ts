@@ -43,7 +43,7 @@ test('Playwright built-in locators',{tag : ['@playwrightBuiltinLocators']}, asyn
     
 });
 
-test('Files uploading test', async({page})=> {
+test('Files uploading test',{tag:['@FilesUploading']}, async({page})=> {
     const FileActions = new File(page);
     await FileActions.FileInput();
 })

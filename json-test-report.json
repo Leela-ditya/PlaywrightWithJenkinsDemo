@@ -1,7 +1,7 @@
 {
   "config": {
-    "configFile": "D:\\playwright\\playwright.config.ts",
-    "rootDir": "D:/playwright/tests",
+    "configFile": "C:\\Users\\leela\\OneDrive\\Desktop\\PWCode\\playwright\\playwright.config.ts",
+    "rootDir": "C:/Users/leela/OneDrive/Desktop/PWCode/playwright/tests",
     "forbidOnly": false,
     "fullyParallel": true,
     "globalSetup": null,
@@ -11,13 +11,16 @@
     "grepInvert": null,
     "maxFailures": 0,
     "metadata": {
-      "actualWorkers": 6
+      "actualWorkers": 1
     },
     "preserveOutput": "always",
     "reporter": [
       [
         "html",
-        null
+        {
+          "outputFolder": "playwright-report",
+          "open": "never"
+        }
       ],
       [
         "list",
@@ -40,7 +43,7 @@
         }
       ],
       [
-        "D:\\playwright\\node_modules\\allure-playwright\\dist\\cjs\\index.js",
+        "C:\\Users\\leela\\OneDrive\\Desktop\\PWCode\\playwright\\node_modules\\allure-playwright\\dist\\cjs\\index.js",
         null
       ]
     ],
@@ -51,15 +54,47 @@
     "quiet": false,
     "projects": [
       {
-        "outputDir": "D:/playwright/test-results",
+        "outputDir": "C:/Users/leela/OneDrive/Desktop/PWCode/playwright/test-results",
         "repeatEach": 1,
         "retries": 0,
         "metadata": {
-          "actualWorkers": 6
+          "actualWorkers": 1
         },
         "id": "chromium",
         "name": "chromium",
-        "testDir": "D:/playwright/tests",
+        "testDir": "C:/Users/leela/OneDrive/Desktop/PWCode/playwright/tests",
+        "testIgnore": [],
+        "testMatch": [
+          "**/*.@(spec|test).?(c|m)[jt]s?(x)"
+        ],
+        "timeout": 30000
+      },
+      {
+        "outputDir": "C:/Users/leela/OneDrive/Desktop/PWCode/playwright/test-results",
+        "repeatEach": 1,
+        "retries": 0,
+        "metadata": {
+          "actualWorkers": 1
+        },
+        "id": "firefox",
+        "name": "firefox",
+        "testDir": "C:/Users/leela/OneDrive/Desktop/PWCode/playwright/tests",
+        "testIgnore": [],
+        "testMatch": [
+          "**/*.@(spec|test).?(c|m)[jt]s?(x)"
+        ],
+        "timeout": 30000
+      },
+      {
+        "outputDir": "C:/Users/leela/OneDrive/Desktop/PWCode/playwright/test-results",
+        "repeatEach": 1,
+        "retries": 0,
+        "metadata": {
+          "actualWorkers": 1
+        },
+        "id": "webkit",
+        "name": "webkit",
+        "testDir": "C:/Users/leela/OneDrive/Desktop/PWCode/playwright/tests",
         "testIgnore": [],
         "testMatch": [
           "**/*.@(spec|test).?(c|m)[jt]s?(x)"
@@ -71,7 +106,7 @@
     "updateSnapshots": "missing",
     "updateSourceMethod": "patch",
     "version": "1.56.0",
-    "workers": 6,
+    "workers": 1,
     "webServer": null
   },
   "suites": [
@@ -90,19 +125,16 @@
               "timeout": 30000,
               "annotations": [],
               "expectedStatus": "passed",
-              "projectId": "chromium",
-              "projectName": "chromium",
+              "projectId": "webkit",
+              "projectName": "webkit",
               "results": [
                 {
                   "workerIndex": 0,
                   "parallelIndex": 0,
                   "status": "passed",
-                  "duration": 3652,
+                  "duration": 3049,
                   "errors": [],
                   "stdout": [
-                    {
-                      "text": "Table Rows Count is: 7\n"
-                    },
                     {
                       "text": "Excel file created at: tableData.xlsx\n"
                     },
@@ -112,7 +144,7 @@
                   ],
                   "stderr": [],
                   "retry": 0,
-                  "startTime": "2025-10-07T13:13:31.008Z",
+                  "startTime": "2025-10-08T10:31:58.708Z",
                   "annotations": [],
                   "attachments": []
                 }
@@ -120,7 +152,7 @@
               "status": "expected"
             }
           ],
-          "id": "b2c9f3a974606f9a5328-779d85b6a62b566e1f5d",
+          "id": "b2c9f3a974606f9a5328-ee5811610329dc0e1194",
           "file": "createExcelFile.spec.ts",
           "line": 4,
           "column": 5
@@ -142,14 +174,14 @@
               "timeout": 30000,
               "annotations": [],
               "expectedStatus": "passed",
-              "projectId": "chromium",
-              "projectName": "chromium",
+              "projectId": "webkit",
+              "projectName": "webkit",
               "results": [
                 {
-                  "workerIndex": 1,
-                  "parallelIndex": 1,
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
                   "status": "passed",
-                  "duration": 311,
+                  "duration": 665,
                   "errors": [],
                   "stdout": [
                     {
@@ -158,7 +190,7 @@
                   ],
                   "stderr": [],
                   "retry": 0,
-                  "startTime": "2025-10-07T13:13:30.882Z",
+                  "startTime": "2025-10-08T10:32:02.015Z",
                   "annotations": [],
                   "attachments": []
                 }
@@ -166,7 +198,7 @@
               "status": "expected"
             }
           ],
-          "id": "c6aa30f97cc6ec558151-c791b98787a2a34fb1af",
+          "id": "c6aa30f97cc6ec558151-c59eda470f019791e0d8",
           "file": "csvFile.spec.ts",
           "line": 26,
           "column": 7
@@ -180,14 +212,14 @@
               "timeout": 30000,
               "annotations": [],
               "expectedStatus": "passed",
-              "projectId": "chromium",
-              "projectName": "chromium",
+              "projectId": "webkit",
+              "projectName": "webkit",
               "results": [
                 {
-                  "workerIndex": 2,
-                  "parallelIndex": 2,
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
                   "status": "passed",
-                  "duration": 232,
+                  "duration": 699,
                   "errors": [],
                   "stdout": [
                     {
@@ -196,7 +228,7 @@
                   ],
                   "stderr": [],
                   "retry": 0,
-                  "startTime": "2025-10-07T13:13:30.827Z",
+                  "startTime": "2025-10-08T10:32:02.714Z",
                   "annotations": [],
                   "attachments": []
                 }
@@ -204,7 +236,7 @@
               "status": "expected"
             }
           ],
-          "id": "c6aa30f97cc6ec558151-743afba57dc9ad2e8cb2",
+          "id": "c6aa30f97cc6ec558151-9a79c2d66931669b9065",
           "file": "csvFile.spec.ts",
           "line": 26,
           "column": 7
@@ -226,14 +258,14 @@
               "timeout": 30000,
               "annotations": [],
               "expectedStatus": "passed",
-              "projectId": "chromium",
-              "projectName": "chromium",
+              "projectId": "webkit",
+              "projectName": "webkit",
               "results": [
                 {
-                  "workerIndex": 3,
-                  "parallelIndex": 3,
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
                   "status": "passed",
-                  "duration": 51,
+                  "duration": 27,
                   "errors": [],
                   "stdout": [
                     {
@@ -242,7 +274,7 @@
                   ],
                   "stderr": [],
                   "retry": 0,
-                  "startTime": "2025-10-07T13:13:31.641Z",
+                  "startTime": "2025-10-08T10:32:03.458Z",
                   "annotations": [],
                   "attachments": []
                 }
@@ -250,7 +282,7 @@
               "status": "expected"
             }
           ],
-          "id": "4d02477737ad0565136c-b53d0037e07af434c79f",
+          "id": "4d02477737ad0565136c-158b6e5ab4bc54c8809a",
           "file": "ExcelFileJSON.spec.ts",
           "line": 11,
           "column": 5
@@ -272,14 +304,14 @@
               "timeout": 30000,
               "annotations": [],
               "expectedStatus": "passed",
-              "projectId": "chromium",
-              "projectName": "chromium",
+              "projectId": "webkit",
+              "projectName": "webkit",
               "results": [
                 {
-                  "workerIndex": 4,
-                  "parallelIndex": 4,
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
                   "status": "passed",
-                  "duration": 6,
+                  "duration": 1,
                   "errors": [],
                   "stdout": [
                     {
@@ -288,7 +320,7 @@
                   ],
                   "stderr": [],
                   "retry": 0,
-                  "startTime": "2025-10-07T13:13:30.943Z",
+                  "startTime": "2025-10-08T10:32:03.508Z",
                   "annotations": [],
                   "attachments": []
                 }
@@ -296,7 +328,7 @@
               "status": "expected"
             }
           ],
-          "id": "046c52ba05dab623a6e9-34b1ed8c52d52120ade6",
+          "id": "046c52ba05dab623a6e9-084c39711f2aabd8b88e",
           "file": "jsonFile.spec.ts",
           "line": 8,
           "column": 7
@@ -310,14 +342,14 @@
               "timeout": 30000,
               "annotations": [],
               "expectedStatus": "passed",
-              "projectId": "chromium",
-              "projectName": "chromium",
+              "projectId": "webkit",
+              "projectName": "webkit",
               "results": [
                 {
-                  "workerIndex": 5,
-                  "parallelIndex": 5,
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
                   "status": "passed",
-                  "duration": 9,
+                  "duration": 1,
                   "errors": [],
                   "stdout": [
                     {
@@ -326,7 +358,7 @@
                   ],
                   "stderr": [],
                   "retry": 0,
-                  "startTime": "2025-10-07T13:13:31.085Z",
+                  "startTime": "2025-10-08T10:32:03.524Z",
                   "annotations": [],
                   "attachments": []
                 }
@@ -334,7 +366,7 @@
               "status": "expected"
             }
           ],
-          "id": "046c52ba05dab623a6e9-04780374f89d679601ff",
+          "id": "046c52ba05dab623a6e9-72ce1c06d4528855471a",
           "file": "jsonFile.spec.ts",
           "line": 8,
           "column": 7
@@ -349,56 +381,78 @@
       "specs": [
         {
           "title": "Navigate to Lender Price Website",
-          "ok": true,
-          "tags": [],
+          "ok": false,
+          "tags": [
+            "lenderPrice"
+          ],
           "tests": [
             {
               "timeout": 30000,
               "annotations": [],
               "expectedStatus": "passed",
-              "projectId": "chromium",
-              "projectName": "chromium",
+              "projectId": "webkit",
+              "projectName": "webkit",
               "results": [
                 {
-                  "workerIndex": 4,
-                  "parallelIndex": 4,
-                  "status": "passed",
-                  "duration": 17928,
-                  "errors": [],
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "timedOut",
+                  "duration": 30336,
+                  "error": {
+                    "message": "\u001b[31mTest timeout of 30000ms exceeded.\u001b[39m",
+                    "stack": "\u001b[31mTest timeout of 30000ms exceeded.\u001b[39m"
+                  },
+                  "errors": [
+                    {
+                      "message": "\u001b[31mTest timeout of 30000ms exceeded.\u001b[39m"
+                    },
+                    {
+                      "location": {
+                        "file": "C:\\Users\\leela\\OneDrive\\Desktop\\PWCode\\playwright\\LenderPages\\DashboardPage.ts",
+                        "column": 72,
+                        "line": 64
+                      },
+                      "message": "Error: locator.scrollIntoViewIfNeeded: Test timeout of 30000ms exceeded.\nCall log:\n\u001b[2m  - waiting for locator('//app-common-modal[@class=\"component-host-scrollable\"]//div[@class=\"apply-grid\"]/div/following-sibling::div[@class=\"border-bottom p-2 tr-value\"]').nth(53)\u001b[22m\n\n\n\u001b[90m   at \u001b[39m..\\LenderPages\\DashboardPage.ts:64\n\n\u001b[0m \u001b[90m 62 |\u001b[39m\n \u001b[90m 63 |\u001b[39m                 \u001b[36mfor\u001b[39m (\u001b[36mlet\u001b[39m j \u001b[33m=\u001b[39m \u001b[35m0\u001b[39m\u001b[33m;\u001b[39m j \u001b[33m<\u001b[39m totalLoanDetails\u001b[33m;\u001b[39m j\u001b[33m++\u001b[39m) {\n\u001b[31m\u001b[1m>\u001b[22m\u001b[39m\u001b[90m 64 |\u001b[39m                     \u001b[36mawait\u001b[39m \u001b[36mthis\u001b[39m\u001b[33m.\u001b[39mlocators\u001b[33m.\u001b[39mloanDetails_ValueColumn\u001b[33m.\u001b[39mnth(j)\u001b[33m.\u001b[39mscrollIntoViewIfNeeded()\u001b[33m;\u001b[39m\n \u001b[90m    |\u001b[39m                                                                        \u001b[31m\u001b[1m^\u001b[22m\u001b[39m\n \u001b[90m 65 |\u001b[39m                     \u001b[36mlet\u001b[39m loanDetails \u001b[33m=\u001b[39m \u001b[36mawait\u001b[39m \u001b[36mthis\u001b[39m\u001b[33m.\u001b[39mlocators\u001b[33m.\u001b[39mloanDetails_ValueColumn\u001b[33m.\u001b[39mnth(j)\u001b[33m.\u001b[39minnerText()\u001b[33m;\u001b[39m\n \u001b[90m 66 |\u001b[39m                     \u001b[36mif\u001b[39m (loanDetails \u001b[33m===\u001b[39m \u001b[32m''\u001b[39m) loanDetails \u001b[33m=\u001b[39m \u001b[32m'Null Value'\u001b[39m\u001b[33m;\u001b[39m\n \u001b[90m 67 |\u001b[39m                     \u001b[90m// console.log(`Loan Details List ${j + 1} : ` + loanDetails);\u001b[39m\u001b[0m\n\u001b[2m    at DashboardPage.CommitmentsPriceOffered (C:\\Users\\leela\\OneDrive\\Desktop\\PWCode\\playwright\\LenderPages\\DashboardPage.ts:64:72)\u001b[22m\n\u001b[2m    at C:\\Users\\leela\\OneDrive\\Desktop\\PWCode\\playwright\\tests\\lenderPrice.spec.ts:12:5\u001b[22m"
+                    }
+                  ],
                   "stdout": [
                     {
-                      "text": "The Bid Request Id with Committed Status is : 87U16F48453D\n"
+                      "text": "The Bid Request Id with Committed Status is : 57AQ73BCD5A6\n"
                     },
                     {
-                      "text": "The Bid Request Id in Price Offered Page is : 87U16F48453D\n"
+                      "text": "The Bid Request Id in Price Offered Page is : 57AQ73BCD5A6\n"
                     },
                     {
-                      "text": "The Corresponding Loan Id is : DEN_20251006_10001_TPO_Y\n"
-                    },
-                    {
-                      "text": "✅ Loan details (Price Offered) saved to LoanDetails_Offered.xlsx\n"
-                    },
-                    {
-                      "text": "Corr Loan Number List : DEN_20251006_10001_TPO_Y,DEN_20251006_10002_TPO_N,DEN_20251006_10003_TPO_Blank\n"
-                    },
-                    {
-                      "text": "✅ Loan details (Locked Loans) saved to LoanDetails_Locked.xlsx\n"
-                    },
-                    {
-                      "text": "✅ Loan details matched between Offered and Locked Loans!\n"
+                      "text": "The Corresponding Loan Id is : Deepika_JULY_16_11\n"
                     }
                   ],
                   "stderr": [],
                   "retry": 0,
-                  "startTime": "2025-10-07T13:13:31.885Z",
+                  "startTime": "2025-10-08T10:32:03.989Z",
                   "annotations": [],
-                  "attachments": []
+                  "attachments": [
+                    {
+                      "name": "screenshot",
+                      "contentType": "image/png",
+                      "path": "C:\\Users\\leela\\OneDrive\\Desktop\\PWCode\\playwright\\test-results\\lenderPrice-Navigate-to-Lender-Price-Website-webkit\\test-failed-1.png"
+                    },
+                    {
+                      "name": "video",
+                      "contentType": "video/webm",
+                      "path": "C:\\Users\\leela\\OneDrive\\Desktop\\PWCode\\playwright\\test-results\\lenderPrice-Navigate-to-Lender-Price-Website-webkit\\video.webm"
+                    },
+                    {
+                      "name": "error-context",
+                      "contentType": "text/markdown",
+                      "path": "C:\\Users\\leela\\OneDrive\\Desktop\\PWCode\\playwright\\test-results\\lenderPrice-Navigate-to-Lender-Price-Website-webkit\\error-context.md"
+                    }
+                  ]
                 }
               ],
-              "status": "expected"
+              "status": "unexpected"
             }
           ],
-          "id": "d89473421e5eec4fdac2-3d21614d53a978c266fd",
+          "id": "d89473421e5eec4fdac2-4406673215572a63b8d4",
           "file": "lenderPrice.spec.ts",
           "line": 5,
           "column": 5
@@ -422,14 +476,14 @@
               "timeout": 30000,
               "annotations": [],
               "expectedStatus": "passed",
-              "projectId": "chromium",
-              "projectName": "chromium",
+              "projectId": "webkit",
+              "projectName": "webkit",
               "results": [
                 {
-                  "workerIndex": 5,
-                  "parallelIndex": 5,
+                  "workerIndex": 1,
+                  "parallelIndex": 0,
                   "status": "passed",
-                  "duration": 4242,
+                  "duration": 5892,
                   "errors": [],
                   "stdout": [
                     {
@@ -438,7 +492,7 @@
                   ],
                   "stderr": [],
                   "retry": 0,
-                  "startTime": "2025-10-07T13:13:31.187Z",
+                  "startTime": "2025-10-08T10:32:37.487Z",
                   "annotations": [],
                   "attachments": []
                 }
@@ -446,48 +500,73 @@
               "status": "expected"
             }
           ],
-          "id": "c32d81ce54752e4a735c-2c617ba18baf0aeb5124",
+          "id": "c32d81ce54752e4a735c-48e793d32d1c3c63d719",
           "file": "playwrightPractice.spec.ts",
           "line": 21,
           "column": 5
         },
         {
           "title": "Files uploading test",
-          "ok": true,
-          "tags": [],
+          "ok": false,
+          "tags": [
+            "FilesUploading"
+          ],
           "tests": [
             {
               "timeout": 30000,
               "annotations": [],
               "expectedStatus": "passed",
-              "projectId": "chromium",
-              "projectName": "chromium",
+              "projectId": "webkit",
+              "projectName": "webkit",
               "results": [
                 {
-                  "workerIndex": 2,
-                  "parallelIndex": 2,
-                  "status": "passed",
-                  "duration": 3827,
-                  "errors": [],
-                  "stdout": [
-                    {
-                      "text": "Single file selected: playwrightnotes.txt, Size: 1186 bytes, Type: text/plain\n"
+                  "workerIndex": 1,
+                  "parallelIndex": 0,
+                  "status": "failed",
+                  "duration": 2672,
+                  "error": {
+                    "message": "Error: page.goto: Target page, context or browser has been closed\nCall log:\n\u001b[2m  - navigating to \"https://testautomationpractice.blogspot.com/p/playwrightpractice.html\", waiting until \"load\"\u001b[22m\n",
+                    "stack": "Error: page.goto: Target page, context or browser has been closed\nCall log:\n\u001b[2m  - navigating to \"https://testautomationpractice.blogspot.com/p/playwrightpractice.html\", waiting until \"load\"\u001b[22m\n\n    at GetByRoleLocators.gotoURL (C:\\Users\\leela\\OneDrive\\Desktop\\PWCode\\playwright\\pages\\GetByRoleLocators.ts:26:21)\n    at C:\\Users\\leela\\OneDrive\\Desktop\\PWCode\\playwright\\tests\\playwrightPractice.spec.ts:18:24",
+                    "location": {
+                      "file": "C:\\Users\\leela\\OneDrive\\Desktop\\PWCode\\playwright\\pages\\GetByRoleLocators.ts",
+                      "column": 21,
+                      "line": 26
                     },
+                    "snippet": "\u001b[90m   at \u001b[39m..\\pages\\GetByRoleLocators.ts:26\n\n\u001b[0m \u001b[90m 24 |\u001b[39m\n \u001b[90m 25 |\u001b[39m   \u001b[36masync\u001b[39m gotoURL() {\n\u001b[31m\u001b[1m>\u001b[22m\u001b[39m\u001b[90m 26 |\u001b[39m     \u001b[36mawait\u001b[39m \u001b[36mthis\u001b[39m\u001b[33m.\u001b[39mpage\u001b[33m.\u001b[39mgoto(\u001b[32m`${process.env.GOTO_URL}`\u001b[39m)\u001b[33m;\u001b[39m\n \u001b[90m    |\u001b[39m                     \u001b[31m\u001b[1m^\u001b[22m\u001b[39m\n \u001b[90m 27 |\u001b[39m   }\n \u001b[90m 28 |\u001b[39m\n \u001b[90m 29 |\u001b[39m   \u001b[90m// Web Elements from getByRole Locators\u001b[39m\u001b[0m"
+                  },
+                  "errors": [
                     {
-                      "text": "Multiple files selected:\nplaywrightnotes.txt, Size: 1186 bytes, Type: text/plain\nplaywright notes.txt, Size: 378 bytes, Type: text/plain\n\n"
+                      "location": {
+                        "file": "C:\\Users\\leela\\OneDrive\\Desktop\\PWCode\\playwright\\pages\\GetByRoleLocators.ts",
+                        "column": 21,
+                        "line": 26
+                      },
+                      "message": "Error: page.goto: Target page, context or browser has been closed\nCall log:\n\u001b[2m  - navigating to \"https://testautomationpractice.blogspot.com/p/playwrightpractice.html\", waiting until \"load\"\u001b[22m\n\n\n\u001b[90m   at \u001b[39m..\\pages\\GetByRoleLocators.ts:26\n\n\u001b[0m \u001b[90m 24 |\u001b[39m\n \u001b[90m 25 |\u001b[39m   \u001b[36masync\u001b[39m gotoURL() {\n\u001b[31m\u001b[1m>\u001b[22m\u001b[39m\u001b[90m 26 |\u001b[39m     \u001b[36mawait\u001b[39m \u001b[36mthis\u001b[39m\u001b[33m.\u001b[39mpage\u001b[33m.\u001b[39mgoto(\u001b[32m`${process.env.GOTO_URL}`\u001b[39m)\u001b[33m;\u001b[39m\n \u001b[90m    |\u001b[39m                     \u001b[31m\u001b[1m^\u001b[22m\u001b[39m\n \u001b[90m 27 |\u001b[39m   }\n \u001b[90m 28 |\u001b[39m\n \u001b[90m 29 |\u001b[39m   \u001b[90m// Web Elements from getByRole Locators\u001b[39m\u001b[0m\n\u001b[2m    at GetByRoleLocators.gotoURL (C:\\Users\\leela\\OneDrive\\Desktop\\PWCode\\playwright\\pages\\GetByRoleLocators.ts:26:21)\u001b[22m\n\u001b[2m    at C:\\Users\\leela\\OneDrive\\Desktop\\PWCode\\playwright\\tests\\playwrightPractice.spec.ts:18:24\u001b[22m"
                     }
                   ],
+                  "stdout": [],
                   "stderr": [],
                   "retry": 0,
-                  "startTime": "2025-10-07T13:13:31.338Z",
+                  "startTime": "2025-10-08T10:32:43.642Z",
                   "annotations": [],
-                  "attachments": []
+                  "attachments": [
+                    {
+                      "name": "video",
+                      "contentType": "video/webm",
+                      "path": "C:\\Users\\leela\\OneDrive\\Desktop\\PWCode\\playwright\\test-results\\playwrightPractice-Files-uploading-test-webkit\\video.webm"
+                    }
+                  ],
+                  "errorLocation": {
+                    "file": "C:\\Users\\leela\\OneDrive\\Desktop\\PWCode\\playwright\\pages\\GetByRoleLocators.ts",
+                    "column": 21,
+                    "line": 26
+                  }
                 }
               ],
-              "status": "expected"
+              "status": "unexpected"
             }
           ],
-          "id": "c32d81ce54752e4a735c-13204084d71ce2635f02",
+          "id": "c32d81ce54752e4a735c-ff3543677158986f4ae4",
           "file": "playwrightPractice.spec.ts",
           "line": 46,
           "column": 5
@@ -501,38 +580,23 @@
               "timeout": 30000,
               "annotations": [],
               "expectedStatus": "passed",
-              "projectId": "chromium",
-              "projectName": "chromium",
+              "projectId": "webkit",
+              "projectName": "webkit",
               "results": [
                 {
-                  "workerIndex": 1,
-                  "parallelIndex": 1,
+                  "workerIndex": 2,
+                  "parallelIndex": 0,
                   "status": "passed",
-                  "duration": 6243,
+                  "duration": 3690,
                   "errors": [],
                   "stdout": [
-                    {
-                      "text": "Table Name : Static Web Table\n"
-                    },
-                    {
-                      "text": "[ \u001b[32m'BookName'\u001b[39m, \u001b[32m'Author'\u001b[39m, \u001b[32m'Subject'\u001b[39m, \u001b[32m'Price'\u001b[39m ]\n"
-                    },
-                    {
-                      "text": "[ \u001b[32m'Learn JS'\u001b[39m, \u001b[32m'Animesh'\u001b[39m, \u001b[32m'Javascript'\u001b[39m, \u001b[32m'300'\u001b[39m ]\n"
-                    },
-                    {
-                      "text": "Table Rows Count is: 7\n"
-                    },
-                    {
-                      "text": "Table Name : \" Static Web Table \"\n"
-                    },
                     {
                       "text": "┌─────────┬──────────────────────┬───────────┬──────────────┬────────┐\n│ (index) │ BookName             │ Author    │ Subject      │ Price  │\n├─────────┼──────────────────────┼───────────┼──────────────┼────────┤\n│ 0       │ \u001b[32m'Learn Selenium'\u001b[39m     │ \u001b[32m'Amit'\u001b[39m    │ \u001b[32m'Selenium'\u001b[39m   │ \u001b[32m'300'\u001b[39m  │\n│ 1       │ \u001b[32m'Learn Java'\u001b[39m         │ \u001b[32m'Mukesh'\u001b[39m  │ \u001b[32m'Java'\u001b[39m       │ \u001b[32m'500'\u001b[39m  │\n│ 2       │ \u001b[32m'Learn JS'\u001b[39m           │ \u001b[32m'Animesh'\u001b[39m │ \u001b[32m'Javascript'\u001b[39m │ \u001b[32m'300'\u001b[39m  │\n│ 3       │ \u001b[32m'Master In Selenium'\u001b[39m │ \u001b[32m'Mukesh'\u001b[39m  │ \u001b[32m'Selenium'\u001b[39m   │ \u001b[32m'3000'\u001b[39m │\n│ 4       │ \u001b[32m'Master In Java'\u001b[39m     │ \u001b[32m'Amod'\u001b[39m    │ \u001b[32m'JAVA'\u001b[39m       │ \u001b[32m'2000'\u001b[39m │\n│ 5       │ \u001b[32m'Master In JS'\u001b[39m       │ \u001b[32m'Amit'\u001b[39m    │ \u001b[32m'Javascript'\u001b[39m │ \u001b[32m'1000'\u001b[39m │\n└─────────┴──────────────────────┴───────────┴──────────────┴────────┘\n"
                     }
                   ],
                   "stderr": [],
                   "retry": 0,
-                  "startTime": "2025-10-07T13:13:31.492Z",
+                  "startTime": "2025-10-08T10:32:48.613Z",
                   "annotations": [],
                   "attachments": []
                 }
@@ -540,7 +604,7 @@
               "status": "expected"
             }
           ],
-          "id": "c32d81ce54752e4a735c-93b28a609b40d9365141",
+          "id": "c32d81ce54752e4a735c-31f9c332498d5c0ca666",
           "file": "playwrightPractice.spec.ts",
           "line": 51,
           "column": 5
@@ -554,29 +618,29 @@
               "timeout": 30000,
               "annotations": [],
               "expectedStatus": "passed",
-              "projectId": "chromium",
-              "projectName": "chromium",
+              "projectId": "webkit",
+              "projectName": "webkit",
               "results": [
                 {
-                  "workerIndex": 3,
-                  "parallelIndex": 3,
+                  "workerIndex": 2,
+                  "parallelIndex": 0,
                   "status": "passed",
-                  "duration": 4638,
+                  "duration": 4722,
                   "errors": [],
                   "stdout": [
                     {
                       "text": "Table Name: Dynamic Web Table\n"
                     },
                     {
-                      "text": "Table Headers :  [ \u001b[32m'Name'\u001b[39m, \u001b[32m'CPU (%)'\u001b[39m, \u001b[32m'Network (Mbps)'\u001b[39m, \u001b[32m'Memory (MB)'\u001b[39m, \u001b[32m'Disk (MB/s)'\u001b[39m ]\n"
+                      "text": "Table Headers :  [ \u001b[32m'Name'\u001b[39m, \u001b[32m'Memory (MB)'\u001b[39m, \u001b[32m'Network (Mbps)'\u001b[39m, \u001b[32m'Disk (MB/s)'\u001b[39m, \u001b[32m'CPU (%)'\u001b[39m ]\n"
                     },
                     {
-                      "text": "table data 4 :  89.7 MB\n"
+                      "text": "table data 4 :  0.30 MB/s\n"
                     }
                   ],
                   "stderr": [],
                   "retry": 0,
-                  "startTime": "2025-10-07T13:13:31.761Z",
+                  "startTime": "2025-10-08T10:32:52.531Z",
                   "annotations": [],
                   "attachments": []
                 }
@@ -584,7 +648,7 @@
               "status": "expected"
             }
           ],
-          "id": "c32d81ce54752e4a735c-f2501affa11f4bde2cc3",
+          "id": "c32d81ce54752e4a735c-5529d6061d7ebf51e03b",
           "file": "playwrightPractice.spec.ts",
           "line": 60,
           "column": 5
@@ -598,28 +662,16 @@
               "timeout": 30000,
               "annotations": [],
               "expectedStatus": "passed",
-              "projectId": "chromium",
-              "projectName": "chromium",
+              "projectId": "webkit",
+              "projectName": "webkit",
               "results": [
                 {
-                  "workerIndex": 0,
+                  "workerIndex": 2,
                   "parallelIndex": 0,
                   "status": "passed",
-                  "duration": 3729,
+                  "duration": 5034,
                   "errors": [],
                   "stdout": [
-                    {
-                      "text": "Pagination Web Table\n"
-                    },
-                    {
-                      "text": "Table Headers : [ \u001b[32m'ID'\u001b[39m, \u001b[32m'Name'\u001b[39m, \u001b[32m'Price'\u001b[39m ]\n"
-                    },
-                    {
-                      "text": "Tables Count:  \u001b[33m4\u001b[39m\n"
-                    },
-                    {
-                      "text": "Rows count from table : \u001b[33m5\u001b[39m\n"
-                    },
                     {
                       "text": "┌─────────┬─────┬────────────────────┬──────────┬────────┐\n│ (index) │ ID  │ Name               │ Price    │ Select │\n├─────────┼─────┼────────────────────┼──────────┼────────┤\n│ 0       │ \u001b[32m'1'\u001b[39m │ \u001b[32m'Smartphone'\u001b[39m       │ \u001b[32m'$10.99'\u001b[39m │ \u001b[32m''\u001b[39m     │\n│ 1       │ \u001b[32m'2'\u001b[39m │ \u001b[32m'Laptop'\u001b[39m           │ \u001b[32m'$19.99'\u001b[39m │ \u001b[32m''\u001b[39m     │\n│ 2       │ \u001b[32m'3'\u001b[39m │ \u001b[32m'Tablet'\u001b[39m           │ \u001b[32m'$5.99'\u001b[39m  │ \u001b[32m''\u001b[39m     │\n│ 3       │ \u001b[32m'4'\u001b[39m │ \u001b[32m'Smartwatch'\u001b[39m       │ \u001b[32m'$7.99'\u001b[39m  │ \u001b[32m''\u001b[39m     │\n│ 4       │ \u001b[32m'5'\u001b[39m │ \u001b[32m'Wireless Earbuds'\u001b[39m │ \u001b[32m'$8.99'\u001b[39m  │ \u001b[32m''\u001b[39m     │\n└─────────┴─────┴────────────────────┴──────────┴────────┘\n"
                     },
@@ -635,7 +687,7 @@
                   ],
                   "stderr": [],
                   "retry": 0,
-                  "startTime": "2025-10-07T13:13:35.074Z",
+                  "startTime": "2025-10-08T10:32:57.284Z",
                   "annotations": [],
                   "attachments": []
                 }
@@ -643,90 +695,73 @@
               "status": "expected"
             }
           ],
-          "id": "c32d81ce54752e4a735c-c4288da2c5c12e9d1b3d",
+          "id": "c32d81ce54752e4a735c-7a63be98f4acd8b7b2fd",
           "file": "playwrightPractice.spec.ts",
           "line": 70,
           "column": 5
         },
         {
           "title": "Form and ShadowDOM",
-          "ok": true,
+          "ok": false,
           "tags": [],
           "tests": [
             {
               "timeout": 30000,
               "annotations": [],
               "expectedStatus": "passed",
-              "projectId": "chromium",
-              "projectName": "chromium",
+              "projectId": "webkit",
+              "projectName": "webkit",
               "results": [
                 {
                   "workerIndex": 2,
-                  "parallelIndex": 2,
-                  "status": "passed",
-                  "duration": 15296,
-                  "errors": [],
-                  "stdout": [
+                  "parallelIndex": 0,
+                  "status": "timedOut",
+                  "duration": 30806,
+                  "error": {
+                    "message": "\u001b[31mTest timeout of 30000ms exceeded.\u001b[39m",
+                    "stack": "\u001b[31mTest timeout of 30000ms exceeded.\u001b[39m"
+                  },
+                  "errors": [
                     {
-                      "text": "Section 1 para is : This is a paragraph in Section 1.\n"
+                      "message": "\u001b[31mTest timeout of 30000ms exceeded.\u001b[39m"
                     },
                     {
-                      "text": "Section 2 para is : This is a paragraph in Section 2.\n"
-                    },
-                    {
-                      "text": "Section 3 para is : This is a paragraph in Section 3.\n"
-                    },
-                    {
-                      "text": "Footer link 1: http://testautomationpractice.blogspot.com/\n"
-                    },
-                    {
-                      "text": "Visited Page Title: Automation Testing Practice\n"
-                    },
-                    {
-                      "text": "Current Page Title: Automation Testing Practice: PlaywrightPractice\n"
-                    },
-                    {
-                      "text": "Footer link 2: https://testautomationpractice.blogspot.com/p/gui-elements-ajax-hidden.html\n"
-                    },
-                    {
-                      "text": "Visited Page Title: Automation Testing Practice: Hidden Elements & AJAX\n"
-                    },
-                    {
-                      "text": "Current Page Title: Automation Testing Practice: PlaywrightPractice\n"
-                    },
-                    {
-                      "text": "Footer link 3: https://testautomationpractice.blogspot.com/p/download-files_25.html\n"
-                    },
-                    {
-                      "text": "Visited Page Title: Automation Testing Practice: Download Files\n"
-                    },
-                    {
-                      "text": "Current Page Title: Automation Testing Practice: PlaywrightPractice\n"
-                    },
-                    {
-                      "text": "ShadowDOM\n"
-                    },
-                    {
-                      "text": "Shadow DOM Text : \n"
-                    },
-                    {
-                      "text": "Mobiles\n"
-                    },
-                    {
-                      "text": "Laptops\n"
+                      "location": {
+                        "file": "C:\\Users\\leela\\OneDrive\\Desktop\\PWCode\\playwright\\pages\\FormandShadowDOM.ts",
+                        "column": 35,
+                        "line": 124
+                      },
+                      "message": "Error: locator.fill: Test timeout of 30000ms exceeded.\nCall log:\n\u001b[2m  - waiting for locator('#footer-2-2').getByRole('textbox')\u001b[22m\n\n\n\u001b[90m   at \u001b[39m..\\pages\\FormandShadowDOM.ts:124\n\n\u001b[0m \u001b[90m 122 |\u001b[39m     \u001b[90m// input field \u001b[39m\n \u001b[90m 123 |\u001b[39m     \u001b[36mawait\u001b[39m expect(\u001b[36mthis\u001b[39m\u001b[33m.\u001b[39mlocators\u001b[33m.\u001b[39mtextField)\u001b[33m.\u001b[39mtoBeEmpty()\u001b[33m;\u001b[39m\n\u001b[31m\u001b[1m>\u001b[22m\u001b[39m\u001b[90m 124 |\u001b[39m     \u001b[36mawait\u001b[39m \u001b[36mthis\u001b[39m\u001b[33m.\u001b[39mlocators\u001b[33m.\u001b[39mtextField\u001b[33m.\u001b[39mfill(\u001b[32m\"ShadowDOM section input field\"\u001b[39m)\u001b[33m;\u001b[39m\n \u001b[90m     |\u001b[39m                                   \u001b[31m\u001b[1m^\u001b[22m\u001b[39m\n \u001b[90m 125 |\u001b[39m     \u001b[36mawait\u001b[39m expect(\u001b[36mthis\u001b[39m\u001b[33m.\u001b[39mlocators\u001b[33m.\u001b[39mtextField)\u001b[33m.\u001b[39mnot\u001b[33m.\u001b[39mtoBeEmpty()\u001b[33m;\u001b[39m\n \u001b[90m 126 |\u001b[39m\n \u001b[90m 127 |\u001b[39m     \u001b[90m// checkbox field\u001b[39m\u001b[0m\n\u001b[2m    at FormandShadowDOM.verifyshadowDomSection (C:\\Users\\leela\\OneDrive\\Desktop\\PWCode\\playwright\\pages\\FormandShadowDOM.ts:124:35)\u001b[22m\n\u001b[2m    at C:\\Users\\leela\\OneDrive\\Desktop\\PWCode\\playwright\\tests\\playwrightPractice.spec.ts:81:5\u001b[22m"
                     }
                   ],
+                  "stdout": [],
                   "stderr": [],
                   "retry": 0,
-                  "startTime": "2025-10-07T13:13:35.200Z",
+                  "startTime": "2025-10-08T10:33:02.371Z",
                   "annotations": [],
-                  "attachments": []
+                  "attachments": [
+                    {
+                      "name": "screenshot",
+                      "contentType": "image/png",
+                      "path": "C:\\Users\\leela\\OneDrive\\Desktop\\PWCode\\playwright\\test-results\\playwrightPractice-Form-and-ShadowDOM-webkit\\test-failed-1.png"
+                    },
+                    {
+                      "name": "video",
+                      "contentType": "video/webm",
+                      "path": "C:\\Users\\leela\\OneDrive\\Desktop\\PWCode\\playwright\\test-results\\playwrightPractice-Form-and-ShadowDOM-webkit\\video.webm"
+                    },
+                    {
+                      "name": "error-context",
+                      "contentType": "text/markdown",
+                      "path": "C:\\Users\\leela\\OneDrive\\Desktop\\PWCode\\playwright\\test-results\\playwrightPractice-Form-and-ShadowDOM-webkit\\error-context.md"
+                    }
+                  ]
                 }
               ],
-              "status": "expected"
+              "status": "unexpected"
             }
           ],
-          "id": "c32d81ce54752e4a735c-489dcae15c008387047e",
+          "id": "c32d81ce54752e4a735c-23bfeaff4cbf46699910",
           "file": "playwrightPractice.spec.ts",
           "line": 77,
           "column": 5
@@ -740,56 +775,32 @@
               "timeout": 30000,
               "annotations": [],
               "expectedStatus": "passed",
-              "projectId": "chromium",
-              "projectName": "chromium",
+              "projectId": "webkit",
+              "projectName": "webkit",
               "results": [
                 {
-                  "workerIndex": 5,
-                  "parallelIndex": 5,
-                  "status": "failed",
-                  "duration": 28592,
+                  "workerIndex": 3,
+                  "parallelIndex": 0,
+                  "status": "timedOut",
+                  "duration": 35208,
                   "error": {
-                    "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoHaveText\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m failed\n\nLocator: getByRole('heading', { name: 'Selenium automates browsers. That\\'s it!' })\nExpected: \u001b[32m\"Selenium automates browsers. That's it!\"\u001b[39m\nTimeout: 5000ms\nError: element(s) not found\n\nCall log:\n\u001b[2m  - Expect \"toHaveText\" with timeout 5000ms\u001b[22m\n\u001b[2m  - waiting for getByRole('heading', { name: 'Selenium automates browsers. That\\'s it!' })\u001b[22m\n",
-                    "stack": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoHaveText\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m failed\n\nLocator: getByRole('heading', { name: 'Selenium automates browsers. That\\'s it!' })\nExpected: \u001b[32m\"Selenium automates browsers. That's it!\"\u001b[39m\nTimeout: 5000ms\nError: element(s) not found\n\nCall log:\n\u001b[2m  - Expect \"toHaveText\" with timeout 5000ms\u001b[22m\n\u001b[2m  - waiting for getByRole('heading', { name: 'Selenium automates browsers. That\\'s it!' })\u001b[22m\n\n    at Tabs.popupWindow (D:\\playwright\\pages\\Tabs.ts:218:40)\n    at D:\\playwright\\tests\\playwrightPractice.spec.ts:99:5",
-                    "location": {
-                      "file": "D:\\playwright\\pages\\Tabs.ts",
-                      "column": 40,
-                      "line": 218
-                    },
-                    "snippet": "\u001b[90m   at \u001b[39m..\\pages\\Tabs.ts:218\n\n\u001b[0m \u001b[90m 216 |\u001b[39m     })\u001b[33m;\u001b[39m\n \u001b[90m 217 |\u001b[39m     \u001b[90m// await expect(verifyPopupwindowTxt).toBeVisible();\u001b[39m\n\u001b[31m\u001b[1m>\u001b[22m\u001b[39m\u001b[90m 218 |\u001b[39m     \u001b[36mawait\u001b[39m expect(verifyPopupwindowTxt)\u001b[33m.\u001b[39mtoHaveText(\n \u001b[90m     |\u001b[39m                                        \u001b[31m\u001b[1m^\u001b[22m\u001b[39m\n \u001b[90m 219 |\u001b[39m       \u001b[32m\"Selenium automates browsers. That's it!\"\u001b[39m\n \u001b[90m 220 |\u001b[39m     )\u001b[33m;\u001b[39m\n \u001b[90m 221 |\u001b[39m\u001b[0m"
+                    "message": "\u001b[31mTest timeout of 30000ms exceeded.\u001b[39m",
+                    "stack": "\u001b[31mTest timeout of 30000ms exceeded.\u001b[39m"
                   },
                   "errors": [
                     {
+                      "message": "\u001b[31mTest timeout of 30000ms exceeded.\u001b[39m"
+                    },
+                    {
                       "location": {
-                        "file": "D:\\playwright\\pages\\Tabs.ts",
-                        "column": 40,
-                        "line": 218
+                        "file": "C:\\Users\\leela\\OneDrive\\Desktop\\PWCode\\playwright\\pages\\Tabs.ts",
+                        "column": 23,
+                        "line": 368
                       },
-                      "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoHaveText\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m failed\n\nLocator: getByRole('heading', { name: 'Selenium automates browsers. That\\'s it!' })\nExpected: \u001b[32m\"Selenium automates browsers. That's it!\"\u001b[39m\nTimeout: 5000ms\nError: element(s) not found\n\nCall log:\n\u001b[2m  - Expect \"toHaveText\" with timeout 5000ms\u001b[22m\n\u001b[2m  - waiting for getByRole('heading', { name: 'Selenium automates browsers. That\\'s it!' })\u001b[22m\n\n\n\u001b[90m   at \u001b[39m..\\pages\\Tabs.ts:218\n\n\u001b[0m \u001b[90m 216 |\u001b[39m     })\u001b[33m;\u001b[39m\n \u001b[90m 217 |\u001b[39m     \u001b[90m// await expect(verifyPopupwindowTxt).toBeVisible();\u001b[39m\n\u001b[31m\u001b[1m>\u001b[22m\u001b[39m\u001b[90m 218 |\u001b[39m     \u001b[36mawait\u001b[39m expect(verifyPopupwindowTxt)\u001b[33m.\u001b[39mtoHaveText(\n \u001b[90m     |\u001b[39m                                        \u001b[31m\u001b[1m^\u001b[22m\u001b[39m\n \u001b[90m 219 |\u001b[39m       \u001b[32m\"Selenium automates browsers. That's it!\"\u001b[39m\n \u001b[90m 220 |\u001b[39m     )\u001b[33m;\u001b[39m\n \u001b[90m 221 |\u001b[39m\u001b[0m\n\u001b[2m    at Tabs.popupWindow (D:\\playwright\\pages\\Tabs.ts:218:40)\u001b[22m\n\u001b[2m    at D:\\playwright\\tests\\playwrightPractice.spec.ts:99:5\u001b[22m"
+                      "message": "Error: page.goBack: Test timeout of 30000ms exceeded.\nCall log:\n\u001b[2m  - waiting for navigation until \"load\"\u001b[22m\n\u001b[2m    - navigated to \"https://testautomationpractice.blogspot.com/p/playwrightpractice.html\"\u001b[22m\n\n\n\u001b[90m   at \u001b[39m..\\pages\\Tabs.ts:368\n\n\u001b[0m \u001b[90m 366 |\u001b[39m         \u001b[90m// console.log(\"Automation : \", await this.page.title());\u001b[39m\n \u001b[90m 367 |\u001b[39m       }\n\u001b[31m\u001b[1m>\u001b[22m\u001b[39m\u001b[90m 368 |\u001b[39m       \u001b[36mawait\u001b[39m \u001b[36mthis\u001b[39m\u001b[33m.\u001b[39mpage\u001b[33m.\u001b[39mgoBack()\u001b[33m;\u001b[39m\n \u001b[90m     |\u001b[39m                       \u001b[31m\u001b[1m^\u001b[22m\u001b[39m\n \u001b[90m 369 |\u001b[39m       \u001b[36mawait\u001b[39m \u001b[36mthis\u001b[39m\u001b[33m.\u001b[39mpage\u001b[33m.\u001b[39mwaitForLoadState(\u001b[32m\"domcontentloaded\"\u001b[39m)\u001b[33m;\u001b[39m\n \u001b[90m 370 |\u001b[39m       \u001b[90m// console.log(\"Laptop Original Page Title : \", await this.page.title());\u001b[39m\n \u001b[90m 371 |\u001b[39m     }\u001b[0m\n\u001b[2m    at Tabs.labelsAndLinks (C:\\Users\\leela\\OneDrive\\Desktop\\PWCode\\playwright\\pages\\Tabs.ts:368:23)\u001b[22m\n\u001b[2m    at C:\\Users\\leela\\OneDrive\\Desktop\\PWCode\\playwright\\tests\\playwrightPractice.spec.ts:96:5\u001b[22m"
                     }
                   ],
                   "stdout": [
-                    {
-                      "text": "Count \u001b[33m5\u001b[39m\n"
-                    },
-                    {
-                      "text": "Search texts:  Playwright\n"
-                    },
-                    {
-                      "text": "Search texts:  Playwright (software)\n"
-                    },
-                    {
-                      "text": "Search texts:  Playwrights Horizons\n"
-                    },
-                    {
-                      "text": "Search texts:  Playwrights Guild of Canada\n"
-                    },
-                    {
-                      "text": "Search texts:  Playwrights' Company\n"
-                    },
-                    {
-                      "text": "stop\n"
-                    },
                     {
                       "text": "alert\n"
                     },
@@ -812,118 +823,36 @@
                       "text": "Harry Potter\n"
                     },
                     {
-                      "text": "Next Page Title :  SDET-QA Blog\n"
-                    },
-                    {
-                      "text": "Next Page URL :  https://www.pavantestingtools.com/\n"
-                    },
-                    {
-                      "text": "Original Page URL : https://testautomationpractice.blogspot.com/p/playwrightpractice.html\n"
-                    },
-                    {
                       "text": "Automation Testing Practice: PlaywrightPractice\n"
-                    },
-                    {
-                      "text": "Field1 input value :  Hello World!\n"
-                    },
-                    {
-                      "text": "Field2 input value :  Hello World!\n"
-                    },
-                    {
-                      "text": "Dropped Text :  Dropped!\n"
-                    },
-                    {
-                      "text": "Scrolling Dropdown is successfully Completed\n"
-                    },
-                    {
-                      "text": "Labels and Links Heading :  Labels And Links\n"
-                    },
-                    {
-                      "text": "Mobile Label Heading :  Mobile Labels\n"
-                    },
-                    {
-                      "text": "Mobile Label Texts :  Samsung\n"
-                    },
-                    {
-                      "text": "Mobile Label Texts :  Real Me\n"
-                    },
-                    {
-                      "text": "Mobile Label Texts :  Moto\n"
-                    },
-                    {
-                      "text": "Laptop Heading :  Laptop Links\n"
-                    },
-                    {
-                      "text": "Laptop Lists Count :  \u001b[33m3\u001b[39m\n"
-                    },
-                    {
-                      "text": "Automation :  Apple\n"
-                    },
-                    {
-                      "text": "Laptop Original Page Title :  Automation Testing Practice: PlaywrightPractice\n"
-                    },
-                    {
-                      "text": "Automation :  Lenovo® Official India Site | Laptops, Tablets, Desktops & Servers | Lenovo IN\n"
-                    },
-                    {
-                      "text": "Laptop Original Page Title :  Automation Testing Practice: PlaywrightPractice\n"
-                    },
-                    {
-                      "text": "Automation :  Computers, Monitors & Technology Solutions | Dell India\n"
-                    },
-                    {
-                      "text": "Laptop Original Page Title :  Automation Testing Practice: PlaywrightPractice\n"
-                    },
-                    {
-                      "text": "Display :  Broken Links\n"
-                    },
-                    {
-                      "text": "URL 1 : http://www.deadlinkcity.com/error-page.asp?e=400\n"
-                    },
-                    {
-                      "text": "URL 2 : http://www.deadlinkcity.com/error-page.asp?e=401\n"
-                    },
-                    {
-                      "text": "URL 3 : http://www.deadlinkcity.com/error-page.asp?e=403\n"
-                    },
-                    {
-                      "text": "URL 4 : http://www.deadlinkcity.com/error-page.asp?e=404\n"
-                    },
-                    {
-                      "text": "Visitors\n"
-                    },
-                    {
-                      "text": "Raw visitors count text: 5,011,321\n"
-                    },
-                    {
-                      "text": "Visitors Total Count: \u001b[33m5011321\u001b[39m\n"
-                    },
-                    {
-                      "text": "Popup Window Title :  Fast and reliable end-to-end testing for modern web apps | Playwright\n"
                     }
                   ],
                   "stderr": [],
                   "retry": 0,
-                  "startTime": "2025-10-07T13:13:35.833Z",
+                  "startTime": "2025-10-08T10:33:36.315Z",
                   "annotations": [],
                   "attachments": [
                     {
+                      "name": "video",
+                      "contentType": "video/webm",
+                      "path": "C:\\Users\\leela\\OneDrive\\Desktop\\PWCode\\playwright\\test-results\\playwrightPractice-Tabs-section-test-webkit\\video-1.webm"
+                    },
+                    {
+                      "name": "video",
+                      "contentType": "video/webm",
+                      "path": "C:\\Users\\leela\\OneDrive\\Desktop\\PWCode\\playwright\\test-results\\playwrightPractice-Tabs-section-test-webkit\\video.webm"
+                    },
+                    {
                       "name": "error-context",
                       "contentType": "text/markdown",
-                      "path": "D:\\playwright\\test-results\\playwrightPractice-Tabs-section-test-chromium\\error-context.md"
+                      "path": "C:\\Users\\leela\\OneDrive\\Desktop\\PWCode\\playwright\\test-results\\playwrightPractice-Tabs-section-test-webkit\\error-context.md"
                     }
-                  ],
-                  "errorLocation": {
-                    "file": "D:\\playwright\\pages\\Tabs.ts",
-                    "column": 40,
-                    "line": 218
-                  }
+                  ]
                 }
               ],
               "status": "unexpected"
             }
           ],
-          "id": "c32d81ce54752e4a735c-aff981d7b85dd667379b",
+          "id": "c32d81ce54752e4a735c-2cbf18a6c1aff3d5d702",
           "file": "playwrightPractice.spec.ts",
           "line": 84,
           "column": 5
@@ -933,11 +862,11 @@
   ],
   "errors": [],
   "stats": {
-    "startTime": "2025-10-07T13:13:27.896Z",
-    "duration": 36675.646,
-    "expected": 13,
+    "startTime": "2025-10-08T10:31:54.459Z",
+    "duration": 137361.84900000002,
+    "expected": 10,
     "skipped": 0,
-    "unexpected": 1,
+    "unexpected": 4,
     "flaky": 0
   }
 }

@@ -17,26 +17,26 @@ export class PaginationWebTable {
   }
 
   async verifyTableName() {
-    console.log(await this.locators.tableName.innerText());
+    // console.log(await this.locators.tableName.innerText());
     expect(this.locators.tableName).toHaveText("Pagination Web Table");
   }
 
   async verifyTableHeading() {
-    console.log(
-      "Table Headers :",
-      await this.locators.theaders.allInnerTexts()
-    );
+    // console.log(
+    //   "Table Headers :",
+    //   await this.locators.theaders.allInnerTexts()
+    // );
     expect(this.locators.theaders).toHaveText(["ID", "Name", "Price"]);
   }
 
   async collectTableData() {
     // Table Counts
-    console.log("Tables Count: ", await this.locators.nextTable.count());
+    // console.log("Tables Count: ", await this.locators.nextTable.count());
     const nextTableCount = await this.locators.nextTable.count();
     // console.log(nextTableCount);
 
     const rowCounts = await this.locators.rows.count();
-    console.log("Rows count from table :", await this.locators.rows.count());
+    // console.log("Rows count from table :", await this.locators.rows.count());
 
     for (let i = 0; i < nextTableCount; i++) {
       await this.locators.nextTable.nth(i).click();

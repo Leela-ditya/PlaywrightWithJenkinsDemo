@@ -2,7 +2,7 @@ import {test} from '@playwright/test';
 import {LoginPage} from '../LenderPages/LoginPage';
 import { DashboardPage } from '../LenderPages/DashboardPage';
 
-test('Navigate to Lender Price Website', async({page})=>{
+test('Navigate to Lender Price Website',{tag: ['@lenderPrice']}, async({page})=>{
 
     const loginPage = new LoginPage(page);
     await loginPage.navigateToURL();

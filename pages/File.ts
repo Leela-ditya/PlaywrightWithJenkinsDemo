@@ -25,7 +25,7 @@ export class File{
         expect(singleFileStatusTxt).toContain("Single file selected");
 
         await this.locators.uploadMultipleFile.click();
-        await this.locators.uploadMultipleFile.setInputFiles(["./tests/files/playwrightnotes.txt", "D:/playwright notes.txt"]);
+        await this.locators.uploadMultipleFile.setInputFiles(["./tests/files/playwrightnotes.txt", "D:/playwright notes.txt", "C:/Users/leela/OneDrive/Desktop/PWCode/playwright/notes.txt"]);
         await this.locators.multipleFileBtn.click();
         const multipleFilesStatusTxt = await this.locators.multipleFilesStatus.innerText();
         console.log(multipleFilesStatusTxt)

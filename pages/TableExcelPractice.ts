@@ -19,14 +19,14 @@ export class TableExcelPractice {
   }
 
   async verifyTableName() {
-    console.log(`Table Name : ${await this.tableName.innerText()}`);
+    // console.log(`Table Name : ${await this.tableName.innerText()}`);
     expect(this.tableName).toHaveText("Static Web Table");
   }
 
   async verifyTableHeaders() {
     // verify expected table headers
     const headers = await this.theaders.allInnerTexts();
-    console.log(headers);
+    // console.log(headers);
     expect(this.theaders).toHaveText([
       "BookName",
       "Author",
@@ -38,14 +38,14 @@ export class TableExcelPractice {
   async verify3RowData() {
     // verify 3rd row texts
     const row3 = await this.rows.nth(3).locator("td").allInnerTexts();
-    console.log(row3);
+    // console.log(row3);
     expect(row3).toEqual(["Learn JS", "Animesh", "Javascript", "300"]);
   }
 
   async collectTableDataAndExportToExcel(filePath: string = "tableData.xlsx") {
     const rowsCount = await this.rows.count();
     // expect(this.rows).toHaveCount(7);
-    console.log(`Table Rows Count is: ${rowsCount}`);
+    // console.log(`Table Rows Count is: ${rowsCount}`);
 
     const tableData: any[] = [];
 

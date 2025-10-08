@@ -30,7 +30,6 @@ export class FormandShadowDOM {
       spanText: page.locator(".description > span"),
       textField: shadowDOMSection.getByRole("textbox"),
       checkboxField: shadowDOMSection.getByRole("checkbox"),
-    //   fileField: shadowDOMSection.getByRole("link", { name: "Blog" }).filter({has: page.locator('//input[@type="file"]')}),
       youtubeLink: shadowDOMSection.getByRole("link", { name: "Youtube" }),
     };
   }
@@ -43,11 +42,11 @@ export class FormandShadowDOM {
     ];
 
     for (let i = 0; i < inputsData.length; i++) {
-      console.log(
-        `Section ${i + 1} para is : ${await this.locators.formPara
-          .nth(i)
-          .innerText()}`
-      );
+      // console.log(
+      //   `Section ${i + 1} para is : ${await this.locators.formPara
+      //     .nth(i)
+      //     .innerText()}`
+      // );
       await this.locators.formInput.nth(i).fill(inputsData[i]);
       await expect(this.locators.formInput.nth(i)).not.toBeEmpty();
       await this.locators.formButton.nth(i).click();
@@ -68,20 +67,19 @@ export class FormandShadowDOM {
       const hrefValue = await this.locators.footerLinks
         .nth(i)
         .getAttribute("href");
-      console.log(`Footer link ${i + 1}: ${hrefValue}`);
+      // console.log(`Footer link ${i + 1}: ${hrefValue}`);
 
       // Verify href matches expected value from linksData
       expect(hrefValue).toBe(links[i]);
 
       // Click the link
       await this.locators.footerLinks.nth(i).click();
-
       // Wait for navigation
       await this.page.waitForLoadState("domcontentloaded");
 
       // (Optional) verify title contains expected keyword
       const pageTitle = await this.page.title();
-      console.log(`Visited Page Title: ${pageTitle}`);
+      // console.log(`Visited Page Title: ${pageTitle}`);
 
       // Go back to footer page
       await this.page.goBack();
@@ -89,22 +87,22 @@ export class FormandShadowDOM {
 
       // Verify previous page contains expected title
       const prevPageTitle = await this.page.title();
-      console.log(`Current Page Title: ${prevPageTitle}`);
+      // console.log(`Current Page Title: ${prevPageTitle}`);
     }
   }
 
   async verifyshadowDomSection() {
     // ShadowDOM text 
-    console.log(await this.locators.shadowDOMHeading.innerText());
+    // console.log(await this.locators.shadowDOMHeading.innerText());
     await expect(this.locators.shadowDOMHeading).toHaveText('ShadowDOM');
 
     // Mobiles text
-    console.log('Shadow DOM Text : ');
-    console.log(await this.locators.mobilesText.innerText());
+    // console.log('Shadow DOM Text : ');
+    // console.log(await this.locators.mobilesText.innerText());
     await expect(this.locators.mobilesText).toHaveText('Mobiles');
 
     // Laptops text
-    console.log(await this.locators.laptopsText.innerText());
+    // console.log(await this.locators.laptopsText.innerText());
     await expect(this.locators.laptopsText).toHaveText('Laptops');
 
     // blog anchor link
@@ -130,10 +128,6 @@ export class FormandShadowDOM {
     await expect(this.locators.checkboxField).not.toBeChecked();
     await this.locators.checkboxField.check();
     await expect(this.locators.checkboxField).toBeChecked();
-
-    // await this.locators.fileField.click();
-    // await this.locators.fileField.setInputFiles("tests/files/playwrightnotes.txt");
-    // await expect(this.locators.fileField).not.toBeEmpty();
 
     // youtube anchor link text
     await this.locators.youtubeLink.click();

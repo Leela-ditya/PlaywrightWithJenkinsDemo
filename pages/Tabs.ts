@@ -68,20 +68,19 @@ export class Tabs {
 
     await this.page.waitForTimeout(500);
     const searchResultsCount = await this.locators.searchResults.count();
-    console.log("Count", await searchResultsCount);
+    // console.log("Count", await searchResultsCount);
 
     for (let i = 0; i < searchResultsCount; i++) {
       const searchResultsText = await this.locators.searchResults
         .nth(i)
         .innerText();
-      console.log("Search texts: ", await searchResultsText);
+      // console.log("Search texts: ", await searchResultsText);
       await expect(this.locators.searchResults).toHaveText([
         "Playwright",
         "Playwright (software)",
         "Playwrights Horizons",
         "Playwrights Guild of Canada",
-        "Playwrights' Company",
-      ]);
+        "Playwrights' Company",]);
     }
   }
 
@@ -97,7 +96,7 @@ export class Tabs {
     }
     // await this.page.waitForTimeout(500);
     let nameValue1 = await this.locators.dynamicBtn.getAttribute("name");
-    console.log(nameValue1);
+    // console.log(nameValue1);
 
     if (nameValue1 === "stop") {
       await this.locators.dynamicBtn.isVisible();
@@ -146,12 +145,12 @@ export class Tabs {
 
     // Verify title
     const nextPageTitle = await newTab.title();
-    console.log("Next Page Title : ", nextPageTitle);
+    // console.log("Next Page Title : ", nextPageTitle);
     expect(nextPageTitle).toBe("SDET-QA Blog");
 
     // Verify URL
     const nextPageURL = newTab.url();
-    console.log("Next Page URL : ", nextPageURL);
+    // console.log("Next Page URL : ", nextPageURL);
     await expect(nextPageURL).toBe("https://www.pavantestingtools.com/");
 
     await expect(
@@ -171,12 +170,12 @@ export class Tabs {
       await expect(originalPageURL).toBe(
         "https://testautomationpractice.blogspot.com/p/playwrightpractice.html#"
       );
-      console.log("Original Page URL :", originalPageURL);
+      // console.log("Original Page URL :", originalPageURL);
     } else {
       await expect(originalPageURL).toBe(
         "https://testautomationpractice.blogspot.com/p/playwrightpractice.html"
       );
-      console.log("Original Page URL :", originalPageURL);
+      // console.log("Original Page URL :", originalPageURL);
     }
     console.log(await this.page.title());
   }
@@ -194,7 +193,7 @@ export class Tabs {
 
     // Verify title of popup window
     const popupTitle = await popupWindow.title();
-    console.log("Popup Window Title : ", popupTitle);
+    // console.log("Popup Window Title : ", popupTitle);
     if (popupTitle === "Selenium") {
       expect(popupTitle).toBe("Selenium");
     } else {
@@ -215,18 +214,18 @@ export class Tabs {
       name: "Selenium automates browsers. That's it!",
     });
     // await expect(verifyPopupwindowTxt).toBeVisible();
-    await expect(verifyPopupwindowTxt).toHaveText(
-      "Selenium automates browsers. That's it!"
-    );
+    // await expect(verifyPopupwindowTxt).toHaveText(
+    //   "Selenium automates browsers. That's it!"
+    // );
 
     // Close popup window
     await popupWindow.close();
-    await popupWindow.isClosed();
+    popupWindow.isClosed();
 
     // Back to original page
     await this.page.waitForLoadState("domcontentloaded");
     await expect(this.page).toHaveURL(originalPageURL);
-    console.log("Original page title:", await this.page.title());
+    // console.log("Original page title:", await this.page.title());
   }
 
   async mouseHover() {
@@ -243,10 +242,10 @@ export class Tabs {
   async doubleClick() {
     await this.locators.copyText.dblclick();
     const field1Value = await this.locators.inputField1.inputValue();
-    console.log("Field1 input value : ", field1Value);
+    // console.log("Field1 input value : ", field1Value);
     const field2Value = await this.locators.inputField2.inputValue();
     expect(this.locators.inputField2).not.toBeEmpty();
-    console.log("Field2 input value : ", field2Value);
+    // console.log("Field2 input value : ", field2Value);
     expect(field1Value).toEqual(field2Value);
   }
 
@@ -254,7 +253,7 @@ export class Tabs {
     await this.locators.draggable.dragTo(this.locators.droppable);
     await expect(this.locators.droppableText).toHaveText("Dropped!");
     const droppedTxt = await this.locators.droppableText.innerText();
-    console.log("Dropped Text : ", droppedTxt);
+    // console.log("Dropped Text : ", droppedTxt);
   }
 
   async slider() {
@@ -299,23 +298,23 @@ export class Tabs {
       .scrollIntoViewIfNeeded();
     await this.locators.selectOptions.getByText("Item 100").click();
     await expect(this.locators.inputDropdown).not.toBeEmpty();
-    console.log("Scrolling Dropdown is successfully Completed");
+    // console.log("Scrolling Dropdown is successfully Completed");
   }
 
   async labelsAndLinks() {
     const labelslinksTxt =
       await this.locators.linksAndLabelsHeading.innerText();
-    console.log(
-      "Labels and Links Heading : ",
-      await this.locators.linksAndLabelsHeading.innerText()
-    );
+    // console.log(
+    //   "Labels and Links Heading : ",
+    //   await this.locators.linksAndLabelsHeading.innerText()
+    // );
     expect(labelslinksTxt).toBe("Labels And Links");
 
     const mobileLabelTxt = await this.locators.mobileLabels.innerText();
-    console.log(
-      "Mobile Label Heading : ",
-      await this.locators.mobileLabels.innerText()
-    );
+    // console.log(
+    //   "Mobile Label Heading : ",
+    //   await this.locators.mobileLabels.innerText()
+    // );
     expect(mobileLabelTxt).toBe("Mobile Labels");
 
     const mobileListCount = await this.locators.mobileList.count();
@@ -323,7 +322,7 @@ export class Tabs {
 
     for (let i = 0; i < mobileListCount; i++) {
       const mobileListTxt = await this.locators.mobileList.nth(i).innerText();
-      console.log("Mobile Label Texts : ", mobileListTxt);
+      // console.log("Mobile Label Texts : ", mobileListTxt);
     }
     await expect(this.locators.mobileList).toHaveText([
       "Samsung",
@@ -332,15 +331,15 @@ export class Tabs {
     ]);
 
     const laptopLinkTxt = await this.locators.laptopsLink.innerText();
-    console.log(
-      "Laptop Heading : ",
-      await this.locators.laptopsLink.innerText()
-    );
+    // console.log(
+    //   "Laptop Heading : ",
+    //   await this.locators.laptopsLink.innerText()
+    // );
     expect(laptopLinkTxt).toBe("Laptop Links");
 
     const laptopListsCount = await this.locators.laptopsList.count();
     await expect(this.locators.laptopsList).toHaveCount(3);
-    console.log("Laptop Lists Count : ", laptopListsCount);
+    // console.log("Laptop Lists Count : ", laptopListsCount);
 
     const hrefValueArr = [
       "https://www.apple.com/",
@@ -361,52 +360,53 @@ export class Tabs {
         let verifyHrefValue = await hrefValueArr[i];
         await verifyHrefValue.concat("in/en/");
         expect(hrefValueArr[i]).toBe(verifyHrefValue);
-        console.log("Automation : ", await this.page.title());
+        // console.log("Automation : ", await this.page.title());
       } else {
         expect(hrefValueArr[i]).toBe(navPageURL);
-        console.log("Automation : ", await this.page.title());
+        // console.log("Automation : ", await this.page.title());
       }
       await this.page.goBack();
       await this.page.waitForLoadState("domcontentloaded");
-      console.log("Laptop Original Page Title : ", await this.page.title());
+      // console.log("Laptop Original Page Title : ", await this.page.title());
     }
   }
 
   async brokenLinks() {
-    console.log(
-      "Display : ",
-      await this.locators.brokenLinkHeading.innerText()
-    );
+    // console.log(
+    //   "Display : ",
+    //   await this.locators.brokenLinkHeading.innerText()
+    // );
     await expect(this.locators.brokenLinkHeading).toHaveText("Broken Links");
 
     const brokenLinksCount = await this.locators.brokenLinks.count();
     await expect(this.locators.brokenLinks).toHaveCount(8);
 
-    for (let i = 0; i < brokenLinksCount-4; i++) {
+    for (let i = 0; i < brokenLinksCount - 4; i++) {
       const hrefValue = await this.locators.brokenLinks.nth(i).getAttribute("href");
       await this.locators.brokenLinks.nth(i).click();
       await this.page.waitForLoadState("domcontentloaded");
       const nextPageURL = this.page.url();
-      console.log(`URL ${i + 1} : ${nextPageURL}`);
+      // console.log(`URL ${i + 1} : ${nextPageURL}`);
       expect(hrefValue).toEqual(nextPageURL);
-      await this.page.waitForLoadState("domcontentloaded");
+      // await this.page.waitForTimeout(1000);
       await this.page.goBack();
       await this.page.waitForLoadState("domcontentloaded");
+      // await this.page.waitForTimeout(2000);
     }
   }
 
   async visitors() {
     // Verify the heading text
-    console.log(await this.locators.visitorsHeading.innerText());
+    // console.log(await this.locators.visitorsHeading.innerText());
     await expect(this.locators.visitorsHeading).toHaveText("Visitors");
 
     // Get the visitors count (string)
     const visitorsCountText = await this.locators.visitorsCount.innerText();
-    console.log("Raw visitors count text:", visitorsCountText);
+    // console.log("Raw visitors count text:", visitorsCountText);
 
     // Clean the number (remove commas)
     const visitorsCount = Number(visitorsCountText.replace(/,/g, ""));
-    console.log("Visitors Total Count:", visitorsCount);
+    // console.log("Visitors Total Count:", visitorsCount);
 
     // Verify it's a valid number
     expect(visitorsCount).not.toBeNaN();

@@ -1,0 +1,12 @@
+Table Rows Count is: 7
+Excel file created at: tableData.xlsx
+┌─────────┬──────────────────────┬───────────┬──────────────┬────────┐
+│ (index) │ BookName             │ Author    │ Subject      │ Price  │
+├─────────┼──────────────────────┼───────────┼──────────────┼────────┤
+│ 0       │ 'Learn Selenium'     │ 'Amit'    │ 'Selenium'   │ '300'  │
+│ 1       │ 'Learn Java'         │ 'Mukesh'  │ 'Java'       │ '500'  │
+│ 2       │ 'Learn JS'           │ 'Animesh' │ 'Javascript' │ '300'  │
+│ 3       │ 'Master In Selenium' │ 'Mukesh'  │ 'Selenium'   │ '3000' │
+│ 4       │ 'Master In Java'     │ 'Amod'    │ 'JAVA'       │ '2000' │
+│ 5       │ 'Master In JS'       │ 'Amit'    │ 'Javascript' │ '1000' │
+└─────────┴──────────────────────┴───────────┴──────────────┴────────┘

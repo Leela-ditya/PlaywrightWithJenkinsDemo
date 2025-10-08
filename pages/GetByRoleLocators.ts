@@ -15,7 +15,7 @@ export class GetByRoleLocators {
 
     // Web Elements from getByRole Locators
     this.username = page.getByRole("textbox").first();
-    this.primaryActionBtn = page.getByRole("button", {name: "Primary Action"});
+    this.primaryActionBtn = page.locator('//button[@role="button" and text()="Primary Action"]');
     this.toggleButton = page.getByRole("button", {name: "Toggle Button"}).first();
     this.listItem = page.getByRole('menuitem', { name: 'Home' }).getByRole('link');
     this.acceptTerms = page.getByRole("checkbox").first();

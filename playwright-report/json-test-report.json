@@ -1,7 +1,7 @@
 {
   "config": {
-    "configFile": "D:\\PlaywrightWithJenkinsDemo\\playwright.config.ts",
-    "rootDir": "D:/PlaywrightWithJenkinsDemo/tests",
+    "configFile": "C:\\Users\\leela\\OneDrive\\Desktop\\PWCode\\PlaywrightWithJenkinsDemo\\playwright.config.ts",
+    "rootDir": "C:/Users/leela/OneDrive/Desktop/PWCode/PlaywrightWithJenkinsDemo/tests",
     "forbidOnly": false,
     "fullyParallel": true,
     "globalSetup": null,
@@ -38,12 +38,11 @@
       [
         "html",
         {
-          "open": "never",
           "outputFolder": "playwright-html-report"
         }
       ],
       [
-        "D:\\PlaywrightWithJenkinsDemo\\node_modules\\allure-playwright\\dist\\cjs\\index.js",
+        "C:\\Users\\leela\\OneDrive\\Desktop\\PWCode\\PlaywrightWithJenkinsDemo\\node_modules\\allure-playwright\\dist\\cjs\\index.js",
         null
       ]
     ],
@@ -54,7 +53,7 @@
     "quiet": false,
     "projects": [
       {
-        "outputDir": "D:/PlaywrightWithJenkinsDemo/test-results",
+        "outputDir": "C:/Users/leela/OneDrive/Desktop/PWCode/PlaywrightWithJenkinsDemo/test-results",
         "repeatEach": 1,
         "retries": 0,
         "metadata": {
@@ -62,7 +61,7 @@
         },
         "id": "chromium",
         "name": "chromium",
-        "testDir": "D:/PlaywrightWithJenkinsDemo/tests",
+        "testDir": "C:/Users/leela/OneDrive/Desktop/PWCode/PlaywrightWithJenkinsDemo/tests",
         "testIgnore": [],
         "testMatch": [
           "**/*.@(spec|test).?(c|m)[jt]s?(x)"
@@ -70,7 +69,7 @@
         "timeout": 30000
       },
       {
-        "outputDir": "D:/PlaywrightWithJenkinsDemo/test-results",
+        "outputDir": "C:/Users/leela/OneDrive/Desktop/PWCode/PlaywrightWithJenkinsDemo/test-results",
         "repeatEach": 1,
         "retries": 0,
         "metadata": {
@@ -78,7 +77,7 @@
         },
         "id": "firefox",
         "name": "firefox",
-        "testDir": "D:/PlaywrightWithJenkinsDemo/tests",
+        "testDir": "C:/Users/leela/OneDrive/Desktop/PWCode/PlaywrightWithJenkinsDemo/tests",
         "testIgnore": [],
         "testMatch": [
           "**/*.@(spec|test).?(c|m)[jt]s?(x)"
@@ -86,7 +85,7 @@
         "timeout": 30000
       },
       {
-        "outputDir": "D:/PlaywrightWithJenkinsDemo/test-results",
+        "outputDir": "C:/Users/leela/OneDrive/Desktop/PWCode/PlaywrightWithJenkinsDemo/test-results",
         "repeatEach": 1,
         "retries": 0,
         "metadata": {
@@ -94,7 +93,7 @@
         },
         "id": "webkit",
         "name": "webkit",
-        "testDir": "D:/PlaywrightWithJenkinsDemo/tests",
+        "testDir": "C:/Users/leela/OneDrive/Desktop/PWCode/PlaywrightWithJenkinsDemo/tests",
         "testIgnore": [],
         "testMatch": [
           "**/*.@(spec|test).?(c|m)[jt]s?(x)"
@@ -117,10 +116,10 @@
       "line": 0,
       "specs": [
         {
-          "title": "Playwright built-in locators",
+          "title": "Static Table",
           "ok": true,
           "tags": [
-            "playwrightBuiltinLocators"
+            "StaticTable"
           ],
           "tests": [
             {
@@ -134,16 +133,16 @@
                   "workerIndex": 0,
                   "parallelIndex": 0,
                   "status": "passed",
-                  "duration": 4693,
+                  "duration": 8246,
                   "errors": [],
                   "stdout": [
                     {
-                      "text": "Tags with getByRoleLocators\n"
+                      "text": "┌─────────┬──────────────────────┬───────────┬──────────────┬────────┐\n│ (index) │ BookName             │ Author    │ Subject      │ Price  │\n├─────────┼──────────────────────┼───────────┼──────────────┼────────┤\n│ 0       │ \u001b[32m'Learn Selenium'\u001b[39m     │ \u001b[32m'Amit'\u001b[39m    │ \u001b[32m'Selenium'\u001b[39m   │ \u001b[32m'300'\u001b[39m  │\n│ 1       │ \u001b[32m'Learn Java'\u001b[39m         │ \u001b[32m'Mukesh'\u001b[39m  │ \u001b[32m'Java'\u001b[39m       │ \u001b[32m'500'\u001b[39m  │\n│ 2       │ \u001b[32m'Learn JS'\u001b[39m           │ \u001b[32m'Animesh'\u001b[39m │ \u001b[32m'Javascript'\u001b[39m │ \u001b[32m'300'\u001b[39m  │\n│ 3       │ \u001b[32m'Master In Selenium'\u001b[39m │ \u001b[32m'Mukesh'\u001b[39m  │ \u001b[32m'Selenium'\u001b[39m   │ \u001b[32m'3000'\u001b[39m │\n│ 4       │ \u001b[32m'Master In Java'\u001b[39m     │ \u001b[32m'Amod'\u001b[39m    │ \u001b[32m'JAVA'\u001b[39m       │ \u001b[32m'2000'\u001b[39m │\n│ 5       │ \u001b[32m'Master In JS'\u001b[39m       │ \u001b[32m'Amit'\u001b[39m    │ \u001b[32m'Javascript'\u001b[39m │ \u001b[32m'1000'\u001b[39m │\n└─────────┴──────────────────────┴───────────┴──────────────┴────────┘\n"
                     }
                   ],
                   "stderr": [],
                   "retry": 0,
-                  "startTime": "2025-10-09T09:53:43.767Z",
+                  "startTime": "2025-10-09T12:18:20.849Z",
                   "annotations": [],
                   "attachments": []
                 }
@@ -151,16 +150,16 @@
               "status": "expected"
             }
           ],
-          "id": "c32d81ce54752e4a735c-2c617ba18baf0aeb5124",
+          "id": "c32d81ce54752e4a735c-93b28a609b40d9365141",
           "file": "playwrightPractice.spec.ts",
-          "line": 21,
+          "line": 51,
           "column": 5
         },
         {
-          "title": "Playwright built-in locators",
+          "title": "Static Table",
           "ok": true,
           "tags": [
-            "playwrightBuiltinLocators"
+            "StaticTable"
           ],
           "tests": [
             {
@@ -174,16 +173,16 @@
                   "workerIndex": 1,
                   "parallelIndex": 1,
                   "status": "passed",
-                  "duration": 8333,
+                  "duration": 5782,
                   "errors": [],
                   "stdout": [
                     {
-                      "text": "Tags with getByRoleLocators\n"
+                      "text": "┌─────────┬──────────────────────┬───────────┬──────────────┬────────┐\n│ (index) │ BookName             │ Author    │ Subject      │ Price  │\n├─────────┼──────────────────────┼───────────┼──────────────┼────────┤\n│ 0       │ \u001b[32m'Learn Selenium'\u001b[39m     │ \u001b[32m'Amit'\u001b[39m    │ \u001b[32m'Selenium'\u001b[39m   │ \u001b[32m'300'\u001b[39m  │\n│ 1       │ \u001b[32m'Learn Java'\u001b[39m         │ \u001b[32m'Mukesh'\u001b[39m  │ \u001b[32m'Java'\u001b[39m       │ \u001b[32m'500'\u001b[39m  │\n│ 2       │ \u001b[32m'Learn JS'\u001b[39m           │ \u001b[32m'Animesh'\u001b[39m │ \u001b[32m'Javascript'\u001b[39m │ \u001b[32m'300'\u001b[39m  │\n│ 3       │ \u001b[32m'Master In Selenium'\u001b[39m │ \u001b[32m'Mukesh'\u001b[39m  │ \u001b[32m'Selenium'\u001b[39m   │ \u001b[32m'3000'\u001b[39m │\n│ 4       │ \u001b[32m'Master In Java'\u001b[39m     │ \u001b[32m'Amod'\u001b[39m    │ \u001b[32m'JAVA'\u001b[39m       │ \u001b[32m'2000'\u001b[39m │\n│ 5       │ \u001b[32m'Master In JS'\u001b[39m       │ \u001b[32m'Amit'\u001b[39m    │ \u001b[32m'Javascript'\u001b[39m │ \u001b[32m'1000'\u001b[39m │\n└─────────┴──────────────────────┴───────────┴──────────────┴────────┘\n"
                     }
                   ],
                   "stderr": [],
                   "retry": 0,
-                  "startTime": "2025-10-09T09:53:43.875Z",
+                  "startTime": "2025-10-09T12:18:21.080Z",
                   "annotations": [],
                   "attachments": []
                 }
@@ -191,16 +190,16 @@
               "status": "expected"
             }
           ],
-          "id": "c32d81ce54752e4a735c-f7d7d774211eda7fb207",
+          "id": "c32d81ce54752e4a735c-03022119b4caa2528ec7",
           "file": "playwrightPractice.spec.ts",
-          "line": 21,
+          "line": 51,
           "column": 5
         },
         {
-          "title": "Playwright built-in locators",
+          "title": "Static Table",
           "ok": true,
           "tags": [
-            "playwrightBuiltinLocators"
+            "StaticTable"
           ],
           "tests": [
             {
@@ -214,16 +213,16 @@
                   "workerIndex": 2,
                   "parallelIndex": 2,
                   "status": "passed",
-                  "duration": 8425,
+                  "duration": 6338,
                   "errors": [],
                   "stdout": [
                     {
-                      "text": "Tags with getByRoleLocators\n"
+                      "text": "┌─────────┬──────────────────────┬───────────┬──────────────┬────────┐\n│ (index) │ BookName             │ Author    │ Subject      │ Price  │\n├─────────┼──────────────────────┼───────────┼──────────────┼────────┤\n│ 0       │ \u001b[32m'Learn Selenium'\u001b[39m     │ \u001b[32m'Amit'\u001b[39m    │ \u001b[32m'Selenium'\u001b[39m   │ \u001b[32m'300'\u001b[39m  │\n│ 1       │ \u001b[32m'Learn Java'\u001b[39m         │ \u001b[32m'Mukesh'\u001b[39m  │ \u001b[32m'Java'\u001b[39m       │ \u001b[32m'500'\u001b[39m  │\n│ 2       │ \u001b[32m'Learn JS'\u001b[39m           │ \u001b[32m'Animesh'\u001b[39m │ \u001b[32m'Javascript'\u001b[39m │ \u001b[32m'300'\u001b[39m  │\n│ 3       │ \u001b[32m'Master In Selenium'\u001b[39m │ \u001b[32m'Mukesh'\u001b[39m  │ \u001b[32m'Selenium'\u001b[39m   │ \u001b[32m'3000'\u001b[39m │\n│ 4       │ \u001b[32m'Master In Java'\u001b[39m     │ \u001b[32m'Amod'\u001b[39m    │ \u001b[32m'JAVA'\u001b[39m       │ \u001b[32m'2000'\u001b[39m │\n│ 5       │ \u001b[32m'Master In JS'\u001b[39m       │ \u001b[32m'Amit'\u001b[39m    │ \u001b[32m'Javascript'\u001b[39m │ \u001b[32m'1000'\u001b[39m │\n└─────────┴──────────────────────┴───────────┴──────────────┴────────┘\n"
                     }
                   ],
                   "stderr": [],
                   "retry": 0,
-                  "startTime": "2025-10-09T09:53:44.019Z",
+                  "startTime": "2025-10-09T12:18:21.013Z",
                   "annotations": [],
                   "attachments": []
                 }
@@ -231,9 +230,9 @@
               "status": "expected"
             }
           ],
-          "id": "c32d81ce54752e4a735c-48e793d32d1c3c63d719",
+          "id": "c32d81ce54752e4a735c-31f9c332498d5c0ca666",
           "file": "playwrightPractice.spec.ts",
-          "line": 21,
+          "line": 51,
           "column": 5
         }
       ]
@@ -241,8 +240,8 @@
   ],
   "errors": [],
   "stats": {
-    "startTime": "2025-10-09T09:53:40.382Z",
-    "duration": 14688.684000000001,
+    "startTime": "2025-10-09T12:18:16.994Z",
+    "duration": 13724.242999999999,
     "expected": 3,
     "skipped": 0,
     "unexpected": 0,

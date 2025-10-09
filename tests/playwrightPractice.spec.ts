@@ -48,7 +48,7 @@ test('Files uploading test',{tag:['@FilesUploading']}, async({page})=> {
     await FileActions.FileInput();
 })
 
-test('Static Table', async({page})=> {
+test('Static Table',{tag: ['@StaticTable']}, async({page})=> {
 
     const table = new StaticTable(page);
     await table.verifyTableName();

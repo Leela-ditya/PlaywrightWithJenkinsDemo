@@ -24,7 +24,7 @@ export default defineConfig({
     ["dot"],
     ['json', { outputFile: 'playwright-report/json-test-report.json' }],
     ['junit', { outputFile: 'playwright-report/junit-test-report.xml' }],
-    ['html', { open: 'never', outputFolder: 'playwright-html-report' }],
+    ['html', { outputFolder: 'playwright-html-report' }],
     ['allure-playwright'],
   ],
   /* Shared settings for all the projects below. See https://playwright.dev/docs/api/class-testoptions. */

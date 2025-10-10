@@ -1,1 +1,0 @@
-Fecthing data from json file testsigma_internal and Welcome@1

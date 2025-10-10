@@ -1,6 +1,0 @@
-Single file selected: playwrightnotes.txt, Size: 1186 bytes, Type: text/plain
-Multiple files selected:
-playwrightnotes.txt, Size: 1186 bytes, Type: text/plain
-playwright notes.txt, Size: 378 bytes, Type: text/plain
-notes.txt, Size: 8437 bytes, Type: text/plain
-

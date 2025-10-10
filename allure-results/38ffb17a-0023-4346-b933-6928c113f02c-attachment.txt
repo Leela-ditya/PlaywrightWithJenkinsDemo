@@ -1,8 +1,0 @@
-alert
-I am an alert box!
-confirm
-Press a button!
-prompt
-Please enter your name:
-Harry Potter
-Automation Testing Practice: PlaywrightPractice

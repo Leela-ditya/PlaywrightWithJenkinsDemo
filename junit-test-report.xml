@@ -1,0 +1,38 @@
+<testsuites id="" name="" tests="3" failures="0" skipped="0" errors="0" time="34.055771">
+<testsuite name="playwrightPractice.spec.ts" timestamp="2025-10-10T08:09:41.040Z" hostname="chromium" tests="1" failures="0" skipped="0" time="5.643" errors="0">
+<testcase name="Files uploading test" classname="playwrightPractice.spec.ts" time="5.643">
+<system-out>
+<![CDATA[Single file selected: playwrightnotes.txt, Size: 1186 bytes, Type: text/plain
+Multiple files selected:
+playwrightnotes.txt, Size: 1186 bytes, Type: text/plain
+notes.txt, Size: 8437 bytes, Type: text/plain
+
+]]>
+</system-out>
+</testcase>
+</testsuite>
+<testsuite name="playwrightPractice.spec.ts" timestamp="2025-10-10T08:09:41.040Z" hostname="firefox" tests="1" failures="0" skipped="0" time="26.948" errors="0">
+<testcase name="Files uploading test" classname="playwrightPractice.spec.ts" time="26.948">
+<system-out>
+<![CDATA[Single file selected: playwrightnotes.txt, Size: 1186 bytes, Type: text/plain
+Multiple files selected:
+playwrightnotes.txt, Size: 1186 bytes, Type: text/plain
+notes.txt, Size: 8437 bytes, Type: text/plain
+
+]]>
+</system-out>
+</testcase>
+</testsuite>
+<testsuite name="playwrightPractice.spec.ts" timestamp="2025-10-10T08:09:41.040Z" hostname="webkit" tests="1" failures="0" skipped="0" time="7.789" errors="0">
+<testcase name="Files uploading test" classname="playwrightPractice.spec.ts" time="7.789">
+<system-out>
+<![CDATA[Single file selected: playwrightnotes.txt, Size: 1186 bytes, Type: text/plain
+Multiple files selected:
+playwrightnotes.txt, Size: 1186 bytes, Type: text/plain
+notes.txt, Size: 8437 bytes, Type: text/plain
+
+]]>
+</system-out>
+</testcase>
+</testsuite>
+</testsuites>

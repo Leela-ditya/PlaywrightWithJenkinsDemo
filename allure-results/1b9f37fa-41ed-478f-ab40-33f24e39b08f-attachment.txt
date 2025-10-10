@@ -1,3 +1,0 @@
-Table Name: Dynamic Web Table
-Table Headers :  [ 'Name', 'Network (Mbps)', 'Memory (MB)', 'Disk (MB/s)', 'CPU (%)' ]
-table data 4 :  0.19 MB/s

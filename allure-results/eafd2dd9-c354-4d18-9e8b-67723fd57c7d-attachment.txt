@@ -1,1 +1,0 @@
-Fecthing data from json file bluecopa_internal and Welcome@2025

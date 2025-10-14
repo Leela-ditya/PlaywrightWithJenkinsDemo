@@ -11,7 +11,7 @@
     "grepInvert": null,
     "maxFailures": 0,
     "metadata": {
-      "actualWorkers": 3
+      "actualWorkers": 1
     },
     "preserveOutput": "always",
     "reporter": [
@@ -58,7 +58,7 @@
         "repeatEach": 1,
         "retries": 0,
         "metadata": {
-          "actualWorkers": 3
+          "actualWorkers": 1
         },
         "id": "chromium",
         "name": "chromium",
@@ -74,7 +74,7 @@
         "repeatEach": 1,
         "retries": 0,
         "metadata": {
-          "actualWorkers": 3
+          "actualWorkers": 1
         },
         "id": "firefox",
         "name": "firefox",
@@ -90,7 +90,7 @@
         "repeatEach": 1,
         "retries": 0,
         "metadata": {
-          "actualWorkers": 3
+          "actualWorkers": 1
         },
         "id": "webkit",
         "name": "webkit",
@@ -111,60 +111,15 @@
   },
   "suites": [
     {
-      "title": "playwrightPractice.spec.ts",
-      "file": "playwrightPractice.spec.ts",
+      "title": "api\\01_GETRequest.spec.ts",
+      "file": "api/01_GETRequest.spec.ts",
       "column": 0,
       "line": 0,
       "specs": [
         {
-          "title": "Files uploading test",
+          "title": "GET list resource",
           "ok": true,
-          "tags": [
-            "FilesUploading"
-          ],
-          "tests": [
-            {
-              "timeout": 30000,
-              "annotations": [],
-              "expectedStatus": "passed",
-              "projectId": "chromium",
-              "projectName": "chromium",
-              "results": [
-                {
-                  "workerIndex": 0,
-                  "parallelIndex": 0,
-                  "status": "passed",
-                  "duration": 5643,
-                  "errors": [],
-                  "stdout": [
-                    {
-                      "text": "Single file selected: playwrightnotes.txt, Size: 1186 bytes, Type: text/plain\n"
-                    },
-                    {
-                      "text": "Multiple files selected:\nplaywrightnotes.txt, Size: 1186 bytes, Type: text/plain\nnotes.txt, Size: 8437 bytes, Type: text/plain\n\n"
-                    }
-                  ],
-                  "stderr": [],
-                  "retry": 0,
-                  "startTime": "2025-10-10T08:09:43.480Z",
-                  "annotations": [],
-                  "attachments": []
-                }
-              ],
-              "status": "expected"
-            }
-          ],
-          "id": "c32d81ce54752e4a735c-13204084d71ce2635f02",
-          "file": "playwrightPractice.spec.ts",
-          "line": 46,
-          "column": 5
-        },
-        {
-          "title": "Files uploading test",
-          "ok": true,
-          "tags": [
-            "FilesUploading"
-          ],
+          "tags": [],
           "tests": [
             {
               "timeout": 30000,
@@ -174,22 +129,40 @@
               "projectName": "firefox",
               "results": [
                 {
-                  "workerIndex": 1,
-                  "parallelIndex": 1,
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
                   "status": "passed",
-                  "duration": 26948,
+                  "duration": 465,
                   "errors": [],
                   "stdout": [
                     {
-                      "text": "Single file selected: playwrightnotes.txt, Size: 1186 bytes, Type: text/plain\n"
+                      "text": "color value :  #98B2D1\n"
                     },
                     {
-                      "text": "Multiple files selected:\nplaywrightnotes.txt, Size: 1186 bytes, Type: text/plain\nnotes.txt, Size: 8437 bytes, Type: text/plain\n\n"
+                      "text": "color value :  #C74375\n"
+                    },
+                    {
+                      "text": "color value :  #BF1932\n"
+                    },
+                    {
+                      "text": "color value :  #7BC4C4\n"
+                    },
+                    {
+                      "text": "color value :  #E2583E\n"
+                    },
+                    {
+                      "text": "color value :  #53B0AE\n"
+                    },
+                    {
+                      "text": "Response Status :  \u001b[33m200\u001b[39m\n"
+                    },
+                    {
+                      "text": "Response Body :  {\n  page: \u001b[33m1\u001b[39m,\n  per_page: \u001b[33m6\u001b[39m,\n  total: \u001b[33m12\u001b[39m,\n  total_pages: \u001b[33m2\u001b[39m,\n  data: [\n    {\n      id: \u001b[33m1\u001b[39m,\n      name: \u001b[32m'cerulean'\u001b[39m,\n      year: \u001b[33m2000\u001b[39m,\n      color: \u001b[32m'#98B2D1'\u001b[39m,\n      pantone_value: \u001b[32m'15-4020'\u001b[39m\n    },\n    {\n      id: \u001b[33m2\u001b[39m,\n      name: \u001b[32m'fuchsia rose'\u001b[39m,\n      year: \u001b[33m2001\u001b[39m,\n      color: \u001b[32m'#C74375'\u001b[39m,\n      pantone_value: \u001b[32m'17-2031'\u001b[39m\n    },\n    {\n      id: \u001b[33m3\u001b[39m,\n      name: \u001b[32m'true red'\u001b[39m,\n      year: \u001b[33m2002\u001b[39m,\n      color: \u001b[32m'#BF1932'\u001b[39m,\n      pantone_value: \u001b[32m'19-1664'\u001b[39m\n    },\n    {\n      id: \u001b[33m4\u001b[39m,\n      name: \u001b[32m'aqua sky'\u001b[39m,\n      year: \u001b[33m2003\u001b[39m,\n      color: \u001b[32m'#7BC4C4'\u001b[39m,\n      pantone_value: \u001b[32m'14-4811'\u001b[39m\n    },\n    {\n      id: \u001b[33m5\u001b[39m,\n      name: \u001b[32m'tigerlily'\u001b[39m,\n      year: \u001b[33m2004\u001b[39m,\n      color: \u001b[32m'#E2583E'\u001b[39m,\n      pantone_value: \u001b[32m'17-1456'\u001b[39m\n    },\n    {\n      id: \u001b[33m6\u001b[39m,\n      name: \u001b[32m'blue turquoise'\u001b[39m,\n      year: \u001b[33m2005\u001b[39m,\n      color: \u001b[32m'#53B0AE'\u001b[39m,\n      pantone_value: \u001b[32m'15-5217'\u001b[39m\n    }\n  ],\n  support: {\n    url: \u001b[32m'https://contentcaddy.io?utm_source=reqres&utm_medium=json&utm_campaign=referral'\u001b[39m,\n    text: \u001b[32m'Tired of writing endless social media content? Let Content Caddy generate it for you.'\u001b[39m\n  },\n  _meta: {\n    powered_by: \u001b[32m'🚀 ReqRes - Deploy backends in 30 seconds'\u001b[39m,\n    upgrade_url: \u001b[32m'https://app.reqres.in/upgrade'\u001b[39m,\n    docs_url: \u001b[32m'https://reqres.in'\u001b[39m,\n    template_gallery: \u001b[32m'https://app.reqres.in/templates'\u001b[39m,\n    message: \u001b[32m'This API is powered by ReqRes. Deploy your own backend in 30 seconds!'\u001b[39m,\n    features: [\n      \u001b[32m'30 Second Backend Templates'\u001b[39m,\n      \u001b[32m'Custom API Endpoints'\u001b[39m,\n      \u001b[32m'Data Persistence'\u001b[39m,\n      \u001b[32m'Real-time Analytics'\u001b[39m\n    ],\n    upgrade_cta: \u001b[32m'Upgrade to Pro for unlimited requests, custom endpoints, and data persistence'\u001b[39m\n  }\n}\n"
                     }
                   ],
                   "stderr": [],
                   "retry": 0,
-                  "startTime": "2025-10-10T08:09:43.597Z",
+                  "startTime": "2025-10-14T06:46:35.740Z",
                   "annotations": [],
                   "attachments": []
                 }
@@ -197,62 +170,19 @@
               "status": "expected"
             }
           ],
-          "id": "c32d81ce54752e4a735c-78e81371aaa653b71aee",
-          "file": "playwrightPractice.spec.ts",
-          "line": 46,
-          "column": 5
-        },
-        {
-          "title": "Files uploading test",
-          "ok": true,
-          "tags": [
-            "FilesUploading"
-          ],
-          "tests": [
-            {
-              "timeout": 30000,
-              "annotations": [],
-              "expectedStatus": "passed",
-              "projectId": "webkit",
-              "projectName": "webkit",
-              "results": [
-                {
-                  "workerIndex": 2,
-                  "parallelIndex": 2,
-                  "status": "passed",
-                  "duration": 7789,
-                  "errors": [],
-                  "stdout": [
-                    {
-                      "text": "Single file selected: playwrightnotes.txt, Size: 1186 bytes, Type: text/plain\n"
-                    },
-                    {
-                      "text": "Multiple files selected:\nplaywrightnotes.txt, Size: 1186 bytes, Type: text/plain\nnotes.txt, Size: 8437 bytes, Type: text/plain\n\n"
-                    }
-                  ],
-                  "stderr": [],
-                  "retry": 0,
-                  "startTime": "2025-10-10T08:09:43.703Z",
-                  "annotations": [],
-                  "attachments": []
-                }
-              ],
-              "status": "expected"
-            }
-          ],
-          "id": "c32d81ce54752e4a735c-ff3543677158986f4ae4",
-          "file": "playwrightPractice.spec.ts",
-          "line": 46,
-          "column": 5
+          "id": "fce0116cf8bc2c4e278c-3f3b1ac6ca8f779d6f71",
+          "file": "api/01_GETRequest.spec.ts",
+          "line": 49,
+          "column": 6
         }
       ]
     }
   ],
   "errors": [],
   "stats": {
-    "startTime": "2025-10-10T08:09:40.373Z",
-    "duration": 34055.771,
-    "expected": 3,
+    "startTime": "2025-10-14T06:46:34.356Z",
+    "duration": 1920.8229999999999,
+    "expected": 1,
     "skipped": 0,
     "unexpected": 0,
     "flaky": 0

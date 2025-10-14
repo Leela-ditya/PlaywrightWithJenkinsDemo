@@ -21,11 +21,11 @@ export default defineConfig({
   reporter: [
     // ["html"], 
     ["list"],
-    ["dot"],
-    ['json', { outputFile: 'json-test-report.json' }],
-    ['junit', { outputFile: 'junit-test-report.xml' }],
-    ['html', { outputFolder: 'playwright-html-report', open:'always'}],
-    ['allure-playwright'],
+    // ["dot"],
+    // ['json', { outputFile: 'json-test-report.json' }],
+    // ['junit', { outputFile: 'junit-test-report.xml' }],
+    // ['html', { outputFolder: 'playwright-html-report', open:'always'}],
+    // ['allure-playwright'],
   ],
   /* Shared settings for all the projects below. See https://playwright.dev/docs/api/class-testoptions. */
   use: {

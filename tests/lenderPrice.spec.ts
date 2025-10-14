@@ -12,3 +12,5 @@ test('Navigate to Lender Price Website',{tag: ['@lenderPrice']}, async({page})=>
     await dashboardPage.CommitmentsPriceOffered();
 })
 
+ 
+

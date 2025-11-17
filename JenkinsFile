@@ -24,11 +24,7 @@ pipeline {
 
         stage('Run Tests') {
             steps {
-<<<<<<< HEAD
                 bat 'npx playwright test --grep "@getByRoleMethod"'
-=======
-                sh 'npx playwright test --grep "@getByRoleMethod" --headed --reporter=html'
->>>>>>> 1401caf (changed the github yml file)
             }
         }
 

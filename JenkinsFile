@@ -1,17 +1,10 @@
 pipeline {
     agent any
 
-    environment {
-        // Load your GitHub PAT correctly
-        GITHUB_TOKEN = credentials('4a222623-6aa2-43b6-a0e7-3ec1abb1aa3c')
-    }
-
     stages {
-
         stage('Checkout Code') {
             steps {
                 git branch: 'main',
-                    credentialsId: '4a222623-6aa2-43b6-a0e7-3ec1abb1aa3c',
                     url: 'https://github.com/Leela-ditya/PlaywrightWithJenkinsDemo.git'
             }
         }
@@ -28,27 +21,9 @@ pipeline {
             }
         }
 
-        stage('Trigger GitHub Actions Workflow') {
-            steps {
-                script {
-                    def response = httpRequest(
-                        httpMode: 'POST',
-                        url: "https://api.github.com/repos/Leela-ditya/PlaywrightWithJenkinsDemo/actions/workflows/playwright.yml/dispatches",
-                        customHeaders: [
-                            [name: "Accept", value: "application/vnd.github+json"],
-                            [name: "Authorization", value: "Bearer ${env.GITHUB_TOKEN}"]
-                        ],
-                        requestBody: """{"ref": "main"}"""
-                    )
-
-                    echo "GitHub Actions Triggered: ${response.status}"
-                }
-            }
-        }
-
         stage('Run Tests') {
             steps {
-                bat 'npx playwright test --grep "@getByRoleMethod"'
+                bat 'npx playwright test'
             }
         }
 

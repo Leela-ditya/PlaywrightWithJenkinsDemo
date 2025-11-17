@@ -1,7 +1,12 @@
 pipeline {
     agent any
 
+    environment {
+        GITHUB_TOKEN = credentials('GITHUB_TOKEN')
+    }
+
     stages {
+
         stage('Checkout Code') {
             steps {
                 git branch: 'main',
@@ -21,9 +26,27 @@ pipeline {
             }
         }
 
+        stage('Trigger GitHub Actions Workflow') {
+            steps {
+                script {
+                    def response = httpRequest(
+                        httpMode: 'POST',
+                        url: "https://api.github.com/repos/Leela-ditya/PlaywrightWithJenkinsDemo/actions/workflows/playwright.yml/dispatches",
+                        customHeaders: [
+                            [name: "Accept", value: "application/vnd.github+json"],
+                            [name: "Authorization", value: "Bearer ${env.GITHUB_TOKEN}"]
+                        ],
+                        requestBody: """{"ref": "main"}"""
+                    )
+
+                    echo "GitHub Actions Triggered: ${response.status}"
+                }
+            }
+        }
+
         stage('Run Tests') {
             steps {
-                bat 'npx playwright test --grep "@StaticTable"'
+                bat 'npx playwright test --grep "@getByRoleMethod"'
             }
         }
 

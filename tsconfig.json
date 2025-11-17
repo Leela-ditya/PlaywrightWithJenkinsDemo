@@ -6,7 +6,7 @@
     "esModuleInterop": true,
     "strict": true,
     "outDir": "dist",
-    "types": ["@playwright/test"]
+    "types": ["@playwright/test"],
   },
   "include": ["tests/**/*.ts", "utilis/**/*.ts", "config/**/*.ts"]
 }

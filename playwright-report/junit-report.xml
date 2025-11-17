@@ -1,0 +1,26 @@
+<testsuites id="" name="" tests="3" failures="0" skipped="0" errors="0" time="22.176565">
+<testsuite name="playwrightPractice.spec.ts" timestamp="2025-11-17T11:57:39.333Z" hostname="chromium" tests="1" failures="0" skipped="0" time="8.725" errors="0">
+<testcase name="Playwright built-in locators getByRole" classname="playwrightPractice.spec.ts" time="8.725">
+<system-out>
+<![CDATA[Tags with getByRoleLocators
+]]>
+</system-out>
+</testcase>
+</testsuite>
+<testsuite name="playwrightPractice.spec.ts" timestamp="2025-11-17T11:57:39.333Z" hostname="firefox" tests="1" failures="0" skipped="0" time="16.247" errors="0">
+<testcase name="Playwright built-in locators getByRole" classname="playwrightPractice.spec.ts" time="16.247">
+<system-out>
+<![CDATA[Tags with getByRoleLocators
+]]>
+</system-out>
+</testcase>
+</testsuite>
+<testsuite name="playwrightPractice.spec.ts" timestamp="2025-11-17T11:57:39.333Z" hostname="webkit" tests="1" failures="0" skipped="0" time="7.403" errors="0">
+<testcase name="Playwright built-in locators getByRole" classname="playwrightPractice.spec.ts" time="7.403">
+<system-out>
+<![CDATA[Tags with getByRoleLocators
+]]>
+</system-out>
+</testcase>
+</testsuite>
+</testsuites>

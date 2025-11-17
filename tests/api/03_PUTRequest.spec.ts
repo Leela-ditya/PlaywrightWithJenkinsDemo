@@ -1,8 +1,7 @@
 import { test, expect } from '@playwright/test';
-import { userid } from './02_POSTRequest.spec';
 
 test('PUT update user', async ({ request }) => {
-    const response =await request.put('https://api.restful-api.dev/objects/'+userid, {
+    const response =await request.put('https://api.restful-api.dev/objects/', {
         data: {
             "name": "Apple MacBook Pro 16",
             "data": {

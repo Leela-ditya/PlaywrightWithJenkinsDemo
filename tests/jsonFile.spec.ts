@@ -1,7 +1,7 @@
 import { test, expect } from "@playwright/test";
 import * as fs from "fs";
 
-const json = fs.readFileSync("utilis/testData.json", "utf-8");
+const json = fs.readFileSync("utilis/test-data/testData.json", "utf-8");
 const jsonData = JSON.parse(json);
 
 for (const data of jsonData) {

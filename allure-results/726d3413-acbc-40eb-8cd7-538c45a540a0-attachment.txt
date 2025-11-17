@@ -1,3 +1,0 @@
-{ error: 'Missing API key' }
-{ error: 'Missing API key' }
-401

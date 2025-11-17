@@ -3,7 +3,7 @@ import { test, expect } from '@playwright/test'
 export let userid: string = '';
 // export var type: string = userid;
 
-test('POST create user', async ({ request }) => {
+test('POST create user', {tag: '@postMethodAPI'}, async ({ request }) => {
     const response = await request.post('https://api.restful-api.dev/objects', {
         data: {
             "name": "Apple MacBook Pro 16",

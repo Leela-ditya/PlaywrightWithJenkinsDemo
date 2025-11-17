@@ -1,49 +1,71 @@
 import {test} from "@playwright/test";
-import { GetByRoleLocators } from "../pages/GetByRoleLocators";
-import { GetByTextLocators } from "../pages/GetByTextLocators";
-import { GetByLabelLocators } from "../pages/GetByLabelLocators";
-import { GetByPlaceholderLocaters } from "../pages/GetByPlaceholderLocaters";
-import { GetByAltTextLocators } from "../pages/GetByAltTextLocators";
-import { GetByTitleLocators } from "../pages/GetByTitleLocators";
-import { GetByTestIdLocators } from "../pages/GetByTestIdLocators";
-import { File } from "../pages/File";
-import { StaticTable } from "../pages/StaticTable";
-import { DynamicTable } from "../pages/DynamicTable";
-import { PaginationWebTable } from "../pages/PaginationWebTable";
-import { FormandShadowDOM } from "../pages/FormandShadowDOM";
-import { Tabs } from "../pages/Tabs";
+import { GetByRoleLocators } from "../pages/DemoWebsitePages/GetByRoleLocators";
+import { GetByTextLocators } from "../pages/DemoWebsitePages/GetByTextLocators";
+import { GetByLabelLocators } from "../pages/DemoWebsitePages/GetByLabelLocators";
+import { GetByPlaceholderLocaters } from "../pages/DemoWebsitePages/GetByPlaceholderLocaters";
+import { GetByAltTextLocators } from "../pages/DemoWebsitePages/GetByAltTextLocators";
+import { GetByTitleLocators } from "../pages/DemoWebsitePages/GetByTitleLocators";
+import { GetByTestIdLocators } from "../pages/DemoWebsitePages/GetByTestIdLocators";
+import { File } from "../pages/DemoWebsitePages/File";
+import { StaticTable } from "../pages/DemoWebsitePages/StaticTable";
+import { DynamicTable } from "../pages/DemoWebsitePages/DynamicTable";
+import { PaginationWebTable } from "../pages/DemoWebsitePages/PaginationWebTable";
+import { FormandShadowDOM } from "../pages/DemoWebsitePages/FormandShadowDOM";
+import { Tabs } from "../pages/DemoWebsitePages/Tabs";
 
 test.beforeEach('GotoURL "Automation Testing Practice" for each test', async ({page})=>{
     const openGivenURL = new GetByRoleLocators(page);
     await openGivenURL.gotoURL();
 });
 
-test('Playwright built-in locators',{tag : ['@playwrightBuiltinLocators']}, async({page})=> {
+test('Playwright built-in locators getByRole',{tag : ['@getByRoleMethod']}, async({page})=> {
     
     const getByRoleSection = new GetByRoleLocators(page);
     await getByRoleSection.getByRoleLocator("Paarivel Kannan");
+    
+});
 
+test('Playwright built-in locators getByText',{tag : ['@getByTextMethod']}, async({page})=> {
+    
     const getByTextSection = new GetByTextLocators(page);
     await getByTextSection.getByTextLocator();
+    
+});
 
+test('Playwright built-in locators getByLabel',{tag : ['@getByLabelMethod']}, async({page})=> {
+    
     const getByLabelSection = new GetByLabelLocators(page);
     await getByLabelSection.formControls('Kannan@gmail.com', 'Kanna@1234', 25);
+    
+});
 
+test('Playwright built-in locators getByPlaceholder',{tag : ['@getByPlaceholderMethod']}, async({page})=> {
+    
     const getByPlaceholderSection = new GetByPlaceholderLocaters(page);
-    await getByPlaceholderSection.getByPlaceholder("Paarival Kannan", 635124789, "Welcome to the Playwright Learning", "Playwright Documentation");
+    await getByPlaceholderSection.getByPlaceholder("Paarival Kannan", 635124789, "Welcome to the Playwright Learning", "Playwright Documentation"); 
+});
 
+test('Playwright built-in locators getByAltText',{tag : ['@getByAltTextMethod']}, async({page})=> {
+    
     const getByAltTextSection = new GetByAltTextLocators(page);
     await getByAltTextSection.getByAltText();
+});
 
+test('Playwright built-in locators getByTitle',{tag : ['@getByTitleMethod']}, async({page})=> {
+    
     const getByTitleSection = new GetByTitleLocators(page);
     await getByTitleSection.getByTitle();
 
-    const data_testid = new GetByTestIdLocators(page);
+});
+
+test('Playwright built-in locators GetByTestIdLocators',{tag : ['@getByTestIdMethod']}, async({page})=> {
+    
+   const data_testid = new GetByTestIdLocators(page);
     await data_testid.dataTestId();
     
 });
 
-test('Files uploading test',{tag:['@FilesUploading']}, async({page})=> {
+test.only('Files uploading test',{tag:['@FilesUploading']}, async({page})=> {
     const FileActions = new File(page);
     await FileActions.FileInput();
 })

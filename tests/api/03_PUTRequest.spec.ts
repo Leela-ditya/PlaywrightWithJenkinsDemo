@@ -1,5 +1,5 @@
 import { test, expect } from '@playwright/test';
-import { userid } from './02_postRequest.spec';
+import { userid } from './02_POSTRequest.spec';
 
 test('PUT update user', async ({ request }) => {
     const response =await request.put('https://api.restful-api.dev/objects/'+userid, {

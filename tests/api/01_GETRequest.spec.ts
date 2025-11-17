@@ -1,7 +1,7 @@
 import { test, expect } from '@playwright/test';
 
 
-test('GET list of users', async ({ request }) => {
+test('GET list of users', {tag: '@getMethodAPI'}, async ({ request }) => {
     const response = await request.get('https://reqres.in/api/users?page=2');
     expect(response.status()).toBe(200);
     expect(response.ok()).toBeTruthy();
@@ -18,7 +18,7 @@ test('GET list of users', async ({ request }) => {
     }
 })
 
-test('GET single user', async ({ request }) => {
+test('GET single user', {tag: '@getMethodAPI'}, async ({ request }) => {
     const response = await request.get('https://reqres.in/api/users/2');
     expect(response.status()).toBe(200);
     expect(response.ok()).toBeTruthy();
@@ -39,14 +39,14 @@ test('GET single user', async ({ request }) => {
    
 })
 
-test('GET single user not found', async ({ request }) => {
+test('GET single user not found', {tag: '@getMethodAPI'}, async ({ request }) => {
     const response = await request.get('https://reqres.in/api/users/23');
     expect(response.status()).toBe(401);
     expect(response.ok()).toBeFalsy();
     expect(await response.json()).toStrictEqual({"error": "Missing API key"});
 })
 
-test('GET list resource', async ({ request }) => {
+test('GET list resource', {tag: '@getMethodAPI'}, async ({ request }) => {
     const response = await request.get('https://reqres.in/api/unknown');
     expect(response.status()).toBe(200);
     expect(response.ok()).toBeTruthy();
@@ -70,7 +70,7 @@ test('GET list resource', async ({ request }) => {
     }
 })
 
-test('GET single resource', async ({ request }) => {
+test('GET single resource', {tag: '@getMethodAPI'}, async ({ request }) => {
     const response = await request.get('https://reqres.in/api/unknown/2'); 
     expect(await response.status()).toBe(200);
     expect(await response.ok()).toBeTruthy();
@@ -80,7 +80,7 @@ test('GET single resource', async ({ request }) => {
     expect(data.data.pantone_value).toBe('17-2031')
 })
 
-test('GET single resource not found', async ({ request }) => {
+test('GET single resource not found', {tag: '@getMethodAPI'}, async ({ request }) => {
     const response = await request.get('https://reqres.in/api/unknown/23');
     expect(await response.status()).toBe(404);
     expect(await response.ok()).toBeFalsy();

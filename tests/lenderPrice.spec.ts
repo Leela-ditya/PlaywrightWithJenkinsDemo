@@ -1,6 +1,6 @@
 import {test} from '@playwright/test';
-import {LoginPage} from '../LenderPages/LoginPage';
-import { DashboardPage } from '../LenderPages/DashboardPage';
+import {LoginPage} from '../pages/LenderPages/LoginPage';
+import { DashboardPage } from '../pages/LenderPages/DashboardPage';
 
 test('Navigate to Lender Price Website',{tag: ['@lenderPrice']}, async({page})=>{
 

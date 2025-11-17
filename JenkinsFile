@@ -2,6 +2,7 @@ pipeline {
     agent any
 
     environment {
+        // Load your GitHub PAT correctly
         GITHUB_TOKEN = credentials('4a222623-6aa2-43b6-a0e7-3ec1abb1aa3c')
     }
 
@@ -10,6 +11,7 @@ pipeline {
         stage('Checkout Code') {
             steps {
                 git branch: 'main',
+                    credentialsId: '4a222623-6aa2-43b6-a0e7-3ec1abb1aa3c',
                     url: 'https://github.com/Leela-ditya/PlaywrightWithJenkinsDemo.git'
             }
         }

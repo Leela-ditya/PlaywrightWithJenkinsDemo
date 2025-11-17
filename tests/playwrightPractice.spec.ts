@@ -65,7 +65,7 @@ test('Playwright built-in locators GetByTestIdLocators',{tag : ['@getByTestIdMet
     
 });
 
-test.only('Files uploading test',{tag:['@FilesUploading']}, async({page})=> {
+test('Files uploading test',{tag:['@FilesUploading']}, async({page})=> {
     const FileActions = new File(page);
     await FileActions.FileInput();
 })

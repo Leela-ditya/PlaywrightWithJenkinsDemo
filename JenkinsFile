@@ -1,94 +1,64 @@
 pipeline {
-  agent any
+    agent any
 
-  environment {
-    REPORT_DIR = 'playwright-report'
-  }
-
-  parameters {
-    string(name: 'SPEC_FILE', defaultValue: '', description: 'Run only this spec file/folder (example: tests/login.spec.ts). Leave empty to run by TEST_TAG or all tests.')
-    string(name: 'TEST_TAG',  defaultValue: '', description: 'Playwright grep/tag (example: @smoke). Used if SPEC_FILE is empty.')
-    booleanParam(name: 'USE_WINDOWS', defaultValue: false, description: 'Run on Windows agent.')
-  }
-
-  stages {
-
-    stage('Checkout') {
-      steps {
-        checkout scm
-      }
+    parameters {
+        string(name: 'TEST_TAG', defaultValue: '', description: 'Enter Playwright tag (example: @smoke)')
+        string(name: 'SPEC_FILE', defaultValue: '', description: 'Enter spec file to run (example: tests/example.spec.ts)')
     }
 
-    stage('Install dependencies') {
-      steps {
-        script {
-          if (params.USE_WINDOWS) {
-            bat 'npm ci'
-          } else {
-            sh 'npm ci'
-          }
+    stages {
+
+        stage('Checkout') {
+            steps {
+                git branch: 'main', url: 'https://github.com/Leela-ditya/PlaywrightWithJenkinsDemo.git'
+            }
         }
-      }
-    }
 
-    stage('Install Playwright Browsers') {
-      steps {
-        script {
-          if (params.USE_WINDOWS) {
-            bat 'npx playwright install'
-          } else {
-            sh 'npx playwright install --with-deps || npx playwright install'
-          }
+        stage('Install dependencies') {
+            steps {
+                bat 'npm ci'
+            }
         }
-      }
-    }
 
-    stage('Run Tests') {
-      steps {
-        script {
-          def cmd = "npx playwright test --reporter=html --output=${env.WORKSPACE}/${REPORT_DIR}"
-
-          if (params.SPEC_FILE?.trim()) {
-            cmd = "npx playwright test ${params.SPEC_FILE} --reporter=html --output=${env.WORKSPACE}/${REPORT_DIR}"
-          } else if (params.TEST_TAG?.trim()) {
-            cmd = "npx playwright test --grep=\"${params.TEST_TAG}\" --reporter=html --output=${env.WORKSPACE}/${REPORT_DIR}"
-          }
-
-          if (params.USE_WINDOWS) {
-            bat cmd
-          } else {
-            sh cmd
-          }
+        stage('Install Playwright Browsers') {
+            steps {
+                bat 'npx playwright install'
+            }
         }
-      }
-    }
 
-    stage('Archive & Publish HTML Report') {
-      steps {
-        script {
-          archiveArtifacts artifacts: "${REPORT_DIR}/**", allowEmptyArchive: true
-
-          publishHTML(target: [
-            reportDir: REPORT_DIR,
-            reportFiles: 'index.html',
-            reportName: 'Playwright Report',
-            keepAll: true,
-            alwaysLinkToLastBuild: true
-          ])
+        stage('Run Tests') {
+            steps {
+                script {
+                    if (params.SPEC_FILE?.trim()) {
+                        echo "▶ Running Spec File: ${params.SPEC_FILE}"
+                        bat "npx playwright test ${params.SPEC_FILE} --reporter=html --output=playwright-report"
+                    } else {
+                        echo "▶ Running Tests with Tag: ${params.TEST_TAG}"
+                        bat "npx playwright test --grep \"${params.TEST_TAG}\" --reporter=html --output=playwright-report"
+                    }
+                }
+            }
         }
-      }
-    }
-  }
 
-  post {
-    always {
-      echo "Build complete."
+        stage('Archive & Publish HTML Report') {
+            steps {
+                archiveArtifacts artifacts: 'playwright-report/**', followSymlinks: false
+                publishHTML(target: [
+                    reportName: "Playwright Report",
+                    reportDir: "playwright-report",
+                    reportFiles: "index.html",
+                    keepAll: true
+                ])
+            }
+        }
     }
-    success {
-      echo "Build Success!"
+
+    post {
+        always {
+            echo "Build complete."
+        }
+        failure {
+            echo "Build Failed!"
+        }
     }
-    failure {
-      echo "Build Failed!"
-    }
-  }
 }

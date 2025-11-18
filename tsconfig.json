@@ -7,6 +7,8 @@
     "strict": true,
     "outDir": "dist",
     "types": ["@playwright/test"],
+    "allowJs": true,
+    "resolveJsonModule": true
   },
-  "include": ["tests/**/*.ts", "utilis/**/*.ts", "config/**/*.ts"]
+  "include": ["tests/**/*.ts", "tests/**/*.js", "utilis/**/*.ts", "utilis/**/*.js", "config/**/*.ts", "config/**/*.js"]
 }

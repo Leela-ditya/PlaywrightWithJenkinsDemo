@@ -15,7 +15,7 @@ export default defineConfig({
     ['json', {  outputFile: 'playwright-report/json-report.json' }],
     ['junit', { outputFile: 'playwright-report/junit-report.xml' }],
     ['github'],
-    // ['allure-playwright'],
+    ['allure-playwright'],
     // ["list"],
     // ["dot"],
   ],
@@ -23,8 +23,7 @@ export default defineConfig({
   use: {
     trace: "on-first-retry",
     screenshot: 'only-on-failure',
-    // video: 'retain-on-failure',
-    // video: 'retain-on-failure',
+    video: 'retain-on-failure',
     testIdAttribute: "data-testid",
   },
 

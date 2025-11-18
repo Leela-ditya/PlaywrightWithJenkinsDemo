@@ -25,40 +25,40 @@ test('Playwright built-in locators getByRole',{tag : ['@getByRoleMethod']}, asyn
     
 });
 
-test('Playwright built-in locators getByText',{tag : ['@getByTextMethod']}, async({page})=> {
+test('Playwright built-in locators getByText',{tag : ['@builtInLocatorsMethod']}, async({page})=> {
     
     const getByTextSection = new GetByTextLocators(page);
     await getByTextSection.getByTextLocator();
     
 });
 
-test('Playwright built-in locators getByLabel',{tag : ['@getByLabelMethod']}, async({page})=> {
+test('Playwright built-in locators getByLabel',{tag : ['@builtInLocatorsMethod']}, async({page})=> {
     
     const getByLabelSection = new GetByLabelLocators(page);
     await getByLabelSection.formControls('Kannan@gmail.com', 'Kanna@1234', 25);
     
 });
 
-test('Playwright built-in locators getByPlaceholder',{tag : ['@getByPlaceholderMethod']}, async({page})=> {
+test('Playwright built-in locators getByPlaceholder',{tag : ['@builtInLocatorsMethod']}, async({page})=> {
     
     const getByPlaceholderSection = new GetByPlaceholderLocaters(page);
     await getByPlaceholderSection.getByPlaceholder("Paarival Kannan", 635124789, "Welcome to the Playwright Learning", "Playwright Documentation"); 
 });
 
-test('Playwright built-in locators getByAltText',{tag : ['@getByAltTextMethod']}, async({page})=> {
+test('Playwright built-in locators getByAltText',{tag : ['@builtInLocatorsMethod']}, async({page})=> {
     
     const getByAltTextSection = new GetByAltTextLocators(page);
     await getByAltTextSection.getByAltText();
 });
 
-test('Playwright built-in locators getByTitle',{tag : ['@getByTitleMethod']}, async({page})=> {
+test('Playwright built-in locators getByTitle',{tag : ['@builtInLocatorsMethod']}, async({page})=> {
     
     const getByTitleSection = new GetByTitleLocators(page);
     await getByTitleSection.getByTitle();
 
 });
 
-test('Playwright built-in locators GetByTestIdLocators',{tag : ['@getByTestIdMethod']}, async({page})=> {
+test('Playwright built-in locators GetByTestIdLocators',{tag : ['@builtInLocatorsMethod']}, async({page})=> {
     
    const data_testid = new GetByTestIdLocators(page);
     await data_testid.dataTestId();

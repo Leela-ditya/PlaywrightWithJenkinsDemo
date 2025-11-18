@@ -59,7 +59,7 @@ pipeline {
       steps {
         script {
           // Build the run command based on parameters
-          def cmd = "npx playwright test --reporter=html --output="%WORKSPACE%\playwright-report""
+          def cmd = "npx playwright test --reporter=html --output="%WORKSPACE%/playwright-report""
           if (params.SPEC_FILE?.trim()) {
             // Run a specific file or folder
             cmd = "npx playwright test ${params.SPEC_FILE} --reporter=html --output=$(pwd)/${env.REPORT_DIR}"

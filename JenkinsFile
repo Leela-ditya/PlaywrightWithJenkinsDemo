@@ -1,74 +1,122 @@
 pipeline {
-    agent any
+  agent any
 
-    environment {
-        GITHUB_TOKEN = credentials('github_pat_token')  // Create Jenkins secret
-        REPO_OWNER   = "Leela-ditya"
-        REPO_NAME    = "PlaywrightWithJenkinsDemo"
-        WORKFLOW_FILE = "playwright.yml"       // Name of your GitHub Actions workflow file
+  // Change this to the credential ID you created in Jenkins (if needed)
+  environment {
+    GITHUB_CRED_ID = 'github_repo_cred'   // optional: used if your repo is private
+    REPORT_DIR     = 'playwright-report'
+  }
+
+  parameters {
+    string(name: 'SPEC_FILE', defaultValue: '', description: 'Run only this spec file/folder (example: tests/login.spec.ts). Leave empty to run by TEST_TAG or all tests.')
+    string(name: 'TEST_TAG',  defaultValue: '', description: 'Playwright grep/tag (example: @smoke). Used if SPEC_FILE is empty.')
+   // string(name: 'GIT_TAG',   defaultValue: '', description: 'Optional: Git tag name (example: TC-123). Useful when triggering by tag.')
+    booleanParam(name: 'USE_WINDOWS', defaultValue: false, description: 'Set true if your agent is Windows (runs bat instead of sh).')
+  }
+
+  stages {
+    stage('Checkout') {
+      steps {
+        script {
+          // If your repo is public, no credentials needed. If private, add credentials parameter in git step.
+          if (params.USE_WINDOWS.toBoolean()) {
+            bat "git --version"
+            bat "git clone --branch main https://github.com/Leela-ditya/PlaywrightWithJenkinsDemo.git ."
+          } else {
+            sh "git --version"
+            sh "git clone --branch main https://github.com/Leela-ditya/PlaywrightWithJenkinsDemo.git ."
+          }
+        }
+      }
     }
 
-    stages {
-
-        stage('Trigger GitHub Actions Workflow') {
-            steps {
-                script {
-                    def triggerBody = """
-                    {
-                      "ref": "main",
-                      "inputs": {
-                        "triggeredBy": "Jenkins"
-                      }
-                    }
-                    """
-
-                    // GitHub Actions dispatch API
-                    sh """
-                    curl -X POST \
-                      -H "Accept: application/vnd.github+json" \
-                      -H "Authorization: Bearer ${GITHUB_TOKEN}" \
-                      https://api.github.com/repos/${REPO_OWNER}/${REPO_NAME}/actions/workflows/${WORKFLOW_FILE}/dispatches \
-                      -d '${triggerBody}'
-                    """
-                }
-            }
+    stage('Install dependencies') {
+      steps {
+        script {
+          if (params.USE_WINDOWS.toBoolean()) {
+            bat 'npm ci'
+          } else {
+            sh 'npm ci'
+          }
         }
-
-        stage('Checkout Code') {
-            steps {
-                git branch: 'main',
-                    url: 'https://github.com/Leela-ditya/PlaywrightWithJenkinsDemo.git'
-            }
-        }
-
-        stage('Install Dependencies') {
-            steps {
-                bat 'npm install'
-            }
-        }
-
-        stage('Install Playwright Browsers') {
-            steps {
-                bat 'npx playwright install'
-            }
-        }
-
-        stage('Run Tests') {
-            steps {
-                bat 'npx playwright test --reporter=html'
-            }
-        }
-
-        stage('Publish HTML Report') {
-            steps {
-                publishHTML(target: [
-                    reportDir: 'playwright-report',
-                    reportFiles: 'index.html',
-                    reportName: 'Playwright Test Report',
-                    keepAll: true,
-                    alwaysLinkToLastBuild: true
-                ])
-            }
-        }
+      }
     }
+
+    stage('Install Playwright browsers') {
+      steps {
+        script {
+          // --with-deps is useful on Linux container to install system deps
+          if (params.USE_WINDOWS.toBoolean()) {
+            bat 'npx playwright install'
+          } else {
+            sh 'npx playwright install --with-deps || npx playwright install'
+          }
+        }
+      }
+    }
+
+    stage('Run tests') {
+      steps {
+        script {
+          // Build the run command based on parameters
+          def cmd = "npx playwright test --reporter=html --output=$(pwd)/${env.REPORT_DIR}"
+          if (params.SPEC_FILE?.trim()) {
+            // Run a specific file or folder
+            cmd = "npx playwright test ${params.SPEC_FILE} --reporter=html --output=$(pwd)/${env.REPORT_DIR}"
+          } else if (params.TEST_TAG?.trim()) {
+            // Use --grep to filter by tag (tests must contain that string in title or use test.info().annotations)
+            cmd = "npx playwright test --grep \"${params.TEST_TAG}\" --reporter=html --output=$(pwd)/${env.REPORT_DIR}"
+          }
+          // If you want to run specific project: add --project=chromium
+          if (params.USE_WINDOWS.toBoolean()) {
+            bat cmd
+          } else {
+            sh cmd
+          }
+        }
+      }
+      post {
+        always {
+          echo 'Tests finished — preserving report directory'
+        }
+      }
+    }
+
+    stage('Archive & Publish HTML Report') {
+      steps {
+        script {
+          // Make sure Playwright wrote to the REPORT_DIR path (playwright's html reporter writes an index.html inside)
+          if (params.USE_WINDOWS.toBoolean()) {
+            bat "dir ${env.REPORT_DIR}"
+          } else {
+            sh "ls -la ${env.REPORT_DIR} || true"
+          }
+
+          // Archive the HTML report folder as build artifact
+          archiveArtifacts artifacts: "${env.REPORT_DIR}/**", allowEmptyArchive: true
+
+          // Publish HTML using publishHTML plugin (if installed)
+          publishHTML(target: [
+            reportDir: env.REPORT_DIR,
+            reportFiles: 'index.html',
+            reportName: 'Playwright Test Report',
+            keepAll: true,
+            alwaysLinkToLastBuild: true
+          ])
+        }
+      }
+    }
+  } // stages
+
+  post {
+    always {
+      echo "Build finished. Check archived artifacts and Playwright report."
+    }
+    success {
+      echo "Build Success"
+    }
+    failure {
+      echo "Build Failed"
+    }
+  }
 }

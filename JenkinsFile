@@ -4,25 +4,35 @@ pipeline {
     options {
         timestamps()
         durabilityHint('MAX_SURVIVABILITY')
-        buildDiscarder(logRotator(daysToKeepStr: '30'))  // keep reports for 1 month (set '' for forever)
+        buildDiscarder(logRotator(daysToKeepStr: '30'))      // 30 days retention
     }
 
     triggers {
-        cron('0 17 * * *')   // AUTO RUN EVERYDAY AT 5 PM
+        cron('0 17 * * *')    // RUN EVERY DAY AT 5 PM
     }
 
     parameters {
-        string(name: 'EMAIL', defaultValue: 'leelasonu12@gmail.com', description: 'Enter email to receive reports (leave empty to use default)')
-        string(name: 'TEST_TAG', defaultValue: '', description: 'Enter tag to run (example: @smoke)')
-        string(name: 'SPEC_FILE', defaultValue: '', description: 'Enter spec file (example: tests/example.spec.ts)')
-        choice(name: 'BROWSER', choices: ['chromium', 'firefox', 'webkit', 'all'], description: 'Select browser to run')
+        string(name: 'EMAIL', defaultValue: 'leelasonu12@gmail.com',
+            description: 'Enter report email (leave blank to use default)')
+        string(name: 'TEST_TAG', defaultValue: '', description: 'Playwright tag (ex: @smoke)')
+        string(name: 'SPEC_FILE', defaultValue: '', description: 'Spec file to run')
+        string(name: 'GOTO_URL', defaultValue: 'https://testpages.herokuapp.com/styled/tag/table.html',
+            description: 'URL used inside Playwright tests')
+        choice(name: 'BROWSER', choices: ['chromium', 'firefox', 'webkit', 'all'],
+            description: 'Select browser to run')
+    }
+
+    environment {
+        PWDEBUG = "0"
+        GOTO_URL = "${params.GOTO_URL}"
     }
 
     stages {
 
         stage('Checkout') {
             steps {
-                git branch: 'main', url: 'https://github.com/Leela-ditya/PlaywrightWithJenkinsDemo.git'
+                git branch: 'main',
+                    url: 'https://github.com/Leela-ditya/PlaywrightWithJenkinsDemo.git'
             }
         }
 
@@ -46,7 +56,7 @@ pipeline {
 
                         export default defineConfig({
                             testDir: './tests',
-                            retries: 1,  
+                            retries: 1,
 
                             reporter: [
                                 ['html', { outputFolder: 'reports/html-report', open: 'never' }],
@@ -74,26 +84,24 @@ pipeline {
         stage('Run Tests') {
             steps {
                 script {
+                    def cmd = "npx playwright test"
 
-                    def testCommand = "npx playwright test"
-
-                    // SPEC FILE
                     if (params.SPEC_FILE?.trim()) {
-                        testCommand += " ${params.SPEC_FILE}"
+                        cmd += " ${params.SPEC_FILE}"
                     }
-
-                    // TAG
                     if (params.TEST_TAG?.trim()) {
-                        testCommand += " --grep=\"${params.TEST_TAG}\""
+                        cmd += " --grep=\"${params.TEST_TAG}\""
                     }
-
-                    // BROWSER
                     if (params.BROWSER != 'all') {
-                        testCommand += " --project=${params.BROWSER}"
+                        cmd += " --project=${params.BROWSER}"
                     }
 
-                    echo "▶ Running: ${testCommand}"
-                    bat testCommand
+                    echo "▶ Running: ${cmd}"
+
+                    bat """
+                    set GOTO_URL=${GOTO_URL}
+                    ${cmd}
+                    """
                 }
             }
         }
@@ -109,9 +117,6 @@ pipeline {
 
                 archiveArtifacts artifacts: """
                     reports/**,
-                    reports/html-report/**,
-                    reports/json-report/**,
-                    reports/allure-report/**,
                     allure-results/**,
                     **/screenshots/**,
                     **/videos/**,
@@ -131,36 +136,34 @@ pipeline {
     }
 
     post {
-
         always {
             script {
-                // Determine final email → parameter or default
-                def recipient = params.EMAIL?.trim() ? params.EMAIL : "leelasonu12@gmail.com"
+                def recipient = params.EMAIL?.trim() ?
+                                params.EMAIL :
+                                "leelasonu12@gmail.com"
 
                 echo "📧 Sending report to: ${recipient}"
 
                 emailext(
                     to: recipient,
                     subject: "Playwright Test Report - Build #${env.BUILD_NUMBER}",
+                    mimeType: 'text/html',
                     body: """
-                        <h2>Playwright Automation Execution Completed</h2>
+                        <h2>Playwright Execution Completed</h2>
                         <p><b>Status:</b> ${currentBuild.currentResult}</p>
-                        <p><b>HTML Report:</b> <a href="${env.BUILD_URL}Playwright_HTML_Report">Click to view</a></p>
-                        <p><b>Allure Report:</b> <a href="${env.BUILD_URL}allure">Click to view</a></p>
-
-                        <p>Triggered By Jenkins Pipeline.</p>
-                    """,
-                    mimeType: 'text/html'
+                        <p><a href="${env.BUILD_URL}Playwright_HTML_Report">HTML Report</a></p>
+                        <p><a href="${env.BUILD_URL}allure">Allure Report</a></p>
+                    """
                 )
             }
         }
 
         success {
-            echo "🎉 Build Successful — All reports generated!"
+            echo "🎉 Build Successful — Reports generated!"
         }
 
         failure {
-            echo "❌ Build Failed — Check HTML, JSON, Allure, Screenshots, Videos, Trace."
+            echo "❌ Build Failed — Check reports, screenshots, videos, traces."
         }
     }
 }

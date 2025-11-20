@@ -8,12 +8,23 @@ pipeline {
     }
 
     parameters {
-        string(name: 'GITHUB_REPO_URL', defaultValue: 'https://github.com/Leela-ditya/PlaywrightWithJenkinsDemo.git', description: 'GitHub Repo URL')
-        string(name: 'BRANCH', defaultValue: 'main', description: 'Branch name')
+        string(name: 'GITHUB_REPO_URL', 
+               defaultValue: 'https://github.com/Leela-ditya/PlaywrightWithJenkinsDemo.git', 
+               description: 'GitHub Repository URL')
 
-        choice(name: 'BROWSER', choices: ['chromium', 'firefox', 'webkit'], description: 'Choose Browser')
-        string(name: 'TEST_TAG', defaultValue: '', description: 'Enter Tag (ex: @smoke). Leave empty if selecting SPEC.')
-        string(name: 'SPEC_FILE', defaultValue: '', description: 'Enter Spec File (ex: tests/login.spec.ts). Leave empty if using TAG.')
+        string(name: 'BRANCH', defaultValue: 'main', description: 'Git Branch')
+
+        choice(name: 'BROWSER', 
+               choices: ['chromium', 'firefox', 'webkit'], 
+               description: 'Choose Browser')
+
+        string(name: 'TEST_TAG', 
+               defaultValue: '', 
+               description: 'Enter Tag (ex: @smoke). Leave empty if using SPEC.')
+
+        string(name: 'SPEC_FILE', 
+               defaultValue: '', 
+               description: 'Enter Spec File (ex: tests/login.spec.ts). Leave empty if using TAG.')
     }
 
     stages {
@@ -35,11 +46,11 @@ pipeline {
                     def hasSpec = params.SPEC_FILE?.trim()
 
                     if (hasTag && hasSpec) {
-                        error "❌ ERROR: You must provide ONLY one — TAG or SPEC, not both."
+                        error "❌ ERROR: Provide ONLY one — TAG or SPEC, not both."
                     }
 
                     if (!hasTag && !hasSpec) {
-                        echo "⚠ No TAG or SPEC provided — Running full test suite."
+                        echo "⚠ No TAG or SPEC provided — running entire test suite."
                     }
                 }
             }
@@ -55,30 +66,34 @@ pipeline {
         }
 
         stage('Run Playwright Tests') {
-    steps {
-        script {
-            def browserOption = "--project=${params.BROWSER}"
+            steps {
+                script {
+                    def tag = params.TEST_TAG?.trim()
+                    def spec = params.SPEC_FILE?.trim()
 
-            def runCommand = ""
+                    def command = "npx playwright test"
 
-            if (params.TEST_TAG?.trim()) {
-                runCommand = "npx playwright test --grep ${params.TEST_TAG} ${browserOption} --reporter=html,json,junit,allure-playwright"
-            } 
-            else if (params.SPEC_FILE?.trim()) {
-                runCommand = "npx playwright test ${params.SPEC_FILE} ${browserOption} --reporter=html,json,junit,allure-playwright"
-            } 
-            else {
-                runCommand = "npx playwright test ${browserOption} --reporter=html,json,junit,allure-playwright"
+                    if (spec) {
+                        command += " ${spec}"
+                        echo "✔ Running SPEC: ${spec}"
+                    }
+
+                    if (tag) {
+                        command += " --grep ${tag}"
+                        echo "✔ Running TAG: ${tag}"
+                    }
+
+                    command += " --project=${params.BROWSER}"
+                    command += " --reporter=html,json,junit,allure-playwright"
+
+                    echo "Executing: ${command}"
+
+                    bat """
+                        ${command} || exit /b 0
+                    """
+                }
             }
-
-            bat """
-                echo Running: ${runCommand}
-                ${runCommand} || exit /b 0
-            """
         }
-    }
-}
-
 
         stage('Generate Allure Report') {
             steps {
@@ -102,14 +117,16 @@ pipeline {
                     ])
 
                     allure([
-                        reportBuildPolicy: 'ALWAYS',
-                        results: [[path: 'allure-results']]
+                        results: [[path: 'allure-results']],
+                        reportBuildPolicy: 'ALWAYS'
                     ])
 
                     junit allowEmptyResults: true, testResults: 'test-results/**/*.xml'
 
-                    archiveArtifacts artifacts: 'playwright-report/**, allure-report/**, test-results/**, screenshots/**, videos/**, traces/**',
-                                     allowEmptyArchive: true
+                    archiveArtifacts(
+                        artifacts: 'playwright-report/**, allure-report/**, test-results/**, videos/**, traces/**',
+                        allowEmptyArchive: true
+                    )
                 }
             }
         }
@@ -120,7 +137,7 @@ pipeline {
             echo "🎉 Tests Passed Successfully!"
         }
         failure {
-            echo "❌ Tests Failed — Check the Reports."
+            echo "❌ Tests Failed — Check Reports."
         }
     }
 }

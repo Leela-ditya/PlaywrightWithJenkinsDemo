@@ -89,7 +89,7 @@ pipeline {
                     echo "Executing: ${command}"
 
                     bat """
-                        ${command} || exit /b 0
+                        ${command} --output=test-results --video=on --trace=on
                     """
                 }
             }

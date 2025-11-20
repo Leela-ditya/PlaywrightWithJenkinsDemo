@@ -89,7 +89,7 @@ test('Dynamic Table', async({page})=> {
     console.log("table data 4 : ",await page.locator('//table[@id="taskTable"]/tbody[@id="rows"]/tr[1]/td[4]').innerText());
 })
 
-test('Pagination Web Table', async({page})=> {
+test('Pagination Web Table',{tag: ['@Pagination']}, async({page})=> {
     const table = new PaginationWebTable(page);
     await table.verifyTableName();
     await table.verifyTableHeading();

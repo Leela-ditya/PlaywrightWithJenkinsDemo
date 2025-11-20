@@ -8,7 +8,7 @@ pipeline {
     }
 
     triggers {
-        cron('0 17 * * *')   // run everyday 5 PM
+        cron('0 17 * * *')   // Run everyday 5 PM
     }
 
     parameters {
@@ -38,17 +38,7 @@ pipeline {
             }
         }
 
-        stage('Load ENV File') {
-            steps {
-                script {
-                    def props = readProperties file: '.env'
-                    props.each { key, value -> env[key] = value }
-                    echo "Loaded ENV variables: ${props.keySet()}"
-                }
-            }
-        }
-
-        stage('Configure Playwright') {
+        stage('Write Playwright Config') {
             steps {
                 script {
                     writeFile file: 'playwright.config.ts', text: """
@@ -113,10 +103,9 @@ pipeline {
                 archiveArtifacts artifacts: """
                     reports/**,
                     allure-results/**,
-                    test-results/**,
-                    **/video.webm,
-                    **/screenshot.png,
-                    **/trace.zip
+                    **/*.png,
+                    **/*.webm,
+                    **/*.zip
                 """, followSymlinks: false
 
                 publishHTML(target: [
@@ -134,38 +123,43 @@ pipeline {
     post {
         always {
             script {
+                // Safe JSON parsing
+                def failedList = "JSON report not found"
+                if (fileExists('reports/json-report/results.json')) {
+                    def json = readJSON file: 'reports/json-report/results.json'
 
-                // Read failed tests from JSON
-                def jsonReport = readJSON file: 'reports/json-report/results.json'
-                def failedTests = jsonReport.suites.collectMany { it.specs }
-                    .findAll { it.status == 'failed' }
-                    .collect { it.title }
+                    def failedTests = []
+                    if (json.suites) {
+                        failedTests = json.suites
+                            .collectMany { it.specs }
+                            .findAll { it.status == 'failed' }
+                            .collect { it.title }
+                    }
 
-                def failedList = failedTests ? failedTests.join("<br>") : "All Tests Passed 🎉"
+                    failedList = failedTests ? failedTests.join("<br>") : "All Tests Passed 🎉"
+                }
 
                 def recipient = params.EMAIL?.trim() ? params.EMAIL : "leelasonu12@gmail.com"
 
                 emailext(
                     to: recipient,
-                    subject: "Playwright Test Report - Build #${env.BUILD_NUMBER}",
-
+                    subject: "Playwright Report - Build #${env.BUILD_NUMBER}",
                     body: """
-                        <h2>Playwright Test Execution Completed</h2>
+                        <h2>Playwright Test Execution</h2>
                         <p><b>Status:</b> ${currentBuild.currentResult}</p>
 
-                        <h3>🛑 Failed Testcases:</h3>
+                        <h3>🛑 Failed Tests:</h3>
                         <p>${failedList}</p>
 
                         <h3>📄 Reports</h3>
-                        <p><b>HTML Report:</b> <a href="${env.BUILD_URL}Playwright_HTML_Report">View HTML Report</a></p>
-                        <p><b>Allure Report:</b> <a href="${env.BUILD_URL}allure">View Allure Report</a></p>
-                        <p><b>JSON Report:</b> <a href="${env.BUILD_URL}artifact/reports/json-report/results.json">Download JSON</a></p>
+                        <p><a href="${env.BUILD_URL}Playwright_HTML_Report">HTML Report</a></p>
+                        <p><a href="${env.BUILD_URL}allure">Allure Report</a></p>
+                        <p><a href="${env.BUILD_URL}artifact/reports/json-report/results.json">JSON Report</a></p>
 
-                        <h3>🎥 Videos, 📸 Screenshots, 🧭 Trace Viewer</h3>
-                        <p><a href="${env.BUILD_URL}artifact/">Browse Artifacts (videos/screenshots/traces)</a></p>
-
+                        <h3>🎥 Videos / 📸 Screenshots / 🧭 Traces</h3>
+                        <p><a href="${env.BUILD_URL}artifact/">Browse Artifacts</a></p>
                         <hr>
-                        <p>Triggered from Jenkins Pipeline</p>
+                        <p>Triggered by Jenkins Pipeline</p>
                     """,
                     mimeType: 'text/html'
                 )
@@ -173,11 +167,11 @@ pipeline {
         }
 
         success {
-            echo "🎉 Build Successful — Reports Generated"
+            echo "🎉 Build Successful"
         }
 
         failure {
-            echo "❌ Build Failed — Check Reports and Artifacts"
+            echo "❌ Build Failed — see attached reports"
         }
     }
 }

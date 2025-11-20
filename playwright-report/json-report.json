@@ -1,0 +1,256 @@
+{
+  "config": {
+    "configFile": "C:\\Users\\leela\\OneDrive\\Desktop\\Playwright\\PlaywrightWithJenkinsDemo\\playwright.config.ts",
+    "rootDir": "C:/Users/leela/OneDrive/Desktop/Playwright/PlaywrightWithJenkinsDemo/tests",
+    "forbidOnly": false,
+    "fullyParallel": true,
+    "globalSetup": null,
+    "globalTeardown": null,
+    "globalTimeout": 0,
+    "grep": {},
+    "grepInvert": null,
+    "maxFailures": 0,
+    "metadata": {
+      "actualWorkers": 2
+    },
+    "preserveOutput": "always",
+    "reporter": [
+      [
+        "html",
+        {
+          "outputFile": "html-report",
+          "open": "on-failure"
+        }
+      ],
+      [
+        "json",
+        {
+          "outputFile": "playwright-report/json-report.json"
+        }
+      ],
+      [
+        "junit",
+        {
+          "outputFile": "playwright-report/junit-report.xml"
+        }
+      ],
+      [
+        "github",
+        null
+      ]
+    ],
+    "reportSlowTests": {
+      "max": 5,
+      "threshold": 300000
+    },
+    "quiet": false,
+    "projects": [
+      {
+        "outputDir": "C:/Users/leela/OneDrive/Desktop/Playwright/PlaywrightWithJenkinsDemo/test-results",
+        "repeatEach": 1,
+        "retries": 0,
+        "metadata": {
+          "actualWorkers": 2
+        },
+        "id": "chromium",
+        "name": "chromium",
+        "testDir": "C:/Users/leela/OneDrive/Desktop/Playwright/PlaywrightWithJenkinsDemo/tests",
+        "testIgnore": [],
+        "testMatch": [
+          "**/*.@(spec|test).?(c|m)[jt]s?(x)"
+        ],
+        "timeout": 30000
+      },
+      {
+        "outputDir": "C:/Users/leela/OneDrive/Desktop/Playwright/PlaywrightWithJenkinsDemo/test-results",
+        "repeatEach": 1,
+        "retries": 0,
+        "metadata": {
+          "actualWorkers": 2
+        },
+        "id": "firefox",
+        "name": "firefox",
+        "testDir": "C:/Users/leela/OneDrive/Desktop/Playwright/PlaywrightWithJenkinsDemo/tests",
+        "testIgnore": [],
+        "testMatch": [
+          "**/*.@(spec|test).?(c|m)[jt]s?(x)"
+        ],
+        "timeout": 30000
+      },
+      {
+        "outputDir": "C:/Users/leela/OneDrive/Desktop/Playwright/PlaywrightWithJenkinsDemo/test-results",
+        "repeatEach": 1,
+        "retries": 0,
+        "metadata": {
+          "actualWorkers": 2
+        },
+        "id": "webkit",
+        "name": "webkit",
+        "testDir": "C:/Users/leela/OneDrive/Desktop/Playwright/PlaywrightWithJenkinsDemo/tests",
+        "testIgnore": [],
+        "testMatch": [
+          "**/*.@(spec|test).?(c|m)[jt]s?(x)"
+        ],
+        "timeout": 30000
+      }
+    ],
+    "shard": null,
+    "updateSnapshots": "missing",
+    "updateSourceMethod": "patch",
+    "version": "1.56.1",
+    "workers": 6,
+    "webServer": null
+  },
+  "suites": [
+    {
+      "title": "dataDriven.spec.ts",
+      "file": "dataDriven.spec.ts",
+      "column": 0,
+      "line": 0,
+      "specs": [],
+      "suites": [
+        {
+          "title": "Data Driven Framework - Excel",
+          "file": "dataDriven.spec.ts",
+          "line": 10,
+          "column": 6,
+          "specs": [
+            {
+              "title": "Run test with data: Playwright",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 30000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium",
+                  "projectName": "chromium",
+                  "results": [
+                    {
+                      "workerIndex": 0,
+                      "parallelIndex": 0,
+                      "status": "passed",
+                      "duration": 292,
+                      "errors": [],
+                      "stdout": [
+                        {
+                          "text": "\n=== Test Data From Excel ===\n"
+                        },
+                        {
+                          "text": "STRING: Playwright\n"
+                        },
+                        {
+                          "text": "NUMBER: \u001b[33m12345\u001b[39m\n"
+                        },
+                        {
+                          "text": "BOOLEAN: \u001b[33mtrue\u001b[39m\n"
+                        },
+                        {
+                          "text": "DATE: \u001b[33m45979.442662037036\u001b[39m\n"
+                        },
+                        {
+                          "text": "FORMULA: \u001b[33m30\u001b[39m\n"
+                        },
+                        {
+                          "text": "EMPTY: \u001b[90mundefined\u001b[39m\n"
+                        },
+                        {
+                          "text": "============================\n"
+                        },
+                        {
+                          "text": "Test execution completed for: Playwright\n"
+                        }
+                      ],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2025-11-18T11:31:37.109Z",
+                      "annotations": [],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "b77bd2d234aee5383403-11b45184fb881a96fa3d",
+              "file": "dataDriven.spec.ts",
+              "line": 14,
+              "column": 9
+            },
+            {
+              "title": "Run test with data: 1234",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 30000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium",
+                  "projectName": "chromium",
+                  "results": [
+                    {
+                      "workerIndex": 1,
+                      "parallelIndex": 1,
+                      "status": "passed",
+                      "duration": 349,
+                      "errors": [],
+                      "stdout": [
+                        {
+                          "text": "\n=== Test Data From Excel ===\n"
+                        },
+                        {
+                          "text": "STRING: \u001b[33m1234\u001b[39m\n"
+                        },
+                        {
+                          "text": "NUMBER: Jenkins\n"
+                        },
+                        {
+                          "text": "BOOLEAN: \u001b[33mfalse\u001b[39m\n"
+                        },
+                        {
+                          "text": "DATE: \u001b[33m45979.442662037036\u001b[39m\n"
+                        },
+                        {
+                          "text": "FORMULA: \u001b[90mundefined\u001b[39m\n"
+                        },
+                        {
+                          "text": "EMPTY: \u001b[90mundefined\u001b[39m\n"
+                        },
+                        {
+                          "text": "============================\n"
+                        },
+                        {
+                          "text": "Test execution completed for: \u001b[33m1234\u001b[39m\n"
+                        }
+                      ],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2025-11-18T11:31:37.108Z",
+                      "annotations": [],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "b77bd2d234aee5383403-7ee05032bcb8362e3e30",
+              "file": "dataDriven.spec.ts",
+              "line": 14,
+              "column": 9
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "errors": [],
+  "stats": {
+    "startTime": "2025-11-18T11:31:34.843Z",
+    "duration": 2983.9220000000005,
+    "expected": 2,
+    "skipped": 0,
+    "unexpected": 0,
+    "flaky": 0
+  }
+}

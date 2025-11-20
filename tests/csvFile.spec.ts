@@ -14,7 +14,7 @@ interface UserRecord {
 //   skip_empty_lines: true,
 // }) as UserRecord[];
 
-const records = parse(fs.readFileSync(path.join(__dirname,"../utilis/users.csv")), {
+const records = parse(fs.readFileSync(path.join(__dirname,"../tests/test-data/csv-data/users.csv")), {
     columns: true,
     skip_empty_lines: true,
     // delimiter: ',',

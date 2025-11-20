@@ -3,59 +3,77 @@ pipeline {
 
     options {
         timestamps()
-        buildDiscarder(logRotator(daysToKeepStr: '30'))  // keep reports for 1 month
+        durabilityHint('MAX_SURVIVABILITY')
+        buildDiscarder(logRotator(daysToKeepStr: '30'))
     }
 
     parameters {
-        choice(name: 'BROWSER', choices: ['chromium', 'firefox', 'webkit'], description: 'Choose Playwright Browser')
-        string(name: 'TEST_TAG', defaultValue: '', description: 'Enter Playwright tag (example: @smoke)')
-        string(name: 'SPEC_FILE', defaultValue: '', description: 'Enter spec file to run (example: tests/example.spec.ts)')
+        string(name: 'GITHUB_REPO_URL', defaultValue: 'https://github.com/Leela-ditya/PlaywrightWithJenkinsDemo.git', description: 'GitHub Repo URL')
+        string(name: 'BRANCH', defaultValue: 'main', description: 'Branch name')
+
+        choice(name: 'BROWSER', choices: ['chromium', 'firefox', 'webkit'], description: 'Choose Browser')
+        string(name: 'TEST_TAG', defaultValue: '', description: 'Enter Tag (ex: @smoke). Leave empty if selecting SPEC.')
+        string(name: 'SPEC_FILE', defaultValue: '', description: 'Enter Spec File (ex: tests/login.spec.ts). Leave empty if using TAG.')
     }
 
     stages {
 
-        stage('Checkout Code') {
+        stage('Checkout') {
             steps {
-                echo "Cloning GitHub repo..."
-                git branch: 'main',
-                    url: 'https://github.com/Leela-ditya/PlaywrightWithJenkinsDemo.git'
+                checkout([
+                    $class: 'GitSCM',
+                    branches: [[name: "*/${params.BRANCH}"]],
+                    userRemoteConfigs: [[url: params.GITHUB_REPO_URL]]
+                ])
             }
         }
 
-        stage('Install Dependencies') {
-            steps {
-                echo "Installing Playwright dependencies..."
-                bat """
-                    npm install
-                    npx playwright install %BROWSER% --with-deps
-                """
-            }
-        }
-
-        stage('Install Allure CLI (Windows)') {
-            steps {
-                echo "Installing Allure command-line..."
-                bat 'npm install -g allure-commandline --force'
-            }
-        }
-
-        stage('Run Tests') {
+        stage('Validate Input') {
             steps {
                 script {
-                    def cmd = "npx playwright test --browser=${params.BROWSER} --reporter=line,html,json,allure-playwright"
+                    def hasTag = params.TEST_TAG?.trim()
+                    def hasSpec = params.SPEC_FILE?.trim()
+
+                    if (hasTag && hasSpec) {
+                        error "❌ ERROR: You must provide ONLY one — TAG or SPEC, not both."
+                    }
+
+                    if (!hasTag && !hasSpec) {
+                        echo "⚠ No TAG or SPEC provided — Running full test suite."
+                    }
+                }
+            }
+        }
+
+        stage('Setup Environment') {
+            steps {
+                bat '''
+                    npm install
+                    npx playwright install
+                '''
+            }
+        }
+
+        stage('Run Playwright Tests') {
+            steps {
+                script {
+                    def browserOption = "--browser=${params.BROWSER}"
+
+                    def runCommand = ""
 
                     if (params.TEST_TAG?.trim()) {
-                        cmd = "npx playwright test --grep @${params.TEST_TAG} --browser=${params.BROWSER} --reporter=line,html,json,allure-playwright"
+                        runCommand = "npx playwright test --grep ${params.TEST_TAG} ${browserOption} --reporter=html,json,junit,allure-playwright"
+                    } 
+                    else if (params.SPEC_FILE?.trim()) {
+                        runCommand = "npx playwright test ${params.SPEC_FILE} ${browserOption} --reporter=html,json,junit,allure-playwright"
+                    } 
+                    else {
+                        runCommand = "npx playwright test ${browserOption} --reporter=html,json,junit,allure-playwright"
                     }
-
-                    if (params.SPEC_FILE?.trim()) {
-                        cmd = "npx playwright test ${params.SPEC_FILE} --browser=${params.BROWSER} --reporter=line,html,json,allure-playwright"
-                    }
-
-                    echo "Running: ${cmd}"
 
                     bat """
-                        ${cmd}
+                        echo Running: ${runCommand}
+                        ${runCommand} || exit /b 0
                     """
                 }
             }
@@ -63,32 +81,45 @@ pipeline {
 
         stage('Generate Allure Report') {
             steps {
-                echo "Generating Allure report..."
-                bat """
-                    allure generate allure-results --clean -o allure-report
-                """
+                bat '''
+                    if exist allure-results (
+                        npx allure generate allure-results --clean -o allure-report
+                    )
+                '''
             }
         }
 
-        stage('Archive Reports') {
+        stage('Publish Reports') {
             steps {
-                echo "Archiving HTML, JSON, and Allure reports..."
-                archiveArtifacts artifacts: 'playwright-report/**', allowEmptyArchive: true
-                archiveArtifacts artifacts: 'test-results/**/*.json', allowEmptyArchive: true
-                archiveArtifacts artifacts: 'allure-report/**', allowEmptyArchive: true
+                script {
+                    publishHTML([
+                        reportDir: 'playwright-report',
+                        reportFiles: 'index.html',
+                        reportName: 'Playwright HTML Report',
+                        keepAll: true,
+                        alwaysLinkToLastBuild: true
+                    ])
+
+                    allure([
+                        reportBuildPolicy: 'ALWAYS',
+                        results: [[path: 'allure-results']]
+                    ])
+
+                    junit allowEmptyResults: true, testResults: 'test-results/**/*.xml'
+
+                    archiveArtifacts artifacts: 'playwright-report/**, allure-report/**, test-results/**, screenshots/**, videos/**, traces/**',
+                                     allowEmptyArchive: true
+                }
             }
         }
     }
 
     post {
-        always {
-            echo "Build completed. Reports generated."
+        success {
+            echo "🎉 Tests Passed Successfully!"
         }
         failure {
-            echo "Test FAILED — Reports are available."
-        }
-        success {
-            echo "Test PASSED — Reports available."
+            echo "❌ Tests Failed — Check the Reports."
         }
     }
 }

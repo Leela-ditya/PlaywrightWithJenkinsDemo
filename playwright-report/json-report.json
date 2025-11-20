@@ -11,7 +11,7 @@
     "grepInvert": null,
     "maxFailures": 0,
     "metadata": {
-      "actualWorkers": 2
+      "actualWorkers": 3
     },
     "preserveOutput": "always",
     "reporter": [
@@ -37,6 +37,10 @@
       [
         "github",
         null
+      ],
+      [
+        "C:\\Users\\leela\\OneDrive\\Desktop\\Playwright\\PlaywrightWithJenkinsDemo\\node_modules\\allure-playwright\\dist\\cjs\\index.js",
+        null
       ]
     ],
     "reportSlowTests": {
@@ -50,7 +54,7 @@
         "repeatEach": 1,
         "retries": 0,
         "metadata": {
-          "actualWorkers": 2
+          "actualWorkers": 3
         },
         "id": "chromium",
         "name": "chromium",
@@ -66,7 +70,7 @@
         "repeatEach": 1,
         "retries": 0,
         "metadata": {
-          "actualWorkers": 2
+          "actualWorkers": 3
         },
         "id": "firefox",
         "name": "firefox",
@@ -82,7 +86,7 @@
         "repeatEach": 1,
         "retries": 0,
         "metadata": {
-          "actualWorkers": 2
+          "actualWorkers": 3
         },
         "id": "webkit",
         "name": "webkit",
@@ -103,152 +107,139 @@
   },
   "suites": [
     {
-      "title": "dataDriven.spec.ts",
-      "file": "dataDriven.spec.ts",
+      "title": "playwrightPractice.spec.ts",
+      "file": "playwrightPractice.spec.ts",
       "column": 0,
       "line": 0,
-      "specs": [],
-      "suites": [
+      "specs": [
         {
-          "title": "Data Driven Framework - Excel",
-          "file": "dataDriven.spec.ts",
-          "line": 10,
-          "column": 6,
-          "specs": [
+          "title": "Static Table",
+          "ok": true,
+          "tags": [
+            "StaticTable"
+          ],
+          "tests": [
             {
-              "title": "Run test with data: Playwright",
-              "ok": true,
-              "tags": [],
-              "tests": [
+              "timeout": 30000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "chromium",
+              "projectName": "chromium",
+              "results": [
                 {
-                  "timeout": 30000,
-                  "annotations": [],
-                  "expectedStatus": "passed",
-                  "projectId": "chromium",
-                  "projectName": "chromium",
-                  "results": [
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 9106,
+                  "errors": [],
+                  "stdout": [
                     {
-                      "workerIndex": 0,
-                      "parallelIndex": 0,
-                      "status": "passed",
-                      "duration": 292,
-                      "errors": [],
-                      "stdout": [
-                        {
-                          "text": "\n=== Test Data From Excel ===\n"
-                        },
-                        {
-                          "text": "STRING: Playwright\n"
-                        },
-                        {
-                          "text": "NUMBER: \u001b[33m12345\u001b[39m\n"
-                        },
-                        {
-                          "text": "BOOLEAN: \u001b[33mtrue\u001b[39m\n"
-                        },
-                        {
-                          "text": "DATE: \u001b[33m45979.442662037036\u001b[39m\n"
-                        },
-                        {
-                          "text": "FORMULA: \u001b[33m30\u001b[39m\n"
-                        },
-                        {
-                          "text": "EMPTY: \u001b[90mundefined\u001b[39m\n"
-                        },
-                        {
-                          "text": "============================\n"
-                        },
-                        {
-                          "text": "Test execution completed for: Playwright\n"
-                        }
-                      ],
-                      "stderr": [],
-                      "retry": 0,
-                      "startTime": "2025-11-18T11:31:37.109Z",
-                      "annotations": [],
-                      "attachments": []
+                      "text": "┌─────────┬──────────────────────┬───────────┬──────────────┬────────┐\n│ (index) │ BookName             │ Author    │ Subject      │ Price  │\n├─────────┼──────────────────────┼───────────┼──────────────┼────────┤\n│ 0       │ \u001b[32m'Learn Selenium'\u001b[39m     │ \u001b[32m'Amit'\u001b[39m    │ \u001b[32m'Selenium'\u001b[39m   │ \u001b[32m'300'\u001b[39m  │\n│ 1       │ \u001b[32m'Learn Java'\u001b[39m         │ \u001b[32m'Mukesh'\u001b[39m  │ \u001b[32m'Java'\u001b[39m       │ \u001b[32m'500'\u001b[39m  │\n│ 2       │ \u001b[32m'Learn JS'\u001b[39m           │ \u001b[32m'Animesh'\u001b[39m │ \u001b[32m'Javascript'\u001b[39m │ \u001b[32m'300'\u001b[39m  │\n│ 3       │ \u001b[32m'Master In Selenium'\u001b[39m │ \u001b[32m'Mukesh'\u001b[39m  │ \u001b[32m'Selenium'\u001b[39m   │ \u001b[32m'3000'\u001b[39m │\n│ 4       │ \u001b[32m'Master In Java'\u001b[39m     │ \u001b[32m'Amod'\u001b[39m    │ \u001b[32m'JAVA'\u001b[39m       │ \u001b[32m'2000'\u001b[39m │\n│ 5       │ \u001b[32m'Master In JS'\u001b[39m       │ \u001b[32m'Amit'\u001b[39m    │ \u001b[32m'Javascript'\u001b[39m │ \u001b[32m'1000'\u001b[39m │\n└─────────┴──────────────────────┴───────────┴──────────────┴────────┘\n"
                     }
                   ],
-                  "status": "expected"
-                }
-              ],
-              "id": "b77bd2d234aee5383403-11b45184fb881a96fa3d",
-              "file": "dataDriven.spec.ts",
-              "line": 14,
-              "column": 9
-            },
-            {
-              "title": "Run test with data: 1234",
-              "ok": true,
-              "tags": [],
-              "tests": [
-                {
-                  "timeout": 30000,
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2025-11-20T08:02:39.316Z",
                   "annotations": [],
-                  "expectedStatus": "passed",
-                  "projectId": "chromium",
-                  "projectName": "chromium",
-                  "results": [
-                    {
-                      "workerIndex": 1,
-                      "parallelIndex": 1,
-                      "status": "passed",
-                      "duration": 349,
-                      "errors": [],
-                      "stdout": [
-                        {
-                          "text": "\n=== Test Data From Excel ===\n"
-                        },
-                        {
-                          "text": "STRING: \u001b[33m1234\u001b[39m\n"
-                        },
-                        {
-                          "text": "NUMBER: Jenkins\n"
-                        },
-                        {
-                          "text": "BOOLEAN: \u001b[33mfalse\u001b[39m\n"
-                        },
-                        {
-                          "text": "DATE: \u001b[33m45979.442662037036\u001b[39m\n"
-                        },
-                        {
-                          "text": "FORMULA: \u001b[90mundefined\u001b[39m\n"
-                        },
-                        {
-                          "text": "EMPTY: \u001b[90mundefined\u001b[39m\n"
-                        },
-                        {
-                          "text": "============================\n"
-                        },
-                        {
-                          "text": "Test execution completed for: \u001b[33m1234\u001b[39m\n"
-                        }
-                      ],
-                      "stderr": [],
-                      "retry": 0,
-                      "startTime": "2025-11-18T11:31:37.108Z",
-                      "annotations": [],
-                      "attachments": []
-                    }
-                  ],
-                  "status": "expected"
+                  "attachments": []
                 }
               ],
-              "id": "b77bd2d234aee5383403-7ee05032bcb8362e3e30",
-              "file": "dataDriven.spec.ts",
-              "line": 14,
-              "column": 9
+              "status": "expected"
             }
-          ]
+          ],
+          "id": "c32d81ce54752e4a735c-93b28a609b40d9365141",
+          "file": "playwrightPractice.spec.ts",
+          "line": 73,
+          "column": 5
+        },
+        {
+          "title": "Static Table",
+          "ok": true,
+          "tags": [
+            "StaticTable"
+          ],
+          "tests": [
+            {
+              "timeout": 30000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "firefox",
+              "projectName": "firefox",
+              "results": [
+                {
+                  "workerIndex": 1,
+                  "parallelIndex": 1,
+                  "status": "passed",
+                  "duration": 5972,
+                  "errors": [],
+                  "stdout": [
+                    {
+                      "text": "┌─────────┬──────────────────────┬───────────┬──────────────┬────────┐\n│ (index) │ BookName             │ Author    │ Subject      │ Price  │\n├─────────┼──────────────────────┼───────────┼──────────────┼────────┤\n│ 0       │ \u001b[32m'Learn Selenium'\u001b[39m     │ \u001b[32m'Amit'\u001b[39m    │ \u001b[32m'Selenium'\u001b[39m   │ \u001b[32m'300'\u001b[39m  │\n│ 1       │ \u001b[32m'Learn Java'\u001b[39m         │ \u001b[32m'Mukesh'\u001b[39m  │ \u001b[32m'Java'\u001b[39m       │ \u001b[32m'500'\u001b[39m  │\n│ 2       │ \u001b[32m'Learn JS'\u001b[39m           │ \u001b[32m'Animesh'\u001b[39m │ \u001b[32m'Javascript'\u001b[39m │ \u001b[32m'300'\u001b[39m  │\n│ 3       │ \u001b[32m'Master In Selenium'\u001b[39m │ \u001b[32m'Mukesh'\u001b[39m  │ \u001b[32m'Selenium'\u001b[39m   │ \u001b[32m'3000'\u001b[39m │\n│ 4       │ \u001b[32m'Master In Java'\u001b[39m     │ \u001b[32m'Amod'\u001b[39m    │ \u001b[32m'JAVA'\u001b[39m       │ \u001b[32m'2000'\u001b[39m │\n│ 5       │ \u001b[32m'Master In JS'\u001b[39m       │ \u001b[32m'Amit'\u001b[39m    │ \u001b[32m'Javascript'\u001b[39m │ \u001b[32m'1000'\u001b[39m │\n└─────────┴──────────────────────┴───────────┴──────────────┴────────┘\n"
+                    }
+                  ],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2025-11-20T08:02:39.270Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "c32d81ce54752e4a735c-03022119b4caa2528ec7",
+          "file": "playwrightPractice.spec.ts",
+          "line": 73,
+          "column": 5
+        },
+        {
+          "title": "Static Table",
+          "ok": true,
+          "tags": [
+            "StaticTable"
+          ],
+          "tests": [
+            {
+              "timeout": 30000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "webkit",
+              "projectName": "webkit",
+              "results": [
+                {
+                  "workerIndex": 2,
+                  "parallelIndex": 2,
+                  "status": "passed",
+                  "duration": 7836,
+                  "errors": [],
+                  "stdout": [
+                    {
+                      "text": "┌─────────┬──────────────────────┬───────────┬──────────────┬────────┐\n│ (index) │ BookName             │ Author    │ Subject      │ Price  │\n├─────────┼──────────────────────┼───────────┼──────────────┼────────┤\n│ 0       │ \u001b[32m'Learn Selenium'\u001b[39m     │ \u001b[32m'Amit'\u001b[39m    │ \u001b[32m'Selenium'\u001b[39m   │ \u001b[32m'300'\u001b[39m  │\n│ 1       │ \u001b[32m'Learn Java'\u001b[39m         │ \u001b[32m'Mukesh'\u001b[39m  │ \u001b[32m'Java'\u001b[39m       │ \u001b[32m'500'\u001b[39m  │\n│ 2       │ \u001b[32m'Learn JS'\u001b[39m           │ \u001b[32m'Animesh'\u001b[39m │ \u001b[32m'Javascript'\u001b[39m │ \u001b[32m'300'\u001b[39m  │\n│ 3       │ \u001b[32m'Master In Selenium'\u001b[39m │ \u001b[32m'Mukesh'\u001b[39m  │ \u001b[32m'Selenium'\u001b[39m   │ \u001b[32m'3000'\u001b[39m │\n│ 4       │ \u001b[32m'Master In Java'\u001b[39m     │ \u001b[32m'Amod'\u001b[39m    │ \u001b[32m'JAVA'\u001b[39m       │ \u001b[32m'2000'\u001b[39m │\n│ 5       │ \u001b[32m'Master In JS'\u001b[39m       │ \u001b[32m'Amit'\u001b[39m    │ \u001b[32m'Javascript'\u001b[39m │ \u001b[32m'1000'\u001b[39m │\n└─────────┴──────────────────────┴───────────┴──────────────┴────────┘\n"
+                    }
+                  ],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2025-11-20T08:02:39.354Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "c32d81ce54752e4a735c-31f9c332498d5c0ca666",
+          "file": "playwrightPractice.spec.ts",
+          "line": 73,
+          "column": 5
         }
       ]
     }
   ],
   "errors": [],
   "stats": {
-    "startTime": "2025-11-18T11:31:34.843Z",
-    "duration": 2983.9220000000005,
-    "expected": 2,
+    "startTime": "2025-11-20T08:02:36.780Z",
+    "duration": 13581.348999999998,
+    "expected": 3,
     "skipped": 0,
     "unexpected": 0,
     "flaky": 0

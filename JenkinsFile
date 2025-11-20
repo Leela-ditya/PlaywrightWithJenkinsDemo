@@ -4,18 +4,18 @@ pipeline {
     options {
         timestamps()
         durabilityHint('MAX_SURVIVABILITY')
-        buildDiscarder(logRotator(daysToKeepStr: '30'))  // keep reports for 1 month (set '' for forever)
+        buildDiscarder(logRotator(daysToKeepStr: '30'))
     }
 
     triggers {
-        cron('0 17 * * *')   // AUTO RUN EVERYDAY AT 5 PM
+        cron('0 17 * * *')   // run everyday 5 PM
     }
 
     parameters {
-        string(name: 'EMAIL', defaultValue: 'leelasonu12@gmail.com', description: 'Enter email to receive reports (leave empty to use default)')
-        string(name: 'TEST_TAG', defaultValue: '', description: 'Enter tag to run (example: @smoke)')
-        string(name: 'SPEC_FILE', defaultValue: '', description: 'Enter spec file (example: tests/example.spec.ts)')
-        choice(name: 'BROWSER', choices: ['chromium', 'firefox', 'webkit', 'all'], description: 'Select browser to run')
+        string(name: 'EMAIL', defaultValue: 'leelasonu12@gmail.com', description: 'Email to receive reports')
+        string(name: 'TEST_TAG', defaultValue: '', description: 'Run by tag (@smoke)')
+        string(name: 'SPEC_FILE', defaultValue: '', description: 'Run specific spec file')
+        choice(name: 'BROWSER', choices: ['chromium', 'firefox', 'webkit', 'all'], description: 'Browser to run')
     }
 
     stages {
@@ -38,6 +38,16 @@ pipeline {
             }
         }
 
+        stage('Load ENV File') {
+            steps {
+                script {
+                    def props = readProperties file: '.env'
+                    props.each { key, value -> env[key] = value }
+                    echo "Loaded ENV variables: ${props.keySet()}"
+                }
+            }
+        }
+
         stage('Configure Playwright') {
             steps {
                 script {
@@ -46,7 +56,7 @@ pipeline {
 
                         export default defineConfig({
                             testDir: './tests',
-                            retries: 1,  
+                            retries: 1,
 
                             reporter: [
                                 ['html', { outputFolder: 'reports/html-report', open: 'never' }],
@@ -74,26 +84,20 @@ pipeline {
         stage('Run Tests') {
             steps {
                 script {
+                    def cmd = "npx playwright test"
 
-                    def testCommand = "npx playwright test"
-
-                    // SPEC FILE
                     if (params.SPEC_FILE?.trim()) {
-                        testCommand += " ${params.SPEC_FILE}"
+                        cmd += " ${params.SPEC_FILE}"
                     }
-
-                    // TAG
                     if (params.TEST_TAG?.trim()) {
-                        testCommand += " --grep=\"${params.TEST_TAG}\""
+                        cmd += " --grep=\"${params.TEST_TAG}\""
                     }
-
-                    // BROWSER
                     if (params.BROWSER != 'all') {
-                        testCommand += " --project=${params.BROWSER}"
+                        cmd += " --project=${params.BROWSER}"
                     }
 
-                    echo "▶ Running: ${testCommand}"
-                    bat testCommand
+                    echo "▶ Running: ${cmd}"
+                    bat cmd
                 }
             }
         }
@@ -104,18 +108,15 @@ pipeline {
             }
         }
 
-        stage('Archive & Publish Reports') {
+        stage('Archive Reports & Artifacts') {
             steps {
-
                 archiveArtifacts artifacts: """
                     reports/**,
-                    reports/html-report/**,
-                    reports/json-report/**,
-                    reports/allure-report/**,
                     allure-results/**,
-                    **/screenshots/**,
-                    **/videos/**,
-                    **/trace/**,
+                    test-results/**,
+                    **/video.webm,
+                    **/screenshot.png,
+                    **/trace.zip
                 """, followSymlinks: false
 
                 publishHTML(target: [
@@ -131,24 +132,40 @@ pipeline {
     }
 
     post {
-
         always {
             script {
-                // Determine final email → parameter or default
-                def recipient = params.EMAIL?.trim() ? params.EMAIL : "leelasonu12@gmail.com"
 
-                echo "📧 Sending report to: ${recipient}"
+                // Read failed tests from JSON
+                def jsonReport = readJSON file: 'reports/json-report/results.json'
+                def failedTests = jsonReport.suites.collectMany { it.specs }
+                    .findAll { it.status == 'failed' }
+                    .collect { it.title }
+
+                def failedList = failedTests ? failedTests.join("<br>") : "All Tests Passed 🎉"
+
+                def recipient = params.EMAIL?.trim() ? params.EMAIL : "leelasonu12@gmail.com"
 
                 emailext(
                     to: recipient,
                     subject: "Playwright Test Report - Build #${env.BUILD_NUMBER}",
-                    body: """
-                        <h2>Playwright Automation Execution Completed</h2>
-                        <p><b>Status:</b> ${currentBuild.currentResult}</p>
-                        <p><b>HTML Report:</b> <a href="${env.BUILD_URL}Playwright_HTML_Report">Click to view</a></p>
-                        <p><b>Allure Report:</b> <a href="${env.BUILD_URL}allure">Click to view</a></p>
 
-                        <p>Triggered By Jenkins Pipeline.</p>
+                    body: """
+                        <h2>Playwright Test Execution Completed</h2>
+                        <p><b>Status:</b> ${currentBuild.currentResult}</p>
+
+                        <h3>🛑 Failed Testcases:</h3>
+                        <p>${failedList}</p>
+
+                        <h3>📄 Reports</h3>
+                        <p><b>HTML Report:</b> <a href="${env.BUILD_URL}Playwright_HTML_Report">View HTML Report</a></p>
+                        <p><b>Allure Report:</b> <a href="${env.BUILD_URL}allure">View Allure Report</a></p>
+                        <p><b>JSON Report:</b> <a href="${env.BUILD_URL}artifact/reports/json-report/results.json">Download JSON</a></p>
+
+                        <h3>🎥 Videos, 📸 Screenshots, 🧭 Trace Viewer</h3>
+                        <p><a href="${env.BUILD_URL}artifact/">Browse Artifacts (videos/screenshots/traces)</a></p>
+
+                        <hr>
+                        <p>Triggered from Jenkins Pipeline</p>
                     """,
                     mimeType: 'text/html'
                 )
@@ -156,11 +173,11 @@ pipeline {
         }
 
         success {
-            echo "🎉 Build Successful — All reports generated!"
+            echo "🎉 Build Successful — Reports Generated"
         }
 
         failure {
-            echo "❌ Build Failed — Check HTML, JSON, Allure, Screenshots, Videos, Trace."
+            echo "❌ Build Failed — Check Reports and Artifacts"
         }
     }
 }

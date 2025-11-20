@@ -1,32 +1,51 @@
-<testsuites id="" name="" tests="2" failures="0" skipped="0" errors="0" time="2.9839220000000006">
-<testsuite name="dataDriven.spec.ts" timestamp="2025-11-18T11:31:35.256Z" hostname="chromium" tests="2" failures="0" skipped="0" time="0.641" errors="0">
-<testcase name="Data Driven Framework - Excel › Run test with data: Playwright" classname="dataDriven.spec.ts" time="0.292">
+<testsuites id="" name="" tests="3" failures="0" skipped="0" errors="0" time="13.581348999999998">
+<testsuite name="playwrightPractice.spec.ts" timestamp="2025-11-20T08:02:38.048Z" hostname="chromium" tests="1" failures="0" skipped="0" time="9.106" errors="0">
+<testcase name="Static Table" classname="playwrightPractice.spec.ts" time="9.106">
 <system-out>
-<![CDATA[
-=== Test Data From Excel ===
-STRING: Playwright
-NUMBER: [33m12345[39m
-BOOLEAN: [33mtrue[39m
-DATE: [33m45979.442662037036[39m
-FORMULA: [33m30[39m
-EMPTY: [90mundefined[39m
-============================
-Test execution completed for: Playwright
+<![CDATA[┌─────────┬──────────────────────┬───────────┬──────────────┬────────┐
+│ (index) │ BookName             │ Author    │ Subject      │ Price  │
+├─────────┼──────────────────────┼───────────┼──────────────┼────────┤
+│ 0       │ [32m'Learn Selenium'[39m     │ [32m'Amit'[39m    │ [32m'Selenium'[39m   │ [32m'300'[39m  │
+│ 1       │ [32m'Learn Java'[39m         │ [32m'Mukesh'[39m  │ [32m'Java'[39m       │ [32m'500'[39m  │
+│ 2       │ [32m'Learn JS'[39m           │ [32m'Animesh'[39m │ [32m'Javascript'[39m │ [32m'300'[39m  │
+│ 3       │ [32m'Master In Selenium'[39m │ [32m'Mukesh'[39m  │ [32m'Selenium'[39m   │ [32m'3000'[39m │
+│ 4       │ [32m'Master In Java'[39m     │ [32m'Amod'[39m    │ [32m'JAVA'[39m       │ [32m'2000'[39m │
+│ 5       │ [32m'Master In JS'[39m       │ [32m'Amit'[39m    │ [32m'Javascript'[39m │ [32m'1000'[39m │
+└─────────┴──────────────────────┴───────────┴──────────────┴────────┘
 ]]>
 </system-out>
 </testcase>
-<testcase name="Data Driven Framework - Excel › Run test with data: 1234" classname="dataDriven.spec.ts" time="0.349">
+</testsuite>
+<testsuite name="playwrightPractice.spec.ts" timestamp="2025-11-20T08:02:38.048Z" hostname="firefox" tests="1" failures="0" skipped="0" time="5.972" errors="0">
+<testcase name="Static Table" classname="playwrightPractice.spec.ts" time="5.972">
 <system-out>
-<![CDATA[
-=== Test Data From Excel ===
-STRING: [33m1234[39m
-NUMBER: Jenkins
-BOOLEAN: [33mfalse[39m
-DATE: [33m45979.442662037036[39m
-FORMULA: [90mundefined[39m
-EMPTY: [90mundefined[39m
-============================
-Test execution completed for: [33m1234[39m
+<![CDATA[┌─────────┬──────────────────────┬───────────┬──────────────┬────────┐
+│ (index) │ BookName             │ Author    │ Subject      │ Price  │
+├─────────┼──────────────────────┼───────────┼──────────────┼────────┤
+│ 0       │ [32m'Learn Selenium'[39m     │ [32m'Amit'[39m    │ [32m'Selenium'[39m   │ [32m'300'[39m  │
+│ 1       │ [32m'Learn Java'[39m         │ [32m'Mukesh'[39m  │ [32m'Java'[39m       │ [32m'500'[39m  │
+│ 2       │ [32m'Learn JS'[39m           │ [32m'Animesh'[39m │ [32m'Javascript'[39m │ [32m'300'[39m  │
+│ 3       │ [32m'Master In Selenium'[39m │ [32m'Mukesh'[39m  │ [32m'Selenium'[39m   │ [32m'3000'[39m │
+│ 4       │ [32m'Master In Java'[39m     │ [32m'Amod'[39m    │ [32m'JAVA'[39m       │ [32m'2000'[39m │
+│ 5       │ [32m'Master In JS'[39m       │ [32m'Amit'[39m    │ [32m'Javascript'[39m │ [32m'1000'[39m │
+└─────────┴──────────────────────┴───────────┴──────────────┴────────┘
+]]>
+</system-out>
+</testcase>
+</testsuite>
+<testsuite name="playwrightPractice.spec.ts" timestamp="2025-11-20T08:02:38.048Z" hostname="webkit" tests="1" failures="0" skipped="0" time="7.836" errors="0">
+<testcase name="Static Table" classname="playwrightPractice.spec.ts" time="7.836">
+<system-out>
+<![CDATA[┌─────────┬──────────────────────┬───────────┬──────────────┬────────┐
+│ (index) │ BookName             │ Author    │ Subject      │ Price  │
+├─────────┼──────────────────────┼───────────┼──────────────┼────────┤
+│ 0       │ [32m'Learn Selenium'[39m     │ [32m'Amit'[39m    │ [32m'Selenium'[39m   │ [32m'300'[39m  │
+│ 1       │ [32m'Learn Java'[39m         │ [32m'Mukesh'[39m  │ [32m'Java'[39m       │ [32m'500'[39m  │
+│ 2       │ [32m'Learn JS'[39m           │ [32m'Animesh'[39m │ [32m'Javascript'[39m │ [32m'300'[39m  │
+│ 3       │ [32m'Master In Selenium'[39m │ [32m'Mukesh'[39m  │ [32m'Selenium'[39m   │ [32m'3000'[39m │
+│ 4       │ [32m'Master In Java'[39m     │ [32m'Amod'[39m    │ [32m'JAVA'[39m       │ [32m'2000'[39m │
+│ 5       │ [32m'Master In JS'[39m       │ [32m'Amit'[39m    │ [32m'Javascript'[39m │ [32m'1000'[39m │
+└─────────┴──────────────────────┴───────────┴──────────────┴────────┘
 ]]>
 </system-out>
 </testcase>

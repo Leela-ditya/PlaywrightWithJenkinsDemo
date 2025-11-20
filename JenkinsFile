@@ -4,22 +4,19 @@ pipeline {
     options {
         timestamps()
         durabilityHint('MAX_SURVIVABILITY')
-        buildDiscarder(logRotator(daysToKeepStr: '30'))      // 30 days retention
+        buildDiscarder(logRotator(daysToKeepStr: '30'))
     }
 
     triggers {
-        cron('0 17 * * *')    // RUN EVERY DAY AT 5 PM
+        cron('0 17 * * *')   // Daily @ 5 PM
     }
 
     parameters {
-        string(name: 'EMAIL', defaultValue: 'leelasonu12@gmail.com',
-            description: 'Enter report email (leave blank to use default)')
-        string(name: 'TEST_TAG', defaultValue: '', description: 'Playwright tag (ex: @smoke)')
-        string(name: 'SPEC_FILE', defaultValue: '', description: 'Spec file to run')
-        string(name: 'GOTO_URL', defaultValue: 'https://testpages.herokuapp.com/styled/tag/table.html',
-            description: 'URL used inside Playwright tests')
-        choice(name: 'BROWSER', choices: ['chromium', 'firefox', 'webkit', 'all'],
-            description: 'Select browser to run')
+        string(name: 'EMAIL', defaultValue: 'leelasonu12@gmail.com', description: 'Email to receive reports')
+        string(name: 'TEST_TAG', defaultValue: '', description: 'Playwright tag to run (@smoke)')
+        string(name: 'SPEC_FILE', defaultValue: '', description: 'Spec file path')
+        string(name: 'GOTO_URL', defaultValue: 'https://testautomationpractice.blogspot.com/p/playwrightpractice.html', description: 'Base URL for tests')
+        choice(name: 'BROWSER', choices: ['chromium', 'firefox', 'webkit', 'all'], description: 'Select browser')
     }
 
     environment {
@@ -31,20 +28,19 @@ pipeline {
 
         stage('Checkout') {
             steps {
-                git branch: 'main',
-                    url: 'https://github.com/Leela-ditya/PlaywrightWithJenkinsDemo.git'
+                git branch: 'main', url: 'https://github.com/Leela-ditya/PlaywrightWithJenkinsDemo.git'
             }
         }
 
         stage('Install Dependencies') {
             steps {
-                bat 'npm ci'
+                bat "npm ci"
             }
         }
 
         stage('Install Playwright Browsers') {
             steps {
-                bat 'npx playwright install'
+                bat "npx playwright install"
             }
         }
 
@@ -67,7 +63,8 @@ pipeline {
                             use: {
                                 screenshot: 'only-on-failure',
                                 video: 'retain-on-failure',
-                                trace: 'retain-on-failure'
+                                trace: 'retain-on-failure',
+                                baseURL: '${params.GOTO_URL}'
                             },
 
                             projects: [
@@ -84,86 +81,100 @@ pipeline {
         stage('Run Tests') {
             steps {
                 script {
-                    def cmd = "npx playwright test"
+                    def testCommand = "npx playwright test"
 
                     if (params.SPEC_FILE?.trim()) {
-                        cmd += " ${params.SPEC_FILE}"
-                    }
-                    if (params.TEST_TAG?.trim()) {
-                        cmd += " --grep=\"${params.TEST_TAG}\""
-                    }
-                    if (params.BROWSER != 'all') {
-                        cmd += " --project=${params.BROWSER}"
+                        testCommand += " ${params.SPEC_FILE}"
                     }
 
-                    echo "▶ Running: ${cmd}"
+                    if (params.TEST_TAG?.trim()) {
+                        testCommand += " --grep=\"${params.TEST_TAG}\""
+                    }
+
+                    if (params.BROWSER != 'all') {
+                        testCommand += " --project=${params.BROWSER}"
+                    }
+
+                    echo "▶ Running Command: ${testCommand}"
 
                     bat """
                     set GOTO_URL=${GOTO_URL}
-                    ${cmd}
+                    ${testCommand}
                     """
                 }
             }
         }
 
-        stage('Generate Allure Report') {
-            steps {
-                bat "npx allure generate allure-results --clean -o reports/allure-report"
-            }
-        }
-
-        stage('Archive & Publish Reports') {
-            steps {
-
-                archiveArtifacts artifacts: """
-                    reports/**,
-                    allure-results/**,
-                    **/screenshots/**,
-                    **/videos/**,
-                    **/trace/**,
-                """, followSymlinks: false
-
-                publishHTML(target: [
-                    reportName: "Playwright HTML Report",
-                    reportDir: "reports/html-report",
-                    reportFiles: "index.html",
-                    keepAll: true
-                ])
-
-                allure includeProperties: false, jdk: '', results: [[path: 'allure-results']]
-            }
-        }
     }
 
     post {
+
+        /* ALWAYS GENERATE REPORTS (even if test failed) */
+        always {
+
+            echo "📊 Generating Allure Report"
+            bat "npx allure generate allure-results --clean -o reports/allure-report || true"
+
+            echo "📦 Archiving All Reports & Artifacts"
+            archiveArtifacts artifacts: """
+                reports/**,
+                reports/html-report/**,
+                reports/json-report/**,
+                reports/allure-report/**,
+                allure-results/**,
+                **/screenshots/**,
+                **/videos/**,
+                **/trace/**
+            """, allowEmptyArchive: true
+
+            publishHTML(target: [
+                reportName: "Playwright HTML Report",
+                reportDir: "reports/html-report",
+                reportFiles: "index.html",
+                keepAll: true
+            ])
+
+            publishHTML(target: [
+                reportName: "Allure Report",
+                reportDir: "reports/allure-report",
+                reportFiles: "index.html",
+                keepAll: true
+            ])
+        }
+
+        /* ALWAYS SEND EMAIL */
         always {
             script {
-                def recipient = params.EMAIL?.trim() ?
-                                params.EMAIL :
-                                "leelasonu12@gmail.com"
-
+                def recipient = params.EMAIL?.trim() ? params.EMAIL : "leelasonu12@gmail.com"
                 echo "📧 Sending report to: ${recipient}"
 
                 emailext(
                     to: recipient,
-                    subject: "Playwright Test Report - Build #${env.BUILD_NUMBER}",
-                    mimeType: 'text/html',
+                    subject: "Playwright Report - Build #${env.BUILD_NUMBER} (${currentBuild.currentResult})",
                     body: """
                         <h2>Playwright Execution Completed</h2>
-                        <p><b>Status:</b> ${currentBuild.currentResult}</p>
-                        <p><a href="${env.BUILD_URL}Playwright_HTML_Report">HTML Report</a></p>
-                        <p><a href="${env.BUILD_URL}allure">Allure Report</a></p>
-                    """
+                        <p>Status: <b>${currentBuild.currentResult}</b></p>
+
+                        <h3>Report Links</h3>
+                        <ul>
+                            <li><a href="${env.BUILD_URL}Playwright_20HTML_20Report/">HTML Report</a></li>
+                            <li><a href="${env.BUILD_URL}Allure_20Report/">Allure Report</a></li>
+                            <li><a href="${env.BUILD_URL}artifact/">Artifacts (Screenshots, Videos, Trace)</a></li>
+                        </ul>
+
+                        <p>Triggered by Jenkins Pipeline.</p>
+                    """,
+                    mimeType: 'text/html'
                 )
             }
         }
 
         success {
-            echo "🎉 Build Successful — Reports generated!"
+            echo "🎉 SUCCESS — All reports generated!"
         }
 
         failure {
-            echo "❌ Build Failed — Check reports, screenshots, videos, traces."
+            echo "❌ FAILURE — Reports generated. Check HTML, JSON, Allure, Screenshots, Video, Trace."
         }
     }
 }

@@ -45,7 +45,7 @@ pipeline {
                     command += " --project=${params.BROWSER}"
                     command += " --reporter=html,json,junit,allure-playwright"
 
-                    bat "${command} --output=test-results --video=on --trace=on"
+                    bat "${command} --output=test-results"
                 }
             }
         }

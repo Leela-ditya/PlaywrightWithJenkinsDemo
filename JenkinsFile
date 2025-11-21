@@ -76,7 +76,6 @@ pipeline {
 
                     // Enable all artifacts
                     testCmd += " --reporter=line,html,json,junit"
-                    testCmd += " --output=test-results"
 
                     // Run Playwright
                     bat testCmd

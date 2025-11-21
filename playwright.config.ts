@@ -11,20 +11,19 @@ export default defineConfig({
   workers: process.env.CI ? 1 : undefined,
   timeout: 30 * 1000,
   reporter: [
-    ['html', { outputFile: 'html-report', open:'on-failure'}],
-    ['json', {  outputFile: 'playwright-report/json-report.json' }],
-    ['junit', { outputFile: 'playwright-report/junit-report.xml' }],
-    ['github'],
+    ['html', { outputFolder: 'reports/html', open: 'never' }],
+    ['json', { outputFile: 'reports/report.json' }],
+    ['junit', { outputFile: 'reports/results.xml' }],
     ['allure-playwright'],
-    // ["list"],
-    // ["dot"],
+    ['github'],
   ],
   
   use: {
-    trace: "on",
-    screenshot: "on",
-    video: "on",
     testIdAttribute: "data-testid",
+    screenshot: 'only-on-failure',
+    video: 'retain-on-failure',
+    trace: 'retain-on-failure',
+    headless: true,
   },
 
   projects: [
@@ -53,3 +52,5 @@ export default defineConfig({
   ]
 
    });
+
+

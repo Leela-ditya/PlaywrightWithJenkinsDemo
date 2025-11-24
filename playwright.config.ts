@@ -10,12 +10,24 @@ export default defineConfig({
   retries: process.env.CI ? 2 : 0,
   workers: process.env.CI ? 1 : undefined,
   timeout: 30 * 1000,
+
   reporter: [
-    ['html', { outputFolder: 'reports/html', open: 'never' }],
-    ['json', { outputFile: 'reports/report.json' }],
-    ['junit', { outputFile: 'reports/results.xml' }],
-    ['allure-playwright'],
-    ['github'],
+    ['list'],
+    ['html', { 
+      outputFolder: 'playwright-report',
+      open: 'never'
+    }],
+    ['json', { 
+      outputFile: 'playwright-report/json-results.json' 
+    }],
+    ['junit', { 
+      outputFile: 'playwright-report/junit-results.xml' 
+    }],
+    ['allure-playwright', {
+      detail: true,
+      outputFolder: 'allure-results',
+      suiteTitle: false
+    }]
   ],
   
   use: {
@@ -30,24 +42,29 @@ export default defineConfig({
     {
       name: "chromium",
       use: { 
-        // ...devices["Desktop Chrome"],
-        browserName: 'chromium',
-        viewport: null,
-        launchOptions: {
-          args : ['--start-maximized'],
-         }
+        ...devices["Desktop Chrome"],
+          viewport: { width: 1920, height: 1080 }
+        // browserName: 'chromium',
+        // viewport: null,
+        // launchOptions: {
+        //   args : ['--start-maximized'],
+        //  }
       },
      
     },
 
     {
       name: "firefox",
-      use: {  ...devices["Desktop Firefox"]}
+      use: {  ...devices["Desktop Firefox"],
+        viewport: { width: 1920, height: 1080 }
+      }
     },
 
     {
       name: "webkit",
-      use: { ...devices["Desktop Safari"] },
+      use: { ...devices["Desktop Safari"],
+        viewport: { width: 1920, height: 1080 }
+       },
     },
   ]
 

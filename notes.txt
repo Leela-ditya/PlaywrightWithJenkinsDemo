@@ -276,3 +276,403 @@ for(const record of records){
 }
 
 
+=======================================================================================
+
+
+pipeline {
+    agent any
+
+    options {
+        timestamps()
+        durabilityHint('MAX_SURVIVABILITY')
+        buildDiscarder(logRotator(daysToKeepStr: '30', numToKeepStr: '50'))
+    }
+
+    parameters {
+        string(name: 'TAG', defaultValue: '', description: 'Enter Playwright tag (example: @smoke, @regression)')
+        string(name: 'SPEC', defaultValue: '', description: 'Enter spec file to run (example: tests/login.spec.ts)')
+        choice(name: 'BROWSER', choices: ['chromium', 'firefox', 'webkit', 'all'], description: 'Choose Browser')
+        string(name: 'EMAIL', defaultValue: 'yourgmail@gmail.com', description: 'Email to receive test reports')
+    }
+
+    environment {
+        REPORTS_DIR = "test-reports"
+    }
+
+    stages {
+
+        stage('Checkout') {
+            steps {
+                echo "🔄 Checking out code from GitHub..."
+                git branch: 'main',
+                    url: 'https://github.com/Leela-ditya/PlaywrightWithJenkinsDemo.git'
+                echo "✅ Code checkout completed"
+            }
+        }
+
+        stage('Install Dependencies') {
+            steps {
+                echo "📦 Installing dependencies..."
+                bat 'npm install'
+                bat 'npx playwright install --with-deps'
+                echo "✅ Dependencies installed successfully"
+            }
+        }
+
+        stage('Prepare Report Folders') {
+            steps {
+                echo "🗂️ Preparing report directories..."
+                bat """
+                    if exist %REPORTS_DIR% rmdir /s /q %REPORTS_DIR%
+                    mkdir %REPORTS_DIR%\\html
+                    mkdir %REPORTS_DIR%\\json
+                    mkdir %REPORTS_DIR%\\junit
+                    mkdir %REPORTS_DIR%\\allure-results
+                    mkdir %REPORTS_DIR%\\screenshots
+                    mkdir %REPORTS_DIR%\\videos
+                    mkdir %REPORTS_DIR%\\traces
+                """
+                echo "✅ Report directories created"
+            }
+        }
+
+        stage('Run Tests') {
+            steps {
+                script {
+                    echo "🧪 Starting test execution..."
+                    
+                    // ✅ If/Else validation: Prevent both TAG & SPEC
+                    if (params.TAG && params.SPEC) {
+                        error("❌ ERROR: Cannot select both TAG and SPEC. Choose only one option.")
+                    }
+
+                    def testCmd = "npx playwright test"
+                    
+                    // ✅ If/Else block for TAG-based execution
+                    if (params.TAG) {
+                        echo "🏷️ Running tests with TAG: ${params.TAG}"
+                        testCmd += " --grep \"${params.TAG}\""
+                    } 
+                    // ✅ Else If block for SPEC-based execution
+                    else if (params.SPEC) {
+                        echo "📄 Running specific SPEC file: ${params.SPEC}"
+                        testCmd += " ${params.SPEC}"
+                    } 
+                    // ✅ Else block for running all tests
+                    else {
+                        echo "🎯 Running ALL tests (no TAG or SPEC specified)"
+                    }
+
+                    // ✅ Browser selection with if/else
+                    if (params.BROWSER && params.BROWSER != 'all') {
+                        echo "🌐 Running on browser: ${params.BROWSER}"
+                        testCmd += " --project=${params.BROWSER}"
+                    } else {
+                        echo "🌐 Running on ALL browsers"
+                    }
+
+                    // ✅ Enable all reporters including Allure
+                    testCmd += " --reporter=list,html,json,junit,allure-playwright"
+
+                    echo "📝 Executing: ${testCmd}"
+                    
+                    // ✅ Run tests and capture exit status
+                    def testResult = bat(script: testCmd, returnStatus: true)
+                    
+                    // ✅ If/Else for test result handling
+                    if (testResult == 0) {
+                        echo "✅ Tests PASSED"
+                        env.TEST_STATUS = "PASSED"
+                    } else {
+                        echo "⚠️ Tests FAILED"
+                        env.TEST_STATUS = "FAILED"
+                        unstable(message: "Tests failed but continuing to generate reports")
+                    }
+                }
+            }
+        }
+
+        stage('Organize Reports & Artifacts') {
+            steps {
+                echo "📋 Organizing test reports and artifacts..."
+                bat """
+                    @echo off
+                    
+                    REM Copy HTML Report
+                    if exist playwright-report xcopy /E /I /Y playwright-report %REPORTS_DIR%\\html 2>nul
+                    
+                    REM Copy JSON Report
+                    if exist playwright-report\\data xcopy /E /I /Y playwright-report\\data %REPORTS_DIR%\\json 2>nul
+                    
+                    REM Copy JUnit Report
+                    if exist junit-results xcopy /E /I /Y junit-results %REPORTS_DIR%\\junit 2>nul
+                    if exist results.xml copy results.xml %REPORTS_DIR%\\junit\\ 2>nul
+                    
+                    REM Copy Allure Results
+                    if exist allure-results xcopy /E /I /Y allure-results %REPORTS_DIR%\\allure-results 2>nul
+                    
+                    REM Copy test-results folder
+                    if exist test-results xcopy /E /I /Y test-results %REPORTS_DIR%\\test-results 2>nul
+                    
+                    REM Copy Screenshots
+                    if exist test-results (
+                        for /r test-results %%f in (*.png) do copy "%%f" %REPORTS_DIR%\\screenshots\\ 2>nul
+                    )
+                    
+                    REM Copy Videos
+                    if exist test-results (
+                        for /r test-results %%f in (*.webm) do copy "%%f" %REPORTS_DIR%\\videos\\ 2>nul
+                    )
+                    
+                    REM Copy Traces
+                    if exist test-results (
+                        for /r test-results %%f in (*.zip) do copy "%%f" %REPORTS_DIR%\\traces\\ 2>nul
+                    )
+                    
+                    echo Reports organized successfully
+                """
+                echo "✅ Reports organized successfully"
+            }
+        }
+
+        stage('Generate Allure Report') {
+            steps {
+                echo "📊 Generating Allure Report..."
+                script {
+                    // Check if allure command exists before running
+                    def allureExists = bat(script: "@echo off & where allure >nul 2>&1", returnStatus: true)
+                    
+                    if (allureExists == 0) {
+                        echo "Allure found, generating report..."
+                        bat "allure generate %REPORTS_DIR%\\allure-results --clean -o %REPORTS_DIR%\\allure-report"
+                        echo "✅ Allure report generated using local installation"
+                    } else {
+                        echo "⚠️ Allure not found locally, using Jenkins Allure plugin instead"
+                        echo "Allure report will be generated in Publish Reports stage"
+                    }
+                }
+            }
+        }
+
+        stage('Publish Reports') {
+            steps {
+                echo "📤 Publishing reports to Jenkins..."
+                
+                // ✅ HTML Report
+                publishHTML(target: [
+                    allowMissing: false,
+                    alwaysLinkToLastBuild: true,
+                    keepAll: true,
+                    reportDir: "${REPORTS_DIR}\\html",
+                    reportFiles: 'index.html',
+                    reportName: 'Playwright HTML Report'
+                ])
+
+                // ✅ JUnit XML Report (allow empty results)
+                script {
+                    def junitFiles = findFiles(glob: "${REPORTS_DIR}/junit/**/*.xml")
+                    if (junitFiles.length > 0) {
+                        junit allowEmptyResults: true, testResults: "${REPORTS_DIR}/junit/**/*.xml"
+                        echo "✅ JUnit reports published"
+                    } else {
+                        echo "⚠️ No JUnit XML files found - skipping JUnit publisher"
+                    }
+                }
+
+                // ✅ Allure Report (using Jenkins plugin)
+                allure([
+                    includeProperties: false,
+                    jdk: '',
+                    results: [[path: "${REPORTS_DIR}/allure-results"]]
+                ])
+
+                echo "✅ All reports published"
+            }
+        }
+
+        stage('Archive All Files') {
+            steps {
+                echo "💾 Archiving test artifacts..."
+                archiveArtifacts artifacts: "${REPORTS_DIR}/**/*.*", 
+                                 fingerprint: true,
+                                 allowEmptyArchive: true
+                echo "✅ Artifacts archived"
+            }
+        }
+    }
+
+    post {
+        always {
+            script {
+                echo "📧 Preparing email notification..."
+                
+                def buildStatus = currentBuild.currentResult
+                def testStatus = env.TEST_STATUS ?: "UNKNOWN"
+                def buildUrl = "${env.JENKINS_URL}/job/${env.JOB_NAME}/${env.BUILD_NUMBER}"
+                
+                // ✅ Generate clickable report links
+                def htmlReportLink = "${buildUrl}/Playwright_20HTML_20Report/"
+                def allureReportLink = "${buildUrl}/allure/"
+                def consoleLogLink = "${buildUrl}/console"
+                def artifactsLink = "${buildUrl}/artifact/${REPORTS_DIR}/"
+                
+                // ✅ Safely count artifacts with error handling
+                def screenshotCount = "0"
+                def videoCount = "0"
+                def traceCount = "0"
+                
+                try {
+                    screenshotCount = bat(
+                        script: """
+                            @echo off
+                            if exist ${REPORTS_DIR}\\screenshots (
+                                dir /b ${REPORTS_DIR}\\screenshots 2>nul | find /c /v ""
+                            ) else (
+                                echo 0
+                            )
+                        """,
+                        returnStdout: true
+                    ).trim()
+                } catch (Exception e) {
+                    screenshotCount = "0"
+                }
+                
+                try {
+                    videoCount = bat(
+                        script: """
+                            @echo off
+                            if exist ${REPORTS_DIR}\\videos (
+                                dir /b ${REPORTS_DIR}\\videos 2>nul | find /c /v ""
+                            ) else (
+                                echo 0
+                            )
+                        """,
+                        returnStdout: true
+                    ).trim()
+                } catch (Exception e) {
+                    videoCount = "0"
+                }
+                
+                try {
+                    traceCount = bat(
+                        script: """
+                            @echo off
+                            if exist ${REPORTS_DIR}\\traces (
+                                dir /b ${REPORTS_DIR}\\traces 2>nul | find /c /v ""
+                            ) else (
+                                echo 0
+                            )
+                        """,
+                        returnStdout: true
+                    ).trim()
+                } catch (Exception e) {
+                    traceCount = "0"
+                }
+
+                // ✅ HTML Email with clickable links
+                def emailBody = """
+                <html>
+                <head>
+                    <style>
+                        body { font-family: Arial, sans-serif; margin: 0; padding: 0; }
+                        .header { background-color: ${testStatus == 'PASSED' ? '#4CAF50' : '#f44336'}; color: white; padding: 20px; text-align: center; }
+                        .content { padding: 20px; }
+                        .report-link { display: inline-block; margin: 10px 5px; padding: 12px 20px; background-color: #2196F3; color: white; text-decoration: none; border-radius: 5px; font-weight: bold; }
+                        .report-link:hover { background-color: #0b7dda; }
+                        table { border-collapse: collapse; width: 100%; margin: 20px 0; }
+                        th, td { border: 1px solid #ddd; padding: 10px; text-align: left; }
+                        th { background-color: #4CAF50; color: white; }
+                        .footer { background-color: #f1f1f1; padding: 15px; margin-top: 20px; font-size: 12px; color: #666; }
+                    </style>
+                </head>
+                <body>
+                    <div class="header">
+                        <h1>🎭 Playwright Test Execution Report</h1>
+                        <h2>Status: ${testStatus}</h2>
+                    </div>
+                    
+                    <div class="content">
+                        <h3>📊 Test Summary</h3>
+                        <table>
+                            <tr><th>Property</th><th>Value</th></tr>
+                            <tr><td>Build Status</td><td><b>${buildStatus}</b></td></tr>
+                            <tr><td>Test Status</td><td><b>${testStatus}</b></td></tr>
+                            <tr><td>Build Number</td><td>#${env.BUILD_NUMBER}</td></tr>
+                            <tr><td>Job Name</td><td>${env.JOB_NAME}</td></tr>
+                            <tr><td>Browser</td><td>${params.BROWSER}</td></tr>
+                            <tr><td>TAG</td><td>${params.TAG ?: 'Not specified'}</td></tr>
+                            <tr><td>SPEC File</td><td>${params.SPEC ?: 'Not specified'}</td></tr>
+                            <tr><td>Screenshots</td><td>${screenshotCount}</td></tr>
+                            <tr><td>Videos</td><td>${videoCount}</td></tr>
+                            <tr><td>Traces</td><td>${traceCount}</td></tr>
+                        </table>
+
+                        <h3>📄 View Reports (Click Links Below)</h3>
+                        <p style="text-align: center;">
+                            <a href="${htmlReportLink}" class="report-link">📊 HTML Report</a>
+                            <a href="${allureReportLink}" class="report-link">📈 Allure Report</a>
+                            <a href="${artifactsLink}" class="report-link">📁 All Artifacts</a>
+                            <a href="${consoleLogLink}" class="report-link">🖥️ Console Log</a>
+                        </p>
+
+                        <h3>📦 Generated Reports</h3>
+                        <ul>
+                            <li>✅ <b>HTML Report</b> - Playwright native HTML report</li>
+                            <li>✅ <b>Allure Report</b> - Enhanced visualization with graphs</li>
+                            <li>✅ <b>JSON Report</b> - Machine-readable test results</li>
+                            <li>✅ <b>JUnit XML Report</b> - Standard XML format for CI/CD</li>
+                            <li>✅ <b>Screenshots</b> - ${screenshotCount} screenshot(s) captured</li>
+                            <li>✅ <b>Videos</b> - ${videoCount} video recording(s)</li>
+                            <li>✅ <b>Trace Viewer</b> - ${traceCount} trace file(s) for debugging</li>
+                        </ul>
+
+                        <h3>🔗 Direct Links</h3>
+                        <p>
+                            <b>HTML Report:</b> <a href="${htmlReportLink}">${htmlReportLink}</a><br>
+                            <b>Allure Report:</b> <a href="${allureReportLink}">${allureReportLink}</a><br>
+                            <b>Download Artifacts:</b> <a href="${artifactsLink}">${artifactsLink}</a>
+                        </p>
+                    </div>
+
+                    <div class="footer">
+                        <p>
+                            📧 This is an automated email from Jenkins CI/CD Pipeline<br>
+                            ⏰ Build Time: ${new Date()}<br>
+                            🏠 Jenkins: ${env.JENKINS_URL}
+                        </p>
+                    </div>
+                </body>
+                </html>
+                """
+
+                // ✅ Send email with error handling
+                try {
+                    emailext(
+                        subject: "🎭 Playwright ${testStatus} - Build #${env.BUILD_NUMBER} - ${env.JOB_NAME}",
+                        body: emailBody,
+                        mimeType: 'text/html',
+                        attachLog: true,
+                        compressLog: true,
+                        to: "${params.EMAIL}"
+                    )
+                    echo "✅ Email sent successfully to: ${params.EMAIL}"
+                } catch (Exception e) {
+                    echo "⚠️ Failed to send email: ${e.message}"
+                    echo "Build completed but email notification failed"
+                }
+            }
+        }
+        
+        success {
+            echo "🎉 Pipeline completed successfully!"
+        }
+        
+        failure {
+            echo "❌ Pipeline failed!"
+        }
+        
+        unstable {
+            echo "⚠️ Pipeline unstable - tests failed but reports generated"
+        }
+    }
+}

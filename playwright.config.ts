@@ -15,7 +15,7 @@ export default defineConfig({
     ['list'],
     ['html', { 
       outputFolder: 'playwright-report',
-      open: 'never'
+      open: "always"
     }],
     ['json', { 
       outputFile: 'playwright-report/json-results.json' 

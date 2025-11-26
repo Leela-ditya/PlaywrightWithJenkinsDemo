@@ -12,17 +12,16 @@ export default defineConfig({
   timeout: 30 * 1000,
 
   reporter: [
-    ['list'],
     ['html', { 
       outputFolder: 'playwright-report',
       open: "always"
     }],
-    ['json', { 
-      outputFile: 'playwright-report/json-results.json' 
-    }],
-    ['junit', { 
-      outputFile: 'playwright-report/junit-results.xml' 
-    }],
+    // ['json', { 
+    //   outputFile: 'playwright-report/json-results.json' 
+    // }],
+    // ['junit', { 
+    //   outputFile: 'playwright-report/junit-results.xml' 
+    // }],
     ['allure-playwright', {
       detail: true,
       outputFolder: 'allure-results',

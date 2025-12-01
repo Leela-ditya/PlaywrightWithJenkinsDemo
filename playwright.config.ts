@@ -11,8 +11,12 @@ export default defineConfig({
   workers: process.env.CI ? 1 : undefined,
   timeout: 30 * 1000,
 
+  expect: {
+    timeout: 5000,
+  },
+
   reporter: [
-    ['html', { 
+    ['html', {
       outputFolder: 'playwright-report',
       open: "always"
     }],
@@ -28,45 +32,50 @@ export default defineConfig({
       suiteTitle: false
     }]
   ],
-  
+
   use: {
     testIdAttribute: "data-testid",
     screenshot: 'only-on-failure',
     video: 'retain-on-failure',
     trace: 'retain-on-failure',
     headless: true,
+    /* Maximum time each action can take */
+    actionTimeout: 10000,
   },
 
   projects: [
     {
       name: "chromium",
-      use: { 
+      use: {
         ...devices["Desktop Chrome"],
-          viewport: { width: 1920, height: 1080 }
+        viewport: { width: 1920, height: 1080 }
         // browserName: 'chromium',
         // viewport: null,
         // launchOptions: {
         //   args : ['--start-maximized'],
         //  }
       },
-     
+
     },
 
     {
       name: "firefox",
-      use: {  ...devices["Desktop Firefox"],
+      use: {
+        ...devices["Desktop Firefox"],
         viewport: { width: 1920, height: 1080 }
       }
     },
 
     {
       name: "webkit",
-      use: { ...devices["Desktop Safari"],
+      use: {
+        ...devices["Desktop Safari"],
         viewport: { width: 1920, height: 1080 }
-       },
+      },
     },
-  ]
-
-   });
+  ],
+  /* Output folder for test artifacts */
+  outputDir: 'test-results'
+});
 
 

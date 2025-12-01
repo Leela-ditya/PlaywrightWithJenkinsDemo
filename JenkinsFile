@@ -20,7 +20,10 @@ pipeline {
     environment {
         REPORTS_DIR = "test-reports"
         REPO_CHANGED = "false"
-        TEST_FAILED_STEP = ""
+        TEST_STATUS = "UNKNOWN"
+        SCREENSHOT_COUNT = "0"
+        VIDEO_COUNT = "0"
+        TRACE_COUNT = "0"
     }
 
     stages {
@@ -28,8 +31,6 @@ pipeline {
         stage('Git Change Detection & Checkout') {
             steps {
                 script {
-                    def hasChanges = false
-                    
                     if (fileExists('.git')) {
                         echo "📂 Existing repository found. Validating..."
                         
@@ -58,23 +59,10 @@ pipeline {
                             
                             if (localCommit != remoteCommit) {
                                 echo "✅ Changes detected! Pulling latest code..."
-                                
-                                // Clean old reports before pulling new code
-                                echo "🗑️ Cleaning old test reports..."
-                                bat """
-                                    if exist ${REPORTS_DIR} rmdir /S /Q ${REPORTS_DIR}
-                                    if exist playwright-report rmdir /S /Q playwright-report
-                                    if exist allure-results rmdir /S /Q allure-results
-                                    if exist allure-report rmdir /S /Q allure-report
-                                    if exist test-results rmdir /S /Q test-results
-                                """
-                                
                                 bat "git reset --hard origin/${params.BRANCH}"
-                                hasChanges = true
                                 env.REPO_CHANGED = "true"
                             } else {
                                 echo "⏭️ No changes detected. Using existing code."
-                                echo "⚠️ Previous test reports will be overwritten during test execution."
                                 env.REPO_CHANGED = "false"
                             }
                             
@@ -101,17 +89,12 @@ pipeline {
             }
             steps {
                 script {
-                    try {
-                        echo "📦 Installing dependencies (repo changed)..."
-                        bat """
-                            set PATH=%APPDATA%\\npm;%PATH%
-                            npm install
-                            npx playwright install --with-deps
-                        """
-                    } catch (Exception e) {
-                        env.TEST_FAILED_STEP = "Install Dependencies"
-                        throw e
-                    }
+                    echo "📦 Installing dependencies (repo changed)..."
+                    bat """
+                        set PATH=%APPDATA%\\npm;%PATH%
+                        npm install
+                        npx playwright install --with-deps
+                    """
                 }
             }
         }
@@ -131,14 +114,15 @@ pipeline {
         stage('Clean Previous Reports') {
             steps {
                 script {
-                    echo "🗑️ Cleaning previous test reports and results..."
+                    echo "🗑️ Cleaning all previous reports and artifacts..."
                     bat """
+                        @echo off
                         if exist ${REPORTS_DIR} rmdir /S /Q ${REPORTS_DIR}
                         if exist playwright-report rmdir /S /Q playwright-report
                         if exist allure-results rmdir /S /Q allure-results
                         if exist allure-report rmdir /S /Q allure-report
                         if exist test-results rmdir /S /Q test-results
-                        echo Previous reports cleaned successfully
+                        echo ✅ All previous reports cleaned
                     """
                 }
             }
@@ -149,7 +133,7 @@ pipeline {
                 script {
                     def browserProjects = params.BROWSER == 'all' ? '' : "--project=${params.BROWSER}"
                     def testCmd = "npx playwright test ${browserProjects}"
-                    def maxRetries = 3
+                    def maxRetries = 2
                     def currentRetry = 0
                     def testPassed = false
 
@@ -160,10 +144,10 @@ pipeline {
                         testCmd += " ${params.SPEC}"
                     }
 
-                    while (currentRetry < maxRetries && !testPassed) {
+                    while (currentRetry <= maxRetries && !testPassed) {
                         try {
                             if (currentRetry > 0) {
-                                echo "🔄 RETRY ATTEMPT ${currentRetry} of ${maxRetries - 1}"
+                                echo "🔄 RETRY ATTEMPT ${currentRetry} of ${maxRetries}"
                                 testCmd += " --last-failed"
                             }
 
@@ -172,17 +156,18 @@ pipeline {
                                 ${testCmd}
                             """
                             testPassed = true
+                            env.TEST_STATUS = "PASSED"
                             echo "✅ Tests passed!"
 
                         } catch (Exception e) {
                             currentRetry++
-                            env.TEST_FAILED_STEP = "Test Execution - Attempt ${currentRetry}"
+                            env.TEST_STATUS = "FAILED"
                             
-                            if (currentRetry >= maxRetries) {
+                            if (currentRetry > maxRetries) {
                                 echo "❌ All retry attempts exhausted. Tests failed."
-                                throw e
+                                // Don't throw error - continue to generate reports
                             } else {
-                                echo "⚠️ Test failed. Retrying..."
+                                echo "⚠️ Test failed. Retrying in 5 seconds..."
                                 sleep(5)
                             }
                         }
@@ -194,97 +179,157 @@ pipeline {
         stage('Organize Reports') {
             steps {
                 script {
-                    bat """
-                        @echo off
-                        echo ==========================================
-                        echo Organizing Test Reports and Artifacts
-                        echo ==========================================
+                    catchError(buildResult: 'SUCCESS', stageResult: 'SUCCESS') {
+                        bat """
+                            @echo off
+                            echo ==========================================
+                            echo Organizing Test Reports
+                            echo ==========================================
+                            
+                            REM Create clean test-reports directory
+                            if exist ${REPORTS_DIR} rmdir /S /Q ${REPORTS_DIR}
+                            mkdir ${REPORTS_DIR}
+
+                            REM Copy only index.html from playwright-report
+                            if exist playwright-report\\index.html (
+                                echo Copying Playwright index.html...
+                                copy playwright-report\\index.html ${REPORTS_DIR}\\index.html /Y
+                                
+                                REM Copy required assets for the HTML to work
+                                if exist playwright-report\\data (
+                                    xcopy playwright-report\\data ${REPORTS_DIR}\\data\\ /E /I /Y /Q
+                                )
+                                if exist playwright-report\\trace (
+                                    xcopy playwright-report\\trace ${REPORTS_DIR}\\trace\\ /E /I /Y /Q
+                                )
+                                echo ✅ Playwright report copied
+                            ) else (
+                                echo ⚠️ Playwright HTML report not found
+                            )
+
+                            REM Create directories for artifacts
+                            mkdir ${REPORTS_DIR}\\screenshots
+                            mkdir ${REPORTS_DIR}\\videos
+                            mkdir ${REPORTS_DIR}\\traces
+
+                            REM Copy artifacts from test-results
+                            if exist test-results (
+                                echo Copying test artifacts...
+                                
+                                REM Copy screenshots
+                                for /R test-results %%f in (*.png) do (
+                                    copy "%%f" "${REPORTS_DIR}\\screenshots\\" >nul 2>&1
+                                )
+                                echo ✅ Screenshots copied
+                                
+                                REM Copy videos
+                                for /R test-results %%f in (*.webm) do (
+                                    copy "%%f" "${REPORTS_DIR}\\videos\\" >nul 2>&1
+                                )
+                                echo ✅ Videos copied
+                                
+                                REM Copy traces
+                                for /R test-results %%f in (*.zip) do (
+                                    copy "%%f" "${REPORTS_DIR}\\traces\\" >nul 2>&1
+                                )
+                                echo ✅ Traces copied
+                            ) else (
+                                echo ⚠️ test-results directory not found
+                            )
+
+                            REM Generate and ZIP Allure report
+                            if exist allure-results (
+                                echo Generating Allure report...
+                                set PATH=%APPDATA%\\npm;%PATH%
+                                
+                                where allure >nul 2>&1
+                                if %ERRORLEVEL% EQU 0 (
+                                    REM Generate temp allure report
+                                    allure generate allure-results --clean -o allure-temp-report
+                                    
+                                    REM Create ZIP
+                                    powershell -Command "Compress-Archive -Path 'allure-temp-report\\*' -DestinationPath '${REPORTS_DIR}\\allure-report.zip' -Force"
+                                    
+                                    REM Clean up temp
+                                    rmdir /S /Q allure-temp-report
+                                    
+                                    echo ✅ Allure ZIP created
+                                ) else (
+                                    echo ⚠️ Allure not installed. Installing...
+                                    npm install -g allure-commandline --force
+                                    
+                                    allure generate allure-results --clean -o allure-temp-report
+                                    powershell -Command "Compress-Archive -Path 'allure-temp-report\\*' -DestinationPath '${REPORTS_DIR}\\allure-report.zip' -Force"
+                                    rmdir /S /Q allure-temp-report
+                                    
+                                    echo ✅ Allure ZIP created
+                                )
+                                
+                                REM Keep allure-results for Jenkins Allure Plugin
+                                xcopy allure-results ${REPORTS_DIR}\\allure-results\\ /E /I /Y /Q
+                                echo ✅ Allure results copied for Jenkins plugin
+                            ) else (
+                                echo ⚠️ Allure results not found
+                            )
+
+                            REM Count artifacts from test-results (before cleanup)
+                            set /a screenshot_count=0
+                            set /a video_count=0
+                            set /a trace_count=0
+
+                            if exist test-results (
+                                for /R test-results %%f in (*.png) do set /a screenshot_count+=1
+                                for /R test-results %%f in (*.webm) do set /a video_count+=1
+                                for /R test-results %%f in (*.zip) do set /a trace_count+=1
+                            )
+
+                            echo.
+                            echo ==========================================
+                            echo Artifact Counts:
+                            echo Screenshots: %screenshot_count%
+                            echo Videos: %video_count%
+                            echo Traces: %trace_count%
+                            echo ==========================================
+
+                            REM CRITICAL: Clean up ALL unwanted directories
+                            echo.
+                            echo Cleaning up unwanted directories...
+                            if exist playwright-report rmdir /S /Q playwright-report
+                            if exist allure-results rmdir /S /Q allure-results
+                            if exist test-results rmdir /S /Q test-results
+                            if exist allure-report rmdir /S /Q allure-report
+                            
+                            echo ✅ Cleanup completed
+                            echo.
+                            echo Final test-reports structure:
+                            dir ${REPORTS_DIR} /S
+                        """
                         
-                        REM Create main reports directory structure
-                        if not exist ${REPORTS_DIR} mkdir ${REPORTS_DIR}
-                        if not exist ${REPORTS_DIR}\\screenshots mkdir ${REPORTS_DIR}\\screenshots
-                        if not exist ${REPORTS_DIR}\\videos mkdir ${REPORTS_DIR}\\videos
-                        if not exist ${REPORTS_DIR}\\traces mkdir ${REPORTS_DIR}\\traces
+                        // Store counts in environment variables
+                        try {
+                            env.SCREENSHOT_COUNT = powershell(returnStdout: true, script: """
+                                if (Test-Path 'test-results') {
+                                    (Get-ChildItem -Path 'test-results' -Recurse -Filter '*.png' -ErrorAction SilentlyContinue).Count
+                                } else { 0 }
+                            """).trim()
+                        } catch (Exception e) { env.SCREENSHOT_COUNT = "0" }
 
-                        REM Copy Playwright HTML Report to root of test-reports
-                        if exist playwright-report\\index.html (
-                            echo Copying Playwright HTML report to root...
-                            copy playwright-report\\index.html ${REPORTS_DIR}\\index.html /Y
-                            
-                            REM Copy all Playwright assets
-                            if exist playwright-report\\data (
-                                xcopy playwright-report\\data ${REPORTS_DIR}\\data\\ /E /I /Y
-                            )
-                            if exist playwright-report\\trace (
-                                xcopy playwright-report\\trace ${REPORTS_DIR}\\trace\\ /E /I /Y
-                            )
-                            echo Playwright report copied successfully
-                        ) else (
-                            echo WARNING: playwright-report/index.html not found
-                        )
+                        try {
+                            env.VIDEO_COUNT = powershell(returnStdout: true, script: """
+                                if (Test-Path 'test-results') {
+                                    (Get-ChildItem -Path 'test-results' -Recurse -Filter '*.webm' -ErrorAction SilentlyContinue).Count
+                                } else { 0 }
+                            """).trim()
+                        } catch (Exception e) { env.VIDEO_COUNT = "0" }
 
-                        REM Organize test artifacts from test-results
-                        if exist test-results (
-                            echo Organizing test artifacts...
-                            
-                            REM Copy screenshots
-                            echo Copying screenshots...
-                            for /R test-results %%f in (*.png) do (
-                                copy "%%f" "${REPORTS_DIR}\\screenshots\\" >nul 2>&1
-                            )
-                            
-                            REM Copy videos
-                            echo Copying videos...
-                            for /R test-results %%f in (*.webm) do (
-                                copy "%%f" "${REPORTS_DIR}\\videos\\" >nul 2>&1
-                            )
-                            
-                            REM Copy traces
-                            echo Copying traces...
-                            for /R test-results %%f in (*.zip) do (
-                                copy "%%f" "${REPORTS_DIR}\\traces\\" >nul 2>&1
-                            )
-                            
-                            echo All artifacts organized successfully
-                        ) else (
-                            echo WARNING: test-results directory not found
-                        )
-
-                        REM Copy allure-results if exists
-                        if exist allure-results (
-                            echo Copying allure-results...
-                            xcopy allure-results ${REPORTS_DIR}\\allure-results\\ /E /I /Y
-                        ) else (
-                            echo WARNING: allure-results directory not found
-                        )
-
-                        REM Copy allure-results if exists (keep original for Allure plugin)
-                        if exist allure-results (
-                            echo Copying allure-results...
-                            xcopy allure-results ${REPORTS_DIR}\\allure-results\\ /E /I /Y
-                            echo Allure results copied successfully
-                        ) else (
-                            echo WARNING: allure-results directory not found
-                            echo Make sure your playwright.config.ts has allure-playwright reporter configured
-                        )
-
-                        REM Create summary file
-                        echo ======================================== > ${REPORTS_DIR}\\report-summary.txt
-                        echo Report Organization Complete >> ${REPORTS_DIR}\\report-summary.txt
-                        echo ======================================== >> ${REPORTS_DIR}\\report-summary.txt
-                        echo. >> ${REPORTS_DIR}\\report-summary.txt
-                        echo Directory Structure: >> ${REPORTS_DIR}\\report-summary.txt
-                        echo. >> ${REPORTS_DIR}\\report-summary.txt
-                        tree ${REPORTS_DIR} /F >> ${REPORTS_DIR}\\report-summary.txt
-                        
-                        echo ==========================================
-                        echo Report organization completed
-                        echo ==========================================
-                        
-                        echo.
-                        echo Final Report Structure:
-                        tree ${REPORTS_DIR} /F
-                    """
+                        try {
+                            env.TRACE_COUNT = powershell(returnStdout: true, script: """
+                                if (Test-Path 'test-results') {
+                                    (Get-ChildItem -Path 'test-results' -Recurse -Filter '*.zip' -ErrorAction SilentlyContinue).Count
+                                } else { 0 }
+                            """).trim()
+                        } catch (Exception e) { env.TRACE_COUNT = "0" }
+                    }
                 }
             }
         }
@@ -292,67 +337,41 @@ pipeline {
         stage('Publish Reports') {
             steps {
                 script {
-                    // Publish Main Playwright HTML Report from test-reports root
-                    if (fileExists("${REPORTS_DIR}/index.html")) {
-                        publishHTML(target: [
-                            reportDir: "${REPORTS_DIR}",
-                            reportFiles: 'index.html',
-                            reportName: 'Playwright HTML Report',
-                            allowMissing: false,
-                            keepAll: true,
-                            alwaysLinkToLastBuild: true
-                        ])
-                        echo "✅ Playwright HTML Report published successfully"
-                    }
-                    
-                    // Publish Allure Report using Allure Plugin
-                    if (fileExists("${REPORTS_DIR}/allure-results")) {
-                        try {
-                            allure([
-                                includeProperties: false,
-                                jdk: '',
-                                properties: [],
-                                reportBuildPolicy: 'ALWAYS',
-                                results: [[path: "${REPORTS_DIR}/allure-results"]]
+                    catchError(buildResult: 'SUCCESS', stageResult: 'SUCCESS') {
+                        // Publish Playwright HTML Report (index.html only)
+                        if (fileExists("${REPORTS_DIR}/index.html")) {
+                            publishHTML(target: [
+                                reportDir: "${REPORTS_DIR}",
+                                reportFiles: 'index.html',
+                                reportName: 'Playwright HTML Report',
+                                allowMissing: false,
+                                keepAll: true,
+                                alwaysLinkToLastBuild: true
                             ])
-                            echo "✅ Allure Report published successfully"
-                        } catch (Exception e) {
-                            echo "⚠️ Allure Plugin not found. Installing Allure Jenkins Plugin is required."
-                            echo "⚠️ Go to: Manage Jenkins > Plugins > Available Plugins > Search 'Allure' > Install"
-                            
-                            // Fallback: Try HTML Publisher with proper CSP settings
-                            if (fileExists("${REPORTS_DIR}/allure-report/index.html")) {
-                                publishHTML(target: [
-                                    reportDir: "${REPORTS_DIR}/allure-report",
-                                    reportFiles: 'index.html',
-                                    reportName: 'Allure HTML Report',
-                                    allowMissing: true,
-                                    keepAll: true,
-                                    alwaysLinkToLastBuild: true,
-                                    reportTitles: 'Allure Report'
-                                ])
-                                echo "⚠️ Published Allure as HTML (limited functionality). Install Allure Plugin for full features."
-                            }
+                            echo "✅ Playwright HTML Report published"
+                        } else {
+                            echo "⚠️ Playwright report not found"
                         }
-                    } else {
-                        echo "⚠️ Allure results not found at ${REPORTS_DIR}/allure-results"
-                    }
-                }
-            }
-        }
-
-        stage('Test Allure') {
-            steps {
-                script {
-                    // Check if Allure plugin is available
-                    try {
-                        allure([
-                            includeProperties: false,
-                            results: [[path: 'test-reports/allure-results']]
-                        ])
-                        echo "✅ Allure plugin is installed and working!"
-                    } catch (Exception e) {
-                        echo "❌ Allure plugin not found: ${e.message}"
+                        
+                        // Publish Allure Report using Allure Plugin (for Jenkins UI)
+                        if (fileExists("${REPORTS_DIR}/allure-results")) {
+                            try {
+                                allure([
+                                    includeProperties: false,
+                                    jdk: '',
+                                    properties: [],
+                                    reportBuildPolicy: 'ALWAYS',
+                                    results: [[path: "${REPORTS_DIR}/allure-results"]]
+                                ])
+                                echo "✅ Allure Report published via Allure Plugin"
+                            } catch (Exception e) {
+                                echo "⚠️ Allure Plugin not installed."
+                                echo "Install from: Manage Jenkins > Plugins > Available > Search 'Allure'"
+                                echo "📦 Allure ZIP is available for download in Build Artifacts"
+                            }
+                        } else {
+                            echo "⚠️ Allure results not found"
+                        }
                     }
                 }
             }
@@ -361,64 +380,39 @@ pipeline {
 
     post {
         always {
-            archiveArtifacts artifacts: "${REPORTS_DIR}/**", allowEmptyArchive: true
-
             script {
-                def buildStatus = currentBuild.currentResult
-                def buildStatusText = buildStatus
-                def testStatus = (buildStatus == "SUCCESS") ? "PASSED" : "FAILED"
-                def statusColor = (buildStatus == "SUCCESS") ? "#4CAF50" : "#F44336"
-                def statusEmoji = (buildStatus == "SUCCESS") ? "🎉" : "❌"
-                def headerColor = (buildStatus == "SUCCESS") ? "#4CAF50" : "#F44336"
+                catchError(buildResult: 'SUCCESS', stageResult: 'SUCCESS') {
+                    // Archive test-reports with all contents
+                    if (fileExists("${REPORTS_DIR}")) {
+                        archiveArtifacts artifacts: "${REPORTS_DIR}/**", allowEmptyArchive: true
+                        echo "✅ Archived: test-reports folder with all contents"
+                    }
 
-                // Count artifacts
-                def screenshotCount = "0"
-                def videoCount = "0"
-                def traceCount = "0"
+                    def buildStatus = currentBuild.currentResult
+                    def testStatus = env.TEST_STATUS ?: "UNKNOWN"
+                    def statusEmoji = (testStatus == "PASSED") ? "✅" : "❌"
+                    def headerColor = (testStatus == "PASSED") ? "#4CAF50" : "#F44336"
 
-                try {
-                    screenshotCount = powershell(returnStdout: true, script: """
-                        if (Test-Path '${REPORTS_DIR}\\screenshots') {
-                            (Get-ChildItem '${REPORTS_DIR}\\screenshots' -File -ErrorAction SilentlyContinue).Count
-                        } else { 0 }
-                    """).trim()
-                } catch (Exception e) { screenshotCount = "0" }
+                    def screenshotCount = env.SCREENSHOT_COUNT ?: "0"
+                    def videoCount = env.VIDEO_COUNT ?: "0"
+                    def traceCount = env.TRACE_COUNT ?: "0"
 
-                try {
-                    videoCount = powershell(returnStdout: true, script: """
-                        if (Test-Path '${REPORTS_DIR}\\videos') {
-                            (Get-ChildItem '${REPORTS_DIR}\\videos' -File -ErrorAction SilentlyContinue).Count
-                        } else { 0 }
-                    """).trim()
-                } catch (Exception e) { videoCount = "0" }
+                    def buildUrl = env.BUILD_URL
+                    def playwrightReportLink = "${buildUrl}Playwright_20HTML_20Report/"
+                    def allureReportLink = "${buildUrl}Allure_20Report/"
+                    def allureZipLink = "${buildUrl}artifact/${REPORTS_DIR}/allure-report.zip"
+                    def screenshotsLink = "${buildUrl}artifact/${REPORTS_DIR}/screenshots/"
+                    def videosLink = "${buildUrl}artifact/${REPORTS_DIR}/videos/"
+                    def tracesLink = "${buildUrl}artifact/${REPORTS_DIR}/traces/"
+                    def consoleLogLink = "${buildUrl}console"
 
-                try {
-                    traceCount = powershell(returnStdout: true, script: """
-                        if (Test-Path '${REPORTS_DIR}\\traces') {
-                            (Get-ChildItem '${REPORTS_DIR}\\traces' -File -ErrorAction SilentlyContinue).Count
-                        } else { 0 }
-                    """).trim()
-                } catch (Exception e) { traceCount = "0" }
+                    def repoChangeStatus = (env.REPO_CHANGED == "true") ? 
+                        "✅ New changes detected and tested" : 
+                        "⏭️ No changes - reused existing code"
 
-                // Build URLs
-                def buildUrl = env.BUILD_URL
-                def playwrightReportLink = "${buildUrl}Playwright_20HTML_20Report/"
-                def allureReportLink = "${buildUrl}Allure_20Report/"
-                def screenshotsLink = "${buildUrl}artifact/${REPORTS_DIR}/screenshots/"
-                def videosLink = "${buildUrl}artifact/${REPORTS_DIR}/videos/"
-                def tracesLink = "${buildUrl}artifact/${REPORTS_DIR}/traces/"
-                def artifactsLink = "${buildUrl}artifact/${REPORTS_DIR}/"
-                def consoleLogLink = "${buildUrl}console"
+                    def buildTime = new Date().format("EEE MMM dd HH:mm:ss z yyyy")
 
-                def repoChangeStatus = (env.REPO_CHANGED == "true") ? 
-                    "✅ New changes detected and pulled" : 
-                    "⏭️ No changes - used existing code"
-
-                // Build time
-                def buildTime = new Date().format("EEE MMM dd HH:mm:ss z yyyy")
-
-                // Mobile-optimized email template
-                def emailBody = """
+                    def emailBody = """
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -429,32 +423,34 @@ pipeline {
         * { margin: 0; padding: 0; box-sizing: border-box; }
         body { 
             font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Arial, sans-serif;
-            background-color: #1a1a1a;
-            color: #ffffff;
+            background-color: #f5f5f5;
+            color: #333;
             padding: 0;
             margin: 0;
         }
         .email-container {
             max-width: 600px;
-            margin: 0 auto;
-            background-color: #1a1a1a;
+            margin: 20px auto;
+            background-color: #ffffff;
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
         }
         
         .header {
             background: ${headerColor};
             padding: 30px 20px;
             text-align: center;
-            border-radius: 0;
+            color: #ffffff;
         }
         .header-icon {
             font-size: 48px;
             margin-bottom: 10px;
         }
         .header h1 {
-            font-size: 22px;
+            font-size: 24px;
             font-weight: 600;
             margin: 10px 0;
-            color: #ffffff;
         }
         .status-badge {
             display: inline-block;
@@ -464,180 +460,85 @@ pipeline {
             font-size: 14px;
             font-weight: 600;
             margin-top: 10px;
-            color: #ffffff;
         }
 
         .summary-section {
-            background: #2a2a2a;
-            margin: 0;
-            padding: 0;
-        }
-        .section-title {
-            background: #333333;
-            padding: 12px 20px;
-            font-size: 14px;
-            font-weight: 600;
-            color: #ffffff;
-            border-bottom: 1px solid #444;
-        }
-        .summary-table {
-            width: 100%;
-            border-collapse: collapse;
-        }
-        .summary-table thead {
-            background: #4CAF50;
-        }
-        .summary-table th {
-            padding: 12px;
-            text-align: left;
-            font-weight: 600;
-            font-size: 14px;
-            color: #ffffff;
-        }
-        .summary-table td {
-            padding: 12px 20px;
-            border-bottom: 1px solid #333;
-            font-size: 14px;
-            color: #e0e0e0;
-        }
-        .summary-table tr:last-child td {
-            border-bottom: none;
-        }
-        .property-name {
-            color: #bbb;
-            font-weight: 500;
-        }
-
-        .reports-section {
-            background: #2a2a2a;
             padding: 20px;
         }
-        .reports-title {
-            font-size: 14px;
+        .section-title {
+            font-size: 18px;
             font-weight: 600;
             margin-bottom: 15px;
-            color: #ffffff;
+            color: #333;
         }
-        
-        .button-grid {
+        .summary-grid {
             display: grid;
             grid-template-columns: 1fr 1fr;
             gap: 12px;
-            margin-bottom: 20px;
+        }
+        .summary-item {
+            background: #f8f9fa;
+            padding: 15px;
+            border-radius: 8px;
+        }
+        .summary-label {
+            font-size: 12px;
+            color: #666;
+            margin-bottom: 5px;
+        }
+        .summary-value {
+            font-size: 16px;
+            font-weight: 600;
+            color: #333;
+        }
+
+        .buttons-section {
+            padding: 20px;
+            background: #f8f9fa;
+        }
+        .button-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 10px;
         }
         .report-button {
             display: flex;
             align-items: center;
             justify-content: center;
-            padding: 14px 16px;
+            padding: 12px 14px;
             background: #2196F3;
             color: #ffffff !important;
             text-decoration: none;
             border-radius: 8px;
             font-weight: 600;
-            font-size: 13px;
-            transition: background 0.3s;
+            font-size: 12px;
+            transition: all 0.3s;
         }
         .report-button:hover {
             background: #1976D2;
-        }
-        .report-button.secondary {
-            background: #5c6bc0;
-        }
-        .report-button.secondary:hover {
-            background: #3f51b5;
+            transform: translateY(-2px);
         }
         .button-icon {
             margin-right: 6px;
             font-size: 16px;
         }
 
-        .generated-reports {
-            margin-top: 20px;
-        }
-        .reports-list-title {
-            font-size: 14px;
-            font-weight: 600;
-            margin-bottom: 12px;
-            color: #ffffff;
-        }
-        .report-item {
-            display: flex;
-            align-items: flex-start;
-            padding: 10px 0;
-            border-bottom: 1px solid #333;
-            font-size: 13px;
-        }
-        .report-item:last-child {
-            border-bottom: none;
-        }
-        .report-item-icon {
-            margin-right: 8px;
-            font-size: 16px;
-            flex-shrink: 0;
-        }
-        .report-item-text {
-            color: #e0e0e0;
-            line-height: 1.5;
-        }
-        .report-item-title {
-            font-weight: 600;
-            color: #ffffff;
-        }
-
-        .links-section {
-            background: #2a2a2a;
-            padding: 20px;
-            margin-top: 2px;
-        }
-        .link-item {
-            margin-bottom: 12px;
-            font-size: 13px;
-        }
-        .link-label {
-            color: #bbb;
-            font-weight: 600;
-        }
-        .link-url {
-            color: #2196F3;
-            word-break: break-all;
-            text-decoration: none;
-        }
-
         .footer {
-            background: #1a1a1a;
             padding: 20px;
             text-align: center;
-            border-top: 1px solid #333;
+            background: #f8f9fa;
+            border-top: 1px solid #e0e0e0;
         }
-        .footer-item {
+        .footer-text {
             font-size: 12px;
-            color: #888;
+            color: #666;
             margin: 5px 0;
         }
 
         @media only screen and (max-width: 600px) {
-            .header {
-                padding: 20px 15px;
-            }
-            .header h1 {
-                font-size: 18px;
-            }
-            .header-icon {
-                font-size: 36px;
-            }
+            .summary-grid,
             .button-grid {
                 grid-template-columns: 1fr;
-                gap: 10px;
-            }
-            .summary-table th,
-            .summary-table td {
-                padding: 10px 15px;
-                font-size: 13px;
-            }
-            .reports-section,
-            .links-section {
-                padding: 15px;
             }
         }
     </style>
@@ -646,71 +547,50 @@ pipeline {
     <div class="email-container">
         <div class="header">
             <div class="header-icon">${statusEmoji}</div>
-            <h1>Playwright Test Execution Report</h1>
-            <div class="status-badge">Status: ${testStatus}</div>
+            <h1>Playwright Test Report</h1>
+            <div class="status-badge">${testStatus}</div>
         </div>
 
         <div class="summary-section">
             <div class="section-title">📊 Test Summary</div>
-            <table class="summary-table">
-                <thead>
-                    <tr>
-                        <th>Property</th>
-                        <th>Value</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr>
-                        <td class="property-name">Build Status</td>
-                        <td>${buildStatusText}</td>
-                    </tr>
-                    <tr>
-                        <td class="property-name">Test Status</td>
-                        <td>${testStatus}</td>
-                    </tr>
-                    <tr>
-                        <td class="property-name">Repository Status</td>
-                        <td>${repoChangeStatus}</td>
-                    </tr>
-                    <tr>
-                        <td class="property-name">Build Number</td>
-                        <td>#${env.BUILD_NUMBER}</td>
-                    </tr>
-                    <tr>
-                        <td class="property-name">Job Name</td>
-                        <td>${env.JOB_NAME}</td>
-                    </tr>
-                    <tr>
-                        <td class="property-name">Browser</td>
-                        <td>${params.BROWSER}</td>
-                    </tr>
-                    <tr>
-                        <td class="property-name">TAG</td>
-                        <td>${params.TAG ?: 'Not specified'}</td>
-                    </tr>
-                    <tr>
-                        <td class="property-name">SPEC File</td>
-                        <td>${params.SPEC ?: 'All tests'}</td>
-                    </tr>
-                    <tr>
-                        <td class="property-name">Screenshots</td>
-                        <td>${screenshotCount}</td>
-                    </tr>
-                    <tr>
-                        <td class="property-name">Videos</td>
-                        <td>${videoCount}</td>
-                    </tr>
-                    <tr>
-                        <td class="property-name">Traces</td>
-                        <td>${traceCount}</td>
-                    </tr>
-                </tbody>
-            </table>
+            <div class="summary-grid">
+                <div class="summary-item">
+                    <div class="summary-label">Build Status</div>
+                    <div class="summary-value">${buildStatus}</div>
+                </div>
+                <div class="summary-item">
+                    <div class="summary-label">Test Status</div>
+                    <div class="summary-value">${testStatus}</div>
+                </div>
+                <div class="summary-item">
+                    <div class="summary-label">Build Number</div>
+                    <div class="summary-value">#${env.BUILD_NUMBER}</div>
+                </div>
+                <div class="summary-item">
+                    <div class="summary-label">Browser</div>
+                    <div class="summary-value">${params.BROWSER}</div>
+                </div>
+                <div class="summary-item">
+                    <div class="summary-label">Screenshots</div>
+                    <div class="summary-value">${screenshotCount}</div>
+                </div>
+                <div class="summary-item">
+                    <div class="summary-label">Videos</div>
+                    <div class="summary-value">${videoCount}</div>
+                </div>
+                <div class="summary-item">
+                    <div class="summary-label">Traces</div>
+                    <div class="summary-value">${traceCount}</div>
+                </div>
+                <div class="summary-item">
+                    <div class="summary-label">Repository</div>
+                    <div class="summary-value" style="font-size: 12px;">${repoChangeStatus}</div>
+                </div>
+            </div>
         </div>
 
-        <div class="reports-section">
-            <div class="reports-title">📄 View Reports (Click Links Below)</div>
-            
+        <div class="buttons-section">
+            <div class="section-title">📄 View Reports</div>
             <div class="button-grid">
                 <a href="${playwrightReportLink}" class="report-button">
                     <span class="button-icon">📊</span>
@@ -720,113 +600,47 @@ pipeline {
                     <span class="button-icon">📈</span>
                     Allure Report
                 </a>
-                <a href="${artifactsLink}" class="report-button secondary">
-                    <span class="button-icon">📁</span>
-                    All Artifacts
+                <a href="${allureZipLink}" class="report-button">
+                    <span class="button-icon">📦</span>
+                    Download Allure ZIP
                 </a>
-                <a href="${consoleLogLink}" class="report-button secondary">
+                <a href="${screenshotsLink}" class="report-button">
+                    <span class="button-icon">📸</span>
+                    Screenshots
+                </a>
+                <a href="${videosLink}" class="report-button">
+                    <span class="button-icon">🎥</span>
+                    Videos
+                </a>
+                <a href="${tracesLink}" class="report-button">
+                    <span class="button-icon">🔍</span>
+                    Traces
+                </a>
+                <a href="${consoleLogLink}" class="report-button">
                     <span class="button-icon">🖥️</span>
                     Console Log
                 </a>
             </div>
-
-            <div class="generated-reports">
-                <div class="reports-list-title">🎨 Generated Reports</div>
-                
-                <div class="report-item">
-                    <span class="report-item-icon">✅</span>
-                    <div class="report-item-text">
-                        <span class="report-item-title">Playwright HTML Report</span> - Interactive test results with filters
-                    </div>
-                </div>
-                
-                <div class="report-item">
-                    <span class="report-item-icon">✅</span>
-                    <div class="report-item-text">
-                        <span class="report-item-title">Allure Report</span> - Enhanced visualization with graphs
-                    </div>
-                </div>
-                
-                <div class="report-item">
-                    <span class="report-item-icon">📸</span>
-                    <div class="report-item-text">
-                        <span class="report-item-title">Screenshots</span> - ${screenshotCount} screenshot(s) captured
-                    </div>
-                </div>
-                
-                <div class="report-item">
-                    <span class="report-item-icon">🎥</span>
-                    <div class="report-item-text">
-                        <span class="report-item-title">Videos</span> - ${videoCount} video recording(s)
-                    </div>
-                </div>
-                
-                <div class="report-item">
-                    <span class="report-item-icon">🔍</span>
-                    <div class="report-item-text">
-                        <span class="report-item-title">Trace Viewer</span> - ${traceCount} trace file(s) for debugging
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <div class="links-section">
-            <div class="reports-title">🔗 Direct Links</div>
-            
-            <div class="link-item">
-                <div class="link-label">📊 Playwright HTML Report:</div>
-                <a href="${playwrightReportLink}" class="link-url">${playwrightReportLink}</a>
-            </div>
-            
-            <div class="link-item">
-                <div class="link-label">📈 Allure Report:</div>
-                <a href="${allureReportLink}" class="link-url">${allureReportLink}</a>
-            </div>
-            
-            <div class="link-item">
-                <div class="link-label">📁 Download Artifacts:</div>
-                <a href="${artifactsLink}" class="link-url">${artifactsLink}</a>
-            </div>
-            
-            <div class="link-item">
-                <div class="link-label">📸 Screenshots:</div>
-                <a href="${screenshotsLink}" class="link-url">${screenshotsLink}</a>
-            </div>
-            
-            <div class="link-item">
-                <div class="link-label">🎥 Videos:</div>
-                <a href="${videosLink}" class="link-url">${videosLink}</a>
-            </div>
-            
-            <div class="link-item">
-                <div class="link-label">🔍 Traces:</div>
-                <a href="${tracesLink}" class="link-url">${tracesLink}</a>
-            </div>
         </div>
 
         <div class="footer">
-            <div class="footer-item">
-                📧 Automated Jenkins CI/CD Pipeline
-            </div>
-            <div class="footer-item">
-                🕐 Build Time: ${buildTime}
-            </div>
-            <div class="footer-item">
-                🏠 Jenkins: <a href="${env.JENKINS_URL}" style="color: #2196F3;">${env.JENKINS_URL}</a>
-            </div>
+            <div class="footer-text">🤖 Automated Jenkins CI/CD Pipeline</div>
+            <div class="footer-text">🕐 ${buildTime}</div>
+            <div class="footer-text">📧 Build #${env.BUILD_NUMBER} - ${env.JOB_NAME}</div>
         </div>
     </div>
 </body>
 </html>
-                """
+                    """
 
-                emailext(
-                    to: params.EMAIL,
-                    subject: "${statusEmoji} Playwright ${testStatus} - Build #${env.BUILD_NUMBER} - ${env.JOB_NAME}",
-                    mimeType: "text/html",
-                    body: emailBody,
-                    attachLog: false
-                )
+                    emailext(
+                        to: params.EMAIL,
+                        subject: "${statusEmoji} Playwright ${testStatus} - Build #${env.BUILD_NUMBER}",
+                        mimeType: "text/html",
+                        body: emailBody,
+                        attachLog: false
+                    )
+                }
             }
         }
     }

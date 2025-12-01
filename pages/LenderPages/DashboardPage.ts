@@ -137,7 +137,7 @@ export class DashboardPage {
                             throw new Error("Worksheet 'LockedLoans' not found in LoanDetails_Locked.xlsx");
                         }
 
-                        expect(offeredValues).toEqual(lockedValues);
+                        expect(offeredValues).toEqual(lockedValue);
 
                         // console.log comparison result
                         console.log("Loan details matched between Offered and Locked Loans!");

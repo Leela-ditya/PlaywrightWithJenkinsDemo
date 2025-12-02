@@ -20,9 +20,9 @@ export default defineConfig({
       outputFolder: 'playwright-report',
       open: "always"
     }],
-    // ['json', { 
-    //   outputFile: 'playwright-report/json-results.json' 
-    // }],
+    ['json', { 
+      outputFile: 'playwright-report/json-results.json' 
+    }],
     // ['junit', { 
     //   outputFile: 'playwright-report/junit-results.xml' 
     // }],

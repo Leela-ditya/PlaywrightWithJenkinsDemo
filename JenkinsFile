@@ -281,6 +281,7 @@ pipeline {
                                 exit /b %ERRORLEVEL%
                             """)
                             
+                            bat "echo true > tests_executed.txt"
                             env.TESTS_EXECUTED = "true"
                             
                             if (exitCode == 0) {
@@ -293,6 +294,7 @@ pipeline {
                         } catch (Exception e) {
                             currentRetry++
                             env.TEST_STATUS = "FAILED"
+                            bat "echo true > tests_executed.txt"
                             
                             if (currentRetry > maxRetries) {
                                 echo "⚠️  All test attempts completed"
@@ -308,11 +310,18 @@ pipeline {
 
         stage('Extract Test Results') {
             when {
-                expression { return env.TESTS_EXECUTED == "true" }
+                expression { return fileExists('tests_executed.txt') || fileExists('playwright-report/index.html') }
             }
             steps {
                 script {
                     echo "📊 Extracting test results..."
+                    
+                    // Check if Allure results exist
+                    if (fileExists('allure-results')) {
+                        echo "✅ Allure results found"
+                    } else {
+                        echo "⚠️  No Allure results found"
+                    }
                     
                     bat """
                         @echo off
@@ -367,7 +376,7 @@ pipeline {
 
         stage('Organize Reports') {
             when {
-                expression { return env.TESTS_EXECUTED == "true" }
+                expression { return fileExists('tests_executed.txt') || fileExists('playwright-report/index.html') }
             }
             steps {
                 script {
@@ -375,6 +384,7 @@ pipeline {
                     
                     bat """
                         @echo off
+                        setlocal enabledelayedexpansion
                         
                         if exist ${REPORTS_DIR} rmdir /S /Q ${REPORTS_DIR}
                         mkdir ${REPORTS_DIR}
@@ -409,21 +419,30 @@ pipeline {
                             set PATH=%APPDATA%\\npm;%PATH%
                             
                             where allure >nul 2>&1
-                            if %%ERRORLEVEL%% NEQ 0 (
+                            if !ERRORLEVEL! NEQ 0 (
+                                echo Installing allure-commandline...
                                 npm install -g allure-commandline --force
                             )
                             
-                            mkdir ${REPORTS_DIR}\\allure-results
+                            mkdir ${REPORTS_DIR}\\allure-results 2>nul
                             xcopy allure-results ${REPORTS_DIR}\\allure-results\\ /E /I /Y /Q
+                            
+                            echo Generating Allure report...
                             allure generate allure-results --clean -o ${REPORTS_DIR}\\allure-report
                             
                             REM Create allure.zip
-                            cd ${REPORTS_DIR}
-                            powershell -Command "Compress-Archive -Path allure-report -DestinationPath allure.zip -Force"
-                            cd ..
+                            if exist ${REPORTS_DIR}\\allure-report (
+                                cd ${REPORTS_DIR}
+                                powershell -NoProfile -ExecutionPolicy Bypass -Command "Compress-Archive -Path allure-report -DestinationPath allure.zip -Force"
+                                cd ..
+                                echo Allure ZIP created successfully
+                            )
+                        ) else (
+                            echo No allure-results found
                         )
 
                         echo Reports organized successfully
+                        if exist tests_executed.txt del tests_executed.txt
                     """
                     
                     echo "✅ Reports directory structure created with index.html, traces, videos, and screenshots"

@@ -25,7 +25,6 @@ pipeline {
         PASSED_TESTS = "0"
         FAILED_TESTS = "0"
         TESTS_EXECUTED = "false"
-        FAILED_TEST_NAMES = ""
     }
 
     stages {
@@ -38,7 +37,7 @@ pipeline {
                     
                     if (tagProvided && specProvided) {
                         error("""
-                        ❌ ERROR: Both TAG and SPEC parameters are provided!
+                        ERROR: Both TAG and SPEC parameters are provided!
                         
                         You must choose ONE of the following:
                         1. Provide only TAG (e.g., @smoke, @regression) to run tests with that tag
@@ -49,7 +48,7 @@ pipeline {
                     }
                     
                     if (!tagProvided && !specProvided) {
-                        echo "ℹ️  No TAG or SPEC provided - will run all tests"
+                        echo "No TAG or SPEC provided - will run all tests"
                     }
                 }
             }
@@ -58,14 +57,11 @@ pipeline {
         stage('Git Change Detection & Checkout') {
             steps {
                 script {
-                    def lastRevisionFile = "${WORKSPACE}/.last-revision"
                     def hasLocalRepo = fileExists("${WORKSPACE}/.git")
                     def newChanges = false
                     
-                    echo "📁 Checking for local repository..."
-                    
                     if (hasLocalRepo) {
-                        echo "✅ Local repository found, checking for updates..."
+                        echo "Local repository found, checking for updates..."
                         
                         def retryCount = 0
                         def maxRetries = 2
@@ -75,33 +71,28 @@ pipeline {
                             try {
                                 def branch = params.BRANCH ?: "main"
                                 
-                                // Get current commit hash before fetch
                                 def currentCommit = bat(returnStdout: true, script: '''
                                     @echo off
                                     cd /d "%WORKSPACE%"
                                     git rev-parse HEAD 2>nul || echo "unknown"
                                 ''').trim()
                                 
-                                // Fetch latest changes
                                 bat """
                                     @echo off
                                     cd /d "%WORKSPACE%"
                                     git fetch origin ${branch} --depth=1 --quiet
                                 """
                                 
-                                // Get latest commit hash
                                 def latestCommit = bat(returnStdout: true, script: """
                                     @echo off
                                     cd /d "%WORKSPACE%"
                                     git rev-parse origin/${branch} 2>nul || echo "unknown"
                                 """).trim()
                                 
-                                // Check if updates are available
                                 if (!currentCommit.equals(latestCommit) && !currentCommit.equals("unknown")) {
-                                    echo "🔄 New changes detected, pulling latest..."
+                                    echo "New changes detected, pulling latest..."
                                     newChanges = true
                                     
-                                    // Try normal pull first, then with --allow-unrelated-histories if it fails
                                     def pullExitCode = bat(returnStatus: true, script: """
                                         @echo off
                                         cd /d "%WORKSPACE%"
@@ -110,7 +101,7 @@ pipeline {
                                     """)
                                     
                                     if (pullExitCode != 0) {
-                                        echo "ℹ️  Git history mismatch detected, resetting and pulling..."
+                                        echo "Git history mismatch detected, resetting..."
                                         bat """
                                             @echo off
                                             cd /d "%WORKSPACE%"
@@ -119,7 +110,7 @@ pipeline {
                                         """
                                     }
                                 } else {
-                                    echo "✅ No new changes - using last cloned version"
+                                    echo "No new changes - using existing version"
                                     newChanges = false
                                 }
                                 
@@ -128,27 +119,15 @@ pipeline {
                             } catch (Exception e) {
                                 retryCount++
                                 if (retryCount < maxRetries) {
-                                    echo "⚠️  Fetch attempt ${retryCount} failed, retrying..."
+                                    echo "Fetch attempt ${retryCount} failed, retrying..."
                                     sleep(10)
-                                    // Try to cleanup on retry
-                                    try {
-                                        bat """
-                                            @echo off
-                                            cd /d "%WORKSPACE%"
-                                            if exist .git (
-                                                git reset --hard HEAD 2>nul || echo cleanup attempt
-                                            )
-                                        """
-                                    } catch (Exception cleanup) {
-                                        echo "Cleanup attempt skipped"
-                                    }
                                 } else {
-                                    error("Failed to fetch repository after ${maxRetries} attempts: ${e.message}")
+                                    error("Failed to fetch repository after ${maxRetries} attempts")
                                 }
                             }
                         }
                     } else {
-                        echo "❌ Local repository not found, cloning..."
+                        echo "Local repository not found, cloning..."
                         newChanges = true
                         
                         def cloneSuccess = false
@@ -166,7 +145,6 @@ pipeline {
                                     ]
                                 ])
                                 
-                                // Configure git to allow unrelated histories
                                 bat """
                                     @echo off
                                     cd /d "%WORKSPACE%"
@@ -178,7 +156,7 @@ pipeline {
                             } catch (Exception e) {
                                 retryCount++
                                 if (retryCount < maxRetries) {
-                                    echo "⚠️  Clone attempt ${retryCount} failed, retrying..."
+                                    echo "Clone attempt ${retryCount} failed, retrying..."
                                     sleep(10)
                                     if (fileExists("${WORKSPACE}/.git")) {
                                         bat """
@@ -188,7 +166,7 @@ pipeline {
                                         """
                                     }
                                 } else {
-                                    error("Failed to clone repository after ${maxRetries} attempts: ${e.message}")
+                                    error("Failed to clone repository after ${maxRetries} attempts")
                                 }
                             }
                         }
@@ -200,18 +178,32 @@ pipeline {
         }
 
         stage('Install Dependencies') {
-            when {
-                expression { return env.REPO_CHANGED == "true" }
-            }
             steps {
                 script {
-                    echo "📦 Installing dependencies..."
-                    bat """
-                        @echo off
-                        set PATH=%APPDATA%\\npm;%PATH%
-                        npm install --prefer-offline --no-audit
-                        npx playwright install --with-deps
-                    """
+                    def needsInstall = false
+                    
+                    if (env.REPO_CHANGED == "true") {
+                        needsInstall = true
+                        echo "Repository changed - installing dependencies..."
+                    } else {
+                        def nodeModulesExists = fileExists("${WORKSPACE}/node_modules")
+                        if (!nodeModulesExists) {
+                            needsInstall = true
+                            echo "node_modules not found - installing dependencies..."
+                        } else {
+                            echo "Dependencies already installed, skipping..."
+                        }
+                    }
+                    
+                    if (needsInstall) {
+                        bat """
+                            @echo off
+                            cd /d "%WORKSPACE%"
+                            set PATH=%APPDATA%\\npm;%PATH%
+                            npm install --prefer-offline --no-audit
+                            npx playwright install --with-deps
+                        """
+                    }
                 }
             }
         }
@@ -219,9 +211,9 @@ pipeline {
         stage('Verify Playwright Installation') {
             steps {
                 script {
-                    echo "✅ Verifying Playwright..."
                     bat """
                         @echo off
+                        cd /d "%WORKSPACE%"
                         set PATH=%APPDATA%\\npm;%PATH%
                         npx playwright --version
                     """
@@ -232,15 +224,14 @@ pipeline {
         stage('Clean Previous Reports') {
             steps {
                 script {
-                    echo "🧹 Cleaning old reports..."
                     bat """
                         @echo off
+                        cd /d "%WORKSPACE%"
                         if exist ${REPORTS_DIR} rmdir /S /Q ${REPORTS_DIR}
                         if exist playwright-report rmdir /S /Q playwright-report
                         if exist allure-results rmdir /S /Q allure-results
                         if exist allure-report rmdir /S /Q allure-report
                         if exist test-results rmdir /S /Q test-results
-                        echo Cleaned old reports successfully
                     """
                 }
             }
@@ -249,8 +240,6 @@ pipeline {
         stage('Run Tests with Retry') {
             steps {
                 script {
-                    echo "🧪 Running Playwright tests..."
-                    
                     def browserProjects = params.BROWSER == 'all' ? '' : "--project=${params.BROWSER}"
                     def testCmd = "npx playwright test ${browserProjects}".trim()
                     def maxRetries = 0
@@ -259,23 +248,24 @@ pipeline {
 
                     if (params.TAG?.trim()) {
                         testCmd += " --grep \"${params.TAG}\""
-                        echo "🏷️  Running tests with tag: ${params.TAG}"
+                        echo "Running tests with tag: ${params.TAG}"
                     } else if (params.SPEC?.trim()) {
                         testCmd += " ${params.SPEC}"
-                        echo "📄 Running specific test file: ${params.SPEC}"
+                        echo "Running specific test file: ${params.SPEC}"
                     } else {
-                        echo "🎯 Running all tests"
+                        echo "Running all tests"
                     }
 
                     while (currentRetry <= maxRetries && !testPassed) {
                         try {
                             if (currentRetry > 0) {
                                 testCmd += " --last-failed"
-                                echo "🔄 Retry attempt ${currentRetry}: Running only failed tests"
+                                echo "Retry attempt ${currentRetry}: Running only failed tests"
                             }
 
                             def exitCode = bat(returnStatus: true, script: """
                                 @echo off
+                                cd /d "%WORKSPACE%"
                                 set PATH=%APPDATA%\\npm;%PATH%
                                 ${testCmd}
                                 exit /b %ERRORLEVEL%
@@ -297,9 +287,9 @@ pipeline {
                             bat "echo true > tests_executed.txt"
                             
                             if (currentRetry > maxRetries) {
-                                echo "⚠️  All test attempts completed"
+                                echo "All test attempts completed"
                             } else {
-                                echo "⏳ Waiting 5 seconds before retry..."
+                                echo "Waiting 5 seconds before retry..."
                                 sleep(5)
                             }
                         }
@@ -314,17 +304,9 @@ pipeline {
             }
             steps {
                 script {
-                    echo "📊 Extracting test results..."
-                    
-                    // Check if Allure results exist
-                    if (fileExists('allure-results')) {
-                        echo "✅ Allure results found"
-                    } else {
-                        echo "⚠️  No Allure results found"
-                    }
-                    
                     bat """
                         @echo off
+                        cd /d "%WORKSPACE%"
                         setlocal enabledelayedexpansion
                         
                         set "total=0"
@@ -332,10 +314,8 @@ pipeline {
                         set "failed=0"
                         
                         if exist playwright-report\\index.html (
-                            REM Extract passed count
                             for /f "tokens=*" %%a in ('powershell -NoProfile -ExecutionPolicy Bypass -Command "([regex]::Matches((Get-Content 'playwright-report\\index.html' -Raw), '(\\d+)\\s+passed'))[0].Groups[1].Value" 2^>nul') do set "passed=%%a"
                             
-                            REM Extract failed count
                             for /f "tokens=*" %%a in ('powershell -NoProfile -ExecutionPolicy Bypass -Command "([regex]::Matches((Get-Content 'playwright-report\\index.html' -Raw), '(\\d+)\\s+failed'))[0].Groups[1].Value" 2^>nul') do set "failed=%%a"
                         )
                         
@@ -364,7 +344,7 @@ pipeline {
                         currentBuild.result = 'SUCCESS'
                     }
                     
-                    echo "✅ Tests: ${env.TOTAL_TESTS} total | ${env.PASSED_TESTS} passed | ${env.FAILED_TESTS} failed"
+                    echo "Tests: ${env.TOTAL_TESTS} total | ${env.PASSED_TESTS} passed | ${env.FAILED_TESTS} failed"
                 }
             }
         }
@@ -375,10 +355,9 @@ pipeline {
             }
             steps {
                 script {
-                    echo "📦 Organizing test reports..."
-                    
                     bat """
                         @echo off
+                        cd /d "%WORKSPACE%"
                         setlocal enabledelayedexpansion
                         
                         if exist ${REPORTS_DIR} rmdir /S /Q ${REPORTS_DIR}
@@ -387,14 +366,12 @@ pipeline {
                         mkdir ${REPORTS_DIR}\\videos
                         mkdir ${REPORTS_DIR}\\traces
 
-                        REM Copy Playwright HTML report
                         if exist playwright-report\\index.html (
                             copy playwright-report\\index.html ${REPORTS_DIR}\\index.html /Y
                             if exist playwright-report\\data xcopy playwright-report\\data ${REPORTS_DIR}\\data\\ /E /I /Y /Q
                             if exist playwright-report\\trace xcopy playwright-report\\trace ${REPORTS_DIR}\\trace\\ /E /I /Y /Q
                         )
 
-                        REM Copy artifacts from test-results
                         if exist test-results (
                             for /R test-results %%f in (*.png) do (
                                 copy "%%f" "${REPORTS_DIR}\\screenshots\\" >nul 2>&1
@@ -409,38 +386,28 @@ pipeline {
                             )
                         )
 
-                        REM Generate Allure report if allure-results exist
                         if exist allure-results (
                             set PATH=%APPDATA%\\npm;%PATH%
                             
                             where allure >nul 2>&1
                             if !ERRORLEVEL! NEQ 0 (
-                                echo Installing allure-commandline...
                                 npm install -g allure-commandline --force
                             )
                             
                             mkdir ${REPORTS_DIR}\\allure-results 2>nul
                             xcopy allure-results ${REPORTS_DIR}\\allure-results\\ /E /I /Y /Q
                             
-                            echo Generating Allure report...
                             allure generate allure-results --clean -o ${REPORTS_DIR}\\allure-report
                             
-                            REM Create allure.zip
                             if exist ${REPORTS_DIR}\\allure-report (
                                 cd ${REPORTS_DIR}
                                 powershell -NoProfile -ExecutionPolicy Bypass -Command "Compress-Archive -Path allure-report -DestinationPath allure.zip -Force"
                                 cd ..
-                                echo Allure ZIP created successfully
                             )
-                        ) else (
-                            echo No allure-results found
                         )
 
-                        echo Reports organized successfully
                         if exist tests_executed.txt del tests_executed.txt
                     """
-                    
-                    echo "✅ Reports directory structure created with index.html, traces, videos, and screenshots"
                 }
             }
         }
@@ -451,8 +418,6 @@ pipeline {
             }
             steps {
                 script {
-                    echo "📄 Publishing HTML reports..."
-                    
                     if (fileExists("${REPORTS_DIR}/index.html")) {
                         publishHTML(target: [
                             reportDir: "${REPORTS_DIR}",
@@ -475,19 +440,17 @@ pipeline {
                                 alwaysLinkToLastBuild: true
                             ])
                         } catch (Exception e) {
-                            echo "⚠️  Could not publish Allure report: ${e.message}"
+                            echo "Could not publish Allure report"
                         }
                     }
                 }
             }
         }
-
     }
 
     post {
         always {
             script {
-                // Archive reports
                 if (fileExists("${REPORTS_DIR}")) {
                     archiveArtifacts artifacts: "${REPORTS_DIR}/**", allowEmptyArchive: true
                 }
@@ -502,10 +465,9 @@ pipeline {
 
                 def buildUrl = env.BUILD_URL
                 def reportLink = "${buildUrl}Playwright_20HTML_20Report/"
-                def allureReportLink = "${buildUrl}allure/"
+                def allureReportLink = "${buildUrl}Allure_20Report/"
                 def buildTime = new Date().format("yyyy-MM-dd HH:mm:ss z")
 
-                // Build concise email with essential information
                 def emailBody = """
 <!DOCTYPE html>
 <html lang="en">
@@ -595,23 +557,6 @@ pipeline {
             text-transform: uppercase;
             margin-top: 4px;
         }
-        .failed-tests {
-            margin: 20px 0;
-        }
-        .failed-tests h3 {
-            color: #F44336;
-            font-size: 14px;
-            margin-bottom: 10px;
-        }
-        .failed-test-item {
-            background: #ffebee;
-            padding: 10px;
-            margin-bottom: 8px;
-            border-left: 4px solid #F44336;
-            border-radius: 4px;
-            font-size: 13px;
-            color: #333;
-        }
         .links {
             margin-top: 20px;
             padding-top: 20px;
@@ -690,7 +635,7 @@ pipeline {
             </div>
 
             <div class="links">
-                <h3>📊 Reports & Artifacts</h3>
+                <h3>Reports & Artifacts</h3>
                 <a href="${reportLink}" class="link-button">Playwright Report</a>
                 <a href="${allureReportLink}" class="link-button">Allure Report</a>
                 <a href="${buildUrl}artifact/${REPORTS_DIR}/" class="link-button">All Artifacts</a>
@@ -699,7 +644,7 @@ pipeline {
         </div>
 
         <div class="footer">
-            <p>Jenkins CI/CD Pipeline • ${env.JOB_NAME}</p>
+            <p>Jenkins CI/CD Pipeline</p>
         </div>
     </div>
 </body>
@@ -718,13 +663,13 @@ pipeline {
         
         success {
             script {
-                echo "✅ Pipeline completed successfully"
+                echo "Pipeline completed successfully"
             }
         }
         
         failure {
             script {
-                echo "❌ Pipeline failed"
+                echo "Pipeline failed"
             }
         }
     }

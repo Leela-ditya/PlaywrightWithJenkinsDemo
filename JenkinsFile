@@ -332,16 +332,11 @@ pipeline {
                         set "failed=0"
                         
                         if exist playwright-report\\index.html (
-                            powershell -NoProfile -ExecutionPolicy Bypass -Command "& { try { [regex]::Matches((Get-Content 'playwright-report\\index.html' -Raw), '(\\d+)\\s+passed') | ForEach-Object { '!passed!' | Out-File -FilePath 'passed.txt' -Encoding ASCII -NoNewline }; } catch { } }"
+                            REM Extract passed count
+                            for /f "tokens=*" %%a in ('powershell -NoProfile -ExecutionPolicy Bypass -Command "([regex]::Matches((Get-Content 'playwright-report\\index.html' -Raw), '(\\d+)\\s+passed'))[0].Groups[1].Value" 2^>nul') do set "passed=%%a"
                             
-                            powershell -NoProfile -ExecutionPolicy Bypass -Command "& { try { [regex]::Matches((Get-Content 'playwright-report\\index.html' -Raw), '(\\d+)\\s+failed') | ForEach-Object { '!failed!' | Out-File -FilePath 'failed.txt' -Encoding ASCII -NoNewline }; } catch { } }"
-                        )
-                        
-                        if exist passed.txt (
-                            for /f "delims=" %%a in (passed.txt) do set "passed=%%a"
-                        )
-                        if exist failed.txt (
-                            for /f "delims=" %%a in (failed.txt) do set "failed=%%a"
+                            REM Extract failed count
+                            for /f "tokens=*" %%a in ('powershell -NoProfile -ExecutionPolicy Bypass -Command "([regex]::Matches((Get-Content 'playwright-report\\index.html' -Raw), '(\\d+)\\s+failed'))[0].Groups[1].Value" 2^>nul') do set "failed=%%a"
                         )
                         
                         if "!passed!"=="" set "passed=0"
@@ -401,16 +396,16 @@ pipeline {
 
                         REM Copy artifacts from test-results
                         if exist test-results (
-                            for /R test-results %%%%f in (*.png) do (
-                                copy "%%%%f" "${REPORTS_DIR}\\screenshots\\" >nul 2>&1
+                            for /R test-results %%f in (*.png) do (
+                                copy "%%f" "${REPORTS_DIR}\\screenshots\\" >nul 2>&1
                             )
                             
-                            for /R test-results %%%%f in (*.webm) do (
-                                copy "%%%%f" "${REPORTS_DIR}\\videos\\" >nul 2>&1
+                            for /R test-results %%f in (*.webm) do (
+                                copy "%%f" "${REPORTS_DIR}\\videos\\" >nul 2>&1
                             )
                             
-                            for /R test-results %%%%f in (*.zip) do (
-                                copy "%%%%f" "${REPORTS_DIR}\\traces\\" >nul 2>&1
+                            for /R test-results %%f in (*.zip) do (
+                                copy "%%f" "${REPORTS_DIR}\\traces\\" >nul 2>&1
                             )
                         )
 

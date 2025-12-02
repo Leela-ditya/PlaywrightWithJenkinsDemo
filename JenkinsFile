@@ -1,3 +1,5 @@
+def testStatusVar = 'UNKNOWN'
+
 pipeline {
     agent any
 
@@ -139,9 +141,11 @@ pipeline {
             """)
 
                     if (exitCode == 0) {
-                        env.TEST_STATUS = 'PASSED'
+                        testStatusVar = 'PASSED'
+                        env.TEST_STATUS = 'PASSED'  // keep env var update too
                         echo '✅ Tests passed'
-            } else {
+                    } else {
+                        testStatusVar = 'FAILED'
                         env.TEST_STATUS = 'FAILED'
                         echo '❌ Tests failed'
                     }
@@ -392,7 +396,7 @@ pipeline {
                     }
 
                     def buildStatus = currentBuild.currentResult
-                    def testStatus = env.TEST_STATUS ?: 'UNKNOWN'
+                    def testStatus = testStatusVar ?: 'UNKNOWN'
                     def statusEmoji = (testStatus == 'PASSED') ? '✅' : '❌'
                     def headerColor = (testStatus == 'PASSED') ? '#4CAF50' : '#F44336'
 

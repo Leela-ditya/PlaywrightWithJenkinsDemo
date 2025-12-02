@@ -79,7 +79,7 @@ pipeline {
                                 def currentCommit = bat(returnStdout: true, script: '''
                                     @echo off
                                     cd /d "%WORKSPACE%"
-                                    git rev-parse HEAD
+                                    git rev-parse HEAD 2>nul || echo "unknown"
                                 ''').trim()
                                 
                                 // Fetch latest changes
@@ -93,19 +93,31 @@ pipeline {
                                 def latestCommit = bat(returnStdout: true, script: """
                                     @echo off
                                     cd /d "%WORKSPACE%"
-                                    git rev-parse origin/${branch}
+                                    git rev-parse origin/${branch} 2>nul || echo "unknown"
                                 """).trim()
                                 
                                 // Check if updates are available
-                                if (!currentCommit.equals(latestCommit)) {
+                                if (!currentCommit.equals(latestCommit) && !currentCommit.equals("unknown")) {
                                     echo "🔄 New changes detected, pulling latest..."
                                     newChanges = true
                                     
-                                    bat """
+                                    // Try normal pull first, then with --allow-unrelated-histories if it fails
+                                    def pullExitCode = bat(returnStatus: true, script: """
                                         @echo off
                                         cd /d "%WORKSPACE%"
                                         git pull origin ${branch} --depth=1 --quiet
-                                    """
+                                        exit /b !ERRORLEVEL!
+                                    """)
+                                    
+                                    if (pullExitCode != 0) {
+                                        echo "ℹ️  Git history mismatch detected, resetting and pulling..."
+                                        bat """
+                                            @echo off
+                                            cd /d "%WORKSPACE%"
+                                            git reset --hard origin/${branch}
+                                            git clean -fd
+                                        """
+                                    }
                                 } else {
                                     echo "✅ No new changes - using last cloned version"
                                     newChanges = false
@@ -118,6 +130,18 @@ pipeline {
                                 if (retryCount < maxRetries) {
                                     echo "⚠️  Fetch attempt ${retryCount} failed, retrying..."
                                     sleep(10)
+                                    // Try to cleanup on retry
+                                    try {
+                                        bat """
+                                            @echo off
+                                            cd /d "%WORKSPACE%"
+                                            if exist .git (
+                                                git reset --hard HEAD 2>nul || echo cleanup attempt
+                                            )
+                                        """
+                                    } catch (Exception cleanup) {
+                                        echo "Cleanup attempt skipped"
+                                    }
                                 } else {
                                     error("Failed to fetch repository after ${maxRetries} attempts: ${e.message}")
                                 }
@@ -141,6 +165,13 @@ pipeline {
                                         [$class: 'CloneOption', depth: 1, noTags: false, reference: '', shallow: true, timeout: 30]
                                     ]
                                 ])
+                                
+                                // Configure git to allow unrelated histories
+                                bat """
+                                    @echo off
+                                    cd /d "%WORKSPACE%"
+                                    git config pull.rebase false
+                                """
                                 
                                 cloneSuccess = true
                                 

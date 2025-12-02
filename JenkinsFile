@@ -73,6 +73,8 @@ pipeline {
                         
                         while (retryCount < maxRetries && !fetchSuccess) {
                             try {
+                                def branch = params.BRANCH ?: "main"
+                                
                                 // Get current commit hash before fetch
                                 def currentCommit = bat(returnStdout: true, script: '''
                                     @echo off
@@ -84,15 +86,15 @@ pipeline {
                                 bat """
                                     @echo off
                                     cd /d "%WORKSPACE%"
-                                    git fetch --depth=1 --quiet
+                                    git fetch origin ${branch} --depth=1 --quiet
                                 """
                                 
                                 // Get latest commit hash
-                                def latestCommit = bat(returnStdout: true, script: '''
+                                def latestCommit = bat(returnStdout: true, script: """
                                     @echo off
                                     cd /d "%WORKSPACE%"
-                                    git rev-parse origin/${params.BRANCH}
-                                ''').trim()
+                                    git rev-parse origin/${branch}
+                                """).trim()
                                 
                                 // Check if updates are available
                                 if (!currentCommit.equals(latestCommit)) {
@@ -102,7 +104,7 @@ pipeline {
                                     bat """
                                         @echo off
                                         cd /d "%WORKSPACE%"
-                                        git pull origin ${params.BRANCH} --depth=1 --quiet
+                                        git pull origin ${branch} --depth=1 --quiet
                                     """
                                 } else {
                                     echo "✅ No new changes - using last cloned version"

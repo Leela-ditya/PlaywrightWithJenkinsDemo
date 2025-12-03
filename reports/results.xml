@@ -1,0 +1,14 @@
+<testsuites id="" name="" tests="1" failures="0" skipped="0" errors="0" time="10.23163">
+<testsuite name="playwrightPractice.spec.ts" timestamp="2025-12-03T05:28:01.950Z" hostname="chromium" tests="1" failures="0" skipped="0" time="6.255" errors="0">
+<testcase name="Files uploading test" classname="playwrightPractice.spec.ts" time="6.255">
+<system-out>
+<![CDATA[Single file selected: playwrightnotes.txt, Size: 1186 bytes, Type: text/plain
+Multiple files selected:
+playwrightnotes.txt, Size: 1186 bytes, Type: text/plain
+notes.txt, Size: 19517 bytes, Type: text/plain
+
+]]>
+</system-out>
+</testcase>
+</testsuite>
+</testsuites>

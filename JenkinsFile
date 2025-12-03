@@ -26,6 +26,11 @@ pipeline {
         SCREENSHOT_COUNT = '0'
         VIDEO_COUNT = '0'
         TRACE_COUNT = '0'
+        TEST_TOTAL = '0'
+        TEST_PASSED = '0'
+        TEST_FAILED = '0'
+        TEST_SKIPPED = '0'
+        BUILD_DURATION = ''
     }
 
     stages {
@@ -118,6 +123,7 @@ pipeline {
                         if exist allure-results rmdir /S /Q allure-results
                         if exist allure-report rmdir /S /Q allure-report
                         if exist test-results rmdir /S /Q test-results
+                        if exist reports rmdir /S /Q reports
                         if exist screenshot_count.txt del screenshot_count.txt
                         if exist video_count.txt del video_count.txt
                         if exist trace_count.txt del trace_count.txt
@@ -135,19 +141,72 @@ pipeline {
                     if (params.TAG?.trim()) { testCmd += " --grep ${params.TAG}" }
                     if (params.SPEC?.trim()) { testCmd += " ${params.SPEC}" }
 
+                    // Mark as UNSTABLE if tests fail, but continue
+                    catchError(buildResult: 'UNSTABLE', stageResult: 'FAILURE') {
+                        bat """
+                            set PATH=%APPDATA%\\npm;%PATH%
+                            ${testCmd}
+                        """
+                    }
+
+                    // Determine test status
                     def exitCode = bat(returnStatus: true, script: """
-                set PATH=%APPDATA%\\npm;%PATH%
-                ${testCmd}
-            """)
+                        set PATH=%APPDATA%\\npm;%PATH%
+                        ${testCmd}
+                    """)
 
                     if (exitCode == 0) {
                         testStatusVar = 'PASSED'
-                        env.TEST_STATUS = 'PASSED'  // keep env var update too
+                        env.TEST_STATUS = 'PASSED'
                         echo '✅ Tests passed'
                     } else {
                         testStatusVar = 'FAILED'
                         env.TEST_STATUS = 'FAILED'
                         echo '❌ Tests failed'
+                    }
+                }
+            }
+        }
+
+        stage('Extract Test Counts from JUnit XML') {
+            steps {
+                script {
+                    catchError(buildResult: 'SUCCESS', stageResult: 'SUCCESS') {
+                        echo '📊 Extracting test counts from JUnit XML...'
+                        
+                        // Check if JUnit XML exists
+                        if (fileExists('reports/results.xml')) {
+                            try {
+                                def testResultSummary = junit(
+                                    testResults: 'reports/results.xml',
+                                    allowEmptyResults: true
+                                )
+
+                                env.TEST_TOTAL = testResultSummary.totalCount?.toString() ?: '0'
+                                env.TEST_FAILED = testResultSummary.failCount?.toString() ?: '0'
+                                env.TEST_SKIPPED = testResultSummary.skipCount?.toString() ?: '0'
+                                env.TEST_PASSED = testResultSummary.passCount?.toString() ?: '0'
+
+                                echo "✅ Test counts extracted:"
+                                echo "   Total: ${env.TEST_TOTAL}"
+                                echo "   Passed: ${env.TEST_PASSED}"
+                                echo "   Failed: ${env.TEST_FAILED}"
+                                echo "   Skipped: ${env.TEST_SKIPPED}"
+                            } catch (Exception e) {
+                                echo "⚠️ Error parsing JUnit XML: ${e.message}"
+                                env.TEST_TOTAL = '0'
+                                env.TEST_PASSED = '0'
+                                env.TEST_FAILED = '0'
+                                env.TEST_SKIPPED = '0'
+                            }
+                        } else {
+                            echo '⚠️ JUnit XML report not found at reports/results.xml'
+                            echo 'Make sure your playwright.config.ts has JUnit reporter configured'
+                            env.TEST_TOTAL = '0'
+                            env.TEST_PASSED = '0'
+                            env.TEST_FAILED = '0'
+                            env.TEST_SKIPPED = '0'
+                        }
                     }
                 }
             }
@@ -166,6 +225,15 @@ pipeline {
                             REM Create clean test-reports directory
                             if exist ${REPORTS_DIR} rmdir /S /Q ${REPORTS_DIR}
                             mkdir ${REPORTS_DIR}
+
+                            REM Copy JUnit XML report
+                            if exist reports\\results.xml (
+                                echo Copying JUnit XML report...
+                                xcopy reports ${REPORTS_DIR}\\reports\\ /E /I /Y /Q
+                                echo ✅ JUnit XML report copied
+                            ) else (
+                                echo ⚠️ JUnit XML report not found
+                            )
 
                             REM Copy only index.html from playwright-report
                             if exist playwright-report\\index.html (
@@ -395,6 +463,9 @@ pipeline {
                         echo '✅ Archived: test-reports folder with all contents'
                     }
 
+                    // Get build duration
+                    env.BUILD_DURATION = currentBuild.durationString.replace(' and counting', '')
+
                     def buildStatus = currentBuild.currentResult
                     def testStatus = testStatusVar ?: 'UNKNOWN'
                     def statusEmoji = (testStatus == 'PASSED') ? '✅' : '❌'
@@ -403,6 +474,10 @@ pipeline {
                     def screenshotCount = env.SCREENSHOT_COUNT ?: '0'
                     def videoCount = env.VIDEO_COUNT ?: '0'
                     def traceCount = env.TRACE_COUNT ?: '0'
+                    def testTotal = env.TEST_TOTAL ?: '0'
+                    def testPassed = env.TEST_PASSED ?: '0'
+                    def testFailed = env.TEST_FAILED ?: '0'
+                    def testSkipped = env.TEST_SKIPPED ?: '0'
 
                     def buildUrl = env.BUILD_URL
                     def playwrightReportLink = "${buildUrl}Playwright_20HTML_20Report/"
@@ -498,6 +573,18 @@ pipeline {
             font-weight: 600;
             color: #333;
         }
+        .summary-item.highlight {
+            background: #e3f2fd;
+            border-left: 4px solid #2196F3;
+        }
+        .summary-item.success {
+            background: #e8f5e9;
+            border-left: 4px solid #4CAF50;
+        }
+        .summary-item.failure {
+            background: #ffebee;
+            border-left: 4px solid #f44336;
+        }
 
         .buttons-section {
             padding: 20px;
@@ -561,13 +648,25 @@ pipeline {
         <div class="summary-section">
             <div class="section-title">📊 Test Summary</div>
             <div class="summary-grid">
+                <div class="summary-item highlight">
+                    <div class="summary-label">Total Tests</div>
+                    <div class="summary-value">${testTotal}</div>
+                </div>
+                <div class="summary-item success">
+                    <div class="summary-label">Passed</div>
+                    <div class="summary-value">${testPassed}</div>
+                </div>
+                <div class="summary-item failure">
+                    <div class="summary-label">Failed</div>
+                    <div class="summary-value">${testFailed}</div>
+                </div>
+                <div class="summary-item">
+                    <div class="summary-label">Skipped</div>
+                    <div class="summary-value">${testSkipped}</div>
+                </div>
                 <div class="summary-item">
                     <div class="summary-label">Build Status</div>
                     <div class="summary-value">${buildStatus}</div>
-                </div>
-                <div class="summary-item">
-                    <div class="summary-label">Test Status</div>
-                    <div class="summary-value">${testStatus}</div>
                 </div>
                 <div class="summary-item">
                     <div class="summary-label">Build Number</div>
@@ -576,6 +675,10 @@ pipeline {
                 <div class="summary-item">
                     <div class="summary-label">Browser</div>
                     <div class="summary-value">${params.BROWSER}</div>
+                </div>
+                <div class="summary-item">
+                    <div class="summary-label">Duration</div>
+                    <div class="summary-value">${env.BUILD_DURATION}</div>
                 </div>
                 <div class="summary-item">
                     <div class="summary-label">Screenshots</div>
@@ -640,13 +743,16 @@ pipeline {
 </html>
                     """
 
+                    // Send email to multiple recipients (comma-separated)
                     emailext(
                         to: params.EMAIL,
-                        subject: "${statusEmoji} Playwright ${testStatus} - Build #${env.BUILD_NUMBER}",
+                        subject: "${statusEmoji} Playwright ${testStatus} - Build #${env.BUILD_NUMBER} - ${testTotal} Tests (✅ ${testPassed} | ❌ ${testFailed})",
                         mimeType: 'text/html',
                         body: emailBody,
                         attachLog: false
                     )
+
+                    echo "✅ Email sent to: ${params.EMAIL}"
                 }
             }
         }

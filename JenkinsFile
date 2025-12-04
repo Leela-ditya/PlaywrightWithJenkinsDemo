@@ -28,25 +28,27 @@ pipeline {
                 script {
                     if (!fileExists("${REPO_DIR}\\.git")) {
                         echo "Cloning repository for the first time..."
-                        bat '''
-                            rmdir /s /q "${REPO_DIR}" 2>nul || true
+                        bat """
+                            if exist "${REPO_DIR}" (
+                                rmdir /s /q "${REPO_DIR}"
+                            )
                             git clone -b ${BRANCH} ${GITHUB_URL} "${REPO_DIR}"
-                        '''
+                        """
                     } else {
                         echo "Repository exists. Checking for changes..."
                         dir("${REPO_DIR}") {
-                            bat '''
-                                git fetch origin %BRANCH%
+                            bat """
+                                git fetch origin ${BRANCH}
                                 for /f %%i in ('git rev-parse HEAD') do set CURRENT_COMMIT=%%i
-                                for /f %%i in ('git rev-parse origin/%BRANCH%') do set REMOTE_COMMIT=%%i
+                                for /f %%i in ('git rev-parse origin/${BRANCH}') do set REMOTE_COMMIT=%%i
                                 
                                 if "%CURRENT_COMMIT%"=="%REMOTE_COMMIT%" (
                                     echo No changes detected. Using existing repository.
                                 ) else (
                                     echo Changes detected. Pulling updates...
-                                    git pull origin %BRANCH%
+                                    git pull origin ${BRANCH}
                                 )
-                            '''
+                            """
                         }
                     }
                 }
@@ -85,9 +87,9 @@ pipeline {
                 script {
                     dir("${REPO_DIR}") {
                         bat '''
-                            rmdir /s /q "reports" 2>nul || true
-                            rmdir /s /q "allure-results" 2>nul || true
-                            rmdir /s /q "test-results" 2>nul || true
+                            if exist "reports" rmdir /s /q "reports"
+                            if exist "allure-results" rmdir /s /q "allure-results"
+                            if exist "test-results" rmdir /s /q "test-results"
                         '''
                     }
                 }
@@ -98,7 +100,7 @@ pipeline {
             steps {
                 script {
                     bat '''
-                        where allure >nul 2>nul
+                        where allure >nul 2>&1
                         if errorlevel 1 (
                             echo Allure not found. Installing...
                             npm install -g allure-commandline
@@ -115,16 +117,16 @@ pipeline {
                 script {
                     dir("${REPO_DIR}") {
                         try {
-                            bat '''
-                                set SPEC_PATTERN=${SPEC}
-                                if "%SPEC_PATTERN%"=="" set SPEC_PATTERN=.
+                            bat """
+                                set "SPEC_PATTERN=${SPEC}"
+                                if "%SPEC_PATTERN%"=="" set "SPEC_PATTERN=."
                                 
                                 if "${BROWSER}"=="all" (
-                                    npx playwright test "%SPEC_PATTERN%" --reporter=html,json,junit,allure > test-output.log 2>&1
+                                    npx playwright test "%SPEC_PATTERN%" --reporter=html,json,junit,allure
                                 ) else (
-                                    npx playwright test "%SPEC_PATTERN%" --project="${BROWSER}" --reporter=html,json,junit,allure > test-output.log 2>&1
+                                    npx playwright test "%SPEC_PATTERN%" --project=${BROWSER} --reporter=html,json,junit,allure
                                 )
-                            '''
+                            """
                         } catch (Exception e) {
                             echo "Tests failed or encountered an error: ${e.message}"
                         }
@@ -138,19 +140,14 @@ pipeline {
                 script {
                     dir("${REPO_DIR}") {
                         bat '''
-                            if exist "reports\\index.html" (
-                                for /f "tokens=*" %%i in ('findstr /c:"passed" reports\\index.html ^| find /c /v ""') do set TOTAL_TESTS=%%i
-                                for /f "tokens=*" %%i in ('findstr /c:"failed" reports\\index.html ^| find /c /v ""') do set FAILED_TESTS=%%i
-                            ) else (
-                                set TOTAL_TESTS=0
-                                set FAILED_TESTS=0
-                            )
-                            set /a PASSED_TESTS=%TOTAL_TESTS%-%FAILED_TESTS%
+                            set TOTAL_TESTS=0
+                            set PASSED_TESTS=0
+                            set FAILED_TESTS=0
                             
                             (
-                                echo TOTAL_TESTS=%TOTAL_TESTS%
-                                echo PASSED_TESTS=%PASSED_TESTS%
-                                echo FAILED_TESTS=%FAILED_TESTS%
+                                echo TOTAL_TESTS=0
+                                echo PASSED_TESTS=0
+                                echo FAILED_TESTS=0
                             ) > test-counts.properties
                         '''
                         
@@ -169,12 +166,7 @@ pipeline {
                     dir("${REPO_DIR}") {
                         bat '''
                             if exist "allure-results" (
-                                dir allure-results | find /c /v "" >nul
-                                if not errorlevel 1 (
-                                    allure generate allure-results -o allure-report --clean
-                                ) else (
-                                    echo No allure results found.
-                                )
+                                allure generate allure-results -o allure-report --clean
                             ) else (
                                 echo No allure results found.
                             )
@@ -187,37 +179,32 @@ pipeline {
         stage('Organize & Copy Reports') {
             steps {
                 script {
-                    bat '''
-                        rmdir /s /q "%FINAL_REPORTS_DIR%" 2>nul || true
-                        mkdir "%FINAL_REPORTS_DIR%"
+                    bat """
+                        if exist "${WORKSPACE}\\reports" rmdir /s /q "${WORKSPACE}\\reports"
+                        mkdir "${WORKSPACE}\\reports"
                         
-                        if exist "%REPO_DIR%\\reports\\index.html" (
-                            copy "%REPO_DIR%\\reports\\index.html" "%FINAL_REPORTS_DIR%\\"
+                        if exist "${REPO_DIR}\\reports\\index.html" (
+                            copy "${REPO_DIR}\\reports\\index.html" "${WORKSPACE}\\reports\\"
                             echo HTML report copied
                         )
                         
-                        if exist "%REPO_DIR%\\allure-report" (
-                            xcopy "%REPO_DIR%\\allure-report" "%FINAL_REPORTS_DIR%\\allure-report" /E /I /Y >nul
-                            
-                            cd "%FINAL_REPORTS_DIR%\\allure-report"
-                            for /f "delims=" %%A in ('cd') do set CURRENT_DIR=%%A
-                            powershell -Command "Add-Type -AssemblyName System.IO.Compression.FileSystem; [System.IO.Compression.ZipFile]::CreateFromDirectory('%%CURRENT_DIR%%', '%%CURRENT_DIR%%\\..\\allure-results.zip')"
-                            cd "%FINAL_REPORTS_DIR%"
-                            echo Allure report zipped
+                        if exist "${REPO_DIR}\\allure-report" (
+                            xcopy "${REPO_DIR}\\allure-report" "${WORKSPACE}\\reports\\allure-report" /E /I /Y >nul
+                            echo Allure report copied
                         )
                         
-                        if exist "%REPO_DIR%\\test-results" (
-                            mkdir "%FINAL_REPORTS_DIR%\\artifacts"
+                        if exist "${REPO_DIR}\\test-results" (
+                            mkdir "${WORKSPACE}\\reports\\artifacts"
                             
-                            for /d %%d in ("%REPO_DIR%\\test-results\\*") do (
-                                if exist "%%d\\screenshots" xcopy "%%d\\screenshots" "%FINAL_REPORTS_DIR%\\artifacts\\screenshots" /E /I /Y >nul 2>&1
-                                if exist "%%d\\video" xcopy "%%d\\video" "%FINAL_REPORTS_DIR%\\artifacts\\video" /E /I /Y >nul 2>&1
-                                if exist "%%d\\trace" xcopy "%%d\\trace" "%FINAL_REPORTS_DIR%\\artifacts\\trace" /E /I /Y >nul 2>&1
+                            for /d %%d in ("${REPO_DIR}\\test-results\\*") do (
+                                if exist "%%d\\screenshots" xcopy "%%d\\screenshots" "${WORKSPACE}\\reports\\artifacts\\screenshots" /E /I /Y >nul 2>&1
+                                if exist "%%d\\video" xcopy "%%d\\video" "${WORKSPACE}\\reports\\artifacts\\video" /E /I /Y >nul 2>&1
+                                if exist "%%d\\trace" xcopy "%%d\\trace" "${WORKSPACE}\\reports\\artifacts\\trace" /E /I /Y >nul 2>&1
                             )
                         )
                         
                         echo Reports organized successfully
-                    '''
+                    """
                 }
             }
         }

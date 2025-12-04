@@ -20,10 +20,6 @@ export default defineConfig({
       outputFolder: 'reports',
       open: "never"
     }],
-    ['json', { 
-      outputFile: 'reports/json-results.json' 
-    }],
-    ['junit', { outputFile: 'reports/results.xml' }],
     ['allure-playwright', {
       detail: true,
       outputFolder: 'allure-results',

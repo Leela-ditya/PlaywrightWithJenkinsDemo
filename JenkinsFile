@@ -122,9 +122,9 @@ pipeline {
                                 if "%SPEC_PATTERN%"=="" set "SPEC_PATTERN=."
                                 
                                 if "${BROWSER}"=="all" (
-                                    npx playwright test "%SPEC_PATTERN%" --reporter=html,json,junit,allure
+                                    npx playwright test "%SPEC_PATTERN%"
                                 ) else (
-                                    npx playwright test "%SPEC_PATTERN%" --project=${BROWSER} --reporter=html,json,junit,allure
+                                    npx playwright test "%SPEC_PATTERN%" --project=${BROWSER}
                                 )
                             """
                         } catch (Exception e) {

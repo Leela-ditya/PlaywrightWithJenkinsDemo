@@ -1,0 +1,821 @@
+def testStatusVar = 'UNKNOWN'
+
+pipeline {
+    agent any
+
+    options {
+        timestamps()
+        durabilityHint('MAX_SURVIVABILITY')
+        buildDiscarder(logRotator(daysToKeepStr: '30'))
+        skipDefaultCheckout()
+        disableConcurrentBuilds()
+        timeout(time: 60, unit: 'MINUTES')
+    }
+
+    parameters {
+        string(name: 'GITHUB_REPO_URL', defaultValue: 'https://github.com/Leela-ditya/PlaywrightWithJenkinsDemo.git', description: 'GitHub Repository URL')
+        string(name: 'BRANCH', defaultValue: 'main', description: 'Branch to checkout')
+        string(name: 'TAG', defaultValue: '', description: 'Test tag to run (e.g., @getByRoleMethod, @builtInLocatorsMethod) - leave empty for all tests')
+        string(name: 'SPEC', defaultValue: '', description: 'Specific .spec.ts file to run (leave empty for all)')
+        string(name: 'EMAIL', defaultValue: 'your-email@gmail.com', description: 'Email recipients (comma-separated for multiple)')
+        choice(name: 'BROWSER', choices: ['chromium', 'firefox', 'webkit', 'all'], description: 'Browser to run tests on')
+        booleanParam(name: 'HEADED', defaultValue: false, description: 'Run tests in headed mode (visible browser)')
+        booleanParam(name: 'DEBUG', defaultValue: false, description: 'Enable debug mode with extra logging')
+    }
+
+    environment {
+        PLAYWRIGHT_REPORTS = 'playwright-artifacts'
+        REPO_CHANGED = 'false'
+        TEST_STATUS = 'UNKNOWN'
+        TEST_TOTAL = '0'
+        TEST_PASSED = '0'
+        TEST_FAILED = '0'
+        TEST_SKIPPED = '0'
+        BUILD_DURATION = ''
+        PATH = "C:\\Program Files\\nodejs;${env.PATH}"
+        CI = 'true'
+    }
+
+    stages {
+        stage('Pre-Build Info') {
+            steps {
+                script {
+                    echo '━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━'
+                    echo '🎭 PLAYWRIGHT TEST EXECUTION PIPELINE'
+                    echo '━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━'
+                    echo "📦 Job Name: ${env.JOB_NAME}"
+                    echo "🔢 Build Number: #${env.BUILD_NUMBER}"
+                    echo "🌿 Branch: ${params.BRANCH}"
+                    echo "🌐 Browser: ${params.BROWSER}"
+                    echo "🏷️  Tag Filter: ${params.TAG ?: 'ALL TESTS'}"
+                    echo "📧 Email Recipients: ${params.EMAIL}"
+                    echo "👁️  Headed Mode: ${params.HEADED}"
+                    echo "🐛 Debug Mode: ${params.DEBUG}"
+                    echo '━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━'
+                }
+            }
+        }
+
+        stage('Git Change Detection & Checkout') {
+            steps {
+                script {
+                    if (fileExists('.git')) {
+                        echo '📂 Existing repository found. Validating...'
+
+                        try {
+                            def remoteCheck = bat(returnStatus: true, script: '@git remote get-url origin >nul 2>&1')
+
+                            if (remoteCheck != 0) {
+                                echo "⚠️ Remote 'origin' not configured. Adding it..."
+                                bat "@git remote add origin ${params.GITHUB_REPO_URL}"
+                            }
+
+                            def currentRemote = bat(returnStdout: true, script: '@git remote get-url origin 2>nul').trim()
+                            if (currentRemote != params.GITHUB_REPO_URL) {
+                                echo '🔄 Remote URL changed. Updating...'
+                                bat "@git remote set-url origin ${params.GITHUB_REPO_URL}"
+                            }
+
+                            echo "🔍 Fetching latest changes from ${params.BRANCH}..."
+                            bat "@git fetch origin ${params.BRANCH}"
+
+                            def localCommit = bat(returnStdout: true, script: '@git rev-parse HEAD 2>nul').trim()
+                            def remoteCommit = bat(returnStdout: true, script: "@git rev-parse origin/${params.BRANCH} 2>nul").trim()
+
+                            echo "Local commit: ${localCommit}"
+                            echo "Remote commit: ${remoteCommit}"
+
+                            if (localCommit != remoteCommit) {
+                                echo '✅ Changes detected! Pulling latest code...'
+                                bat "@git reset --hard origin/${params.BRANCH}"
+                                env.REPO_CHANGED = 'true'
+                            } else {
+                                echo '⏭️ No changes detected. Using existing code.'
+                                env.REPO_CHANGED = 'false'
+                            }
+                        } catch (Exception e) {
+                            echo "❌ Git repository corrupted. Starting fresh... (${e.message})"
+                            deleteDir()
+                            git branch: params.BRANCH, url: params.GITHUB_REPO_URL
+                            env.REPO_CHANGED = 'true'
+                        }
+                    } else {
+                        echo '🆕 No existing repository. Cloning fresh...'
+                        deleteDir()
+                        git branch: params.BRANCH, url: params.GITHUB_REPO_URL
+                        env.REPO_CHANGED = 'true'
+                    }
+                }
+            }
+        }
+
+        stage('Install Dependencies') {
+            steps {
+                script {
+                    echo '📦 Installing dependencies...'
+                    bat '''
+                        @echo off
+                        set PATH=%APPDATA%\\npm;%PATH%
+                        npm install --legacy-peer-deps
+                    '''
+                }
+            }
+        }
+
+        stage('Install Playwright Browsers') {
+            steps {
+                script {
+                    echo '🌐 Installing Playwright browsers...'
+                    bat '''
+                        @echo off
+                        set PATH=%APPDATA%\\npm;%PATH%
+                        npx playwright install --with-deps
+                    '''
+                }
+            }
+        }
+
+        stage('Verify Playwright Installation') {
+            steps {
+                script {
+                    echo '🔍 Verifying Playwright installation...'
+                    bat '''
+                        @echo off
+                        set PATH=%APPDATA%\\npm;%PATH%
+                        npx playwright --version
+                    '''
+                }
+            }
+        }
+
+        stage('Clean Previous Reports') {
+            steps {
+                script {
+                    echo '🗑️ Cleaning all previous reports and artifacts...'
+                    bat '''
+                        @echo off
+                        REM Delete old reports and results
+                        if exist "playwright-artifacts" rmdir /S /Q "playwright-artifacts" 2>nul
+                        if exist "playwright-report" rmdir /S /Q "playwright-report" 2>nul
+                        if exist "reports" rmdir /S /Q "reports" 2>nul
+                        if exist "allure-results" rmdir /S /Q "allure-results" 2>nul
+                        if exist "allure-report" rmdir /S /Q "allure-report" 2>nul
+                        if exist "test-results" rmdir /S /Q "test-results" 2>nul
+                        
+                        echo ✅ All previous reports cleaned
+                    '''
+                }
+            }
+        }
+
+        stage('Run Playwright Tests') {
+            steps {
+                script {
+                    def browserProjects = params.BROWSER == 'all' ? '' : "--project=${params.BROWSER}"
+                    def testCmd = "npx playwright test ${browserProjects}"
+                    
+                    if (params.TAG?.trim()) { 
+                        testCmd += " --grep \"${params.TAG}\"" 
+                    }
+                    
+                    if (params.SPEC?.trim()) { 
+                        testCmd += " ${params.SPEC}" 
+                    }
+                    
+                    if (params.HEADED) {
+                        testCmd += " --headed"
+                    }
+                    
+                    if (params.DEBUG) {
+                        testCmd += " --debug"
+                    }
+
+                    echo "🧪 Running command: ${testCmd}"
+                    echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
+
+                    // Run tests and capture result, but continue pipeline
+                    def exitCode = bat(returnStatus: true, script: """
+                        @echo off
+                        set PATH=%APPDATA%\\npm;%PATH%
+                        ${testCmd}
+                    """)
+
+                    if (exitCode == 0) {
+                        testStatusVar = 'PASSED'
+                        env.TEST_STATUS = 'PASSED'
+                        echo '✅ Tests PASSED'
+                    } else {
+                        testStatusVar = 'FAILED'
+                        env.TEST_STATUS = 'FAILED'
+                        currentBuild.result = 'UNSTABLE'
+                        echo '❌ Tests FAILED'
+                    }
+                    echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
+                }
+            }
+        }
+
+        stage('Extract Test Counts from JUnit XML') {
+            steps {
+                script {
+                    catchError(buildResult: 'SUCCESS', stageResult: 'SUCCESS') {
+                        echo '📊 Extracting test counts from JUnit XML report...'
+                        
+                        if (fileExists('reports/results.xml')) {
+                            try {
+                                def testResultSummary = junit(
+                                    testResults: 'reports/results.xml',
+                                    allowEmptyResults: true,
+                                    keepLongStdout: true
+                                )
+
+                                if (testResultSummary != null) {
+                                    env.TEST_TOTAL = (testResultSummary.totalCount ?: 0).toString()
+                                    env.TEST_PASSED = (testResultSummary.passCount ?: 0).toString()
+                                    env.TEST_FAILED = (testResultSummary.failCount ?: 0).toString()
+                                    env.TEST_SKIPPED = (testResultSummary.skipCount ?: 0).toString()
+                                } else {
+                                    echo '⚠️ Test result summary is empty'
+                                    // Try to parse XML manually as fallback
+                                    def xmlContent = readFile(file: 'reports/results.xml')
+                                    def testsuites = xmlContent =~ /testsuite[^>]*tests="(\d+)"[^>]*failures="(\d+)"[^>]*skipped="(\d+)"/
+                                    
+                                    if (testsuites) {
+                                        env.TEST_TOTAL = testsuites[0][1]
+                                        env.TEST_FAILED = testsuites[0][2]
+                                        env.TEST_SKIPPED = testsuites[0][3]
+                                        env.TEST_PASSED = (env.TEST_TOTAL.toInteger() - env.TEST_FAILED.toInteger() - env.TEST_SKIPPED.toInteger()).toString()
+                                    }
+                                }
+
+                                echo '✅ Test counts extracted:'
+                                echo "   Total: ${env.TEST_TOTAL}"
+                                echo "   Passed: ${env.TEST_PASSED}"
+                                echo "   Failed: ${env.TEST_FAILED}"
+                                echo "   Skipped: ${env.TEST_SKIPPED}"
+                            } catch (Exception e) {
+                                echo "⚠️ Error parsing JUnit XML: ${e.message}"
+                                env.TEST_TOTAL = '0'
+                                env.TEST_PASSED = '0'
+                                env.TEST_FAILED = '0'
+                                env.TEST_SKIPPED = '0'
+                            }
+                        } else {
+                            echo '⚠️ JUnit XML report not found at reports/results.xml'
+                            echo '💡 Verify your playwright.config.ts includes:'
+                            echo "   ['junit', { outputFile: 'reports/results.xml' }]"
+                            env.TEST_TOTAL = '0'
+                            env.TEST_PASSED = '0'
+                            env.TEST_FAILED = '0'
+                            env.TEST_SKIPPED = '0'
+                        }
+                    }
+                }
+            }
+        }
+
+        stage('Generate Allure Report CLI') {
+            steps {
+                script {
+                    catchError(buildResult: 'SUCCESS', stageResult: 'SUCCESS') {
+                        if (fileExists('allure-results')) {
+                            echo '📊 Generating Allure report using CLI...'
+                            bat '''
+                                @echo off
+                                set PATH=%APPDATA%\\npm;%PATH%
+                                
+                                where allure >nul 2>&1
+                                if %ERRORLEVEL% NEQ 0 (
+                                    echo Installing Allure CLI globally...
+                                    npm install -g allure-commandline --force
+                                )
+                                
+                                if exist allure-report rmdir /S /Q allure-report 2>nul
+                                allure generate allure-results --clean -o allure-report
+                                echo ✅ Allure report generated successfully
+                            '''
+                        } else {
+                            echo '⚠️ Allure results directory not found'
+                            echo '💡 Verify your playwright.config.ts includes:'
+                            echo "   ['allure-playwright', { outputFolder: 'allure-results' }]"
+                        }
+                    }
+                }
+            }
+        }
+
+        stage('Organize & Copy Reports') {
+            steps {
+                script {
+                    catchError(buildResult: 'SUCCESS', stageResult: 'SUCCESS') {
+                        bat '''
+                            @echo off
+                            setlocal enabledelayedexpansion
+                            
+                            echo ==========================================
+                            echo Organizing Test Reports
+                            echo ==========================================
+
+                            REM Create main artifacts directory
+                            if exist "playwright-artifacts" rmdir /S /Q "playwright-artifacts" 2>nul
+                            mkdir "playwright-artifacts"
+
+                            REM Copy JUnit XML report
+                            if exist "reports\\results.xml" (
+                                echo Copying JUnit XML report...
+                                mkdir "playwright-artifacts\\junit-results" 2>nul
+                                xcopy "reports\\results.xml" "playwright-artifacts\\junit-results\\" /Y /Q
+                                echo ✅ JUnit XML report copied
+                            ) else (
+                                echo ⚠️ JUnit XML report not found at reports/results.xml
+                            )
+
+                            REM Copy Playwright HTML Report
+                            if exist "reports\\index.html" (
+                                echo Copying Playwright HTML report...
+                                if exist "playwright-artifacts\\playwright-report" rmdir /S /Q "playwright-artifacts\\playwright-report" 2>nul
+                                xcopy "reports\\*" "playwright-artifacts\\playwright-report\\" /E /I /Y /Q
+                                echo ✅ Playwright HTML report copied
+                            ) else (
+                                echo ⚠️ Playwright HTML report not found
+                            )
+
+                            REM Copy Allure Results for Jenkins Allure Plugin
+                            if exist "allure-results" (
+                                echo Copying Allure results for Jenkins plugin...
+                                if exist "playwright-artifacts\\allure-results" rmdir /S /Q "playwright-artifacts\\allure-results" 2>nul
+                                xcopy "allure-results\\*" "playwright-artifacts\\allure-results\\" /E /I /Y /Q
+                                
+                                if exist "playwright-artifacts\\allure-results" (
+                                    echo ✅ Allure results copied successfully
+                                ) else (
+                                    echo ❌ Failed to copy Allure results
+                                )
+                            ) else (
+                                echo ⚠️ Allure results directory not found
+                            )
+
+                            REM Copy Allure Report HTML (if generated)
+                            if exist "allure-report\\index.html" (
+                                echo Copying Allure HTML report...
+                                if exist "playwright-artifacts\\allure-report" rmdir /S /Q "playwright-artifacts\\allure-report" 2>nul
+                                xcopy "allure-report\\*" "playwright-artifacts\\allure-report\\" /E /I /Y /Q
+                                echo ✅ Allure HTML report copied
+                            ) else (
+                                echo ⚠️ Allure report HTML not found
+                            )
+
+                            REM Create ZIP archives for downloads
+                            echo Creating report ZIP archives...
+                            powershell -Command "if (Test-Path 'allure-report') { Compress-Archive -Path 'allure-report\\*' -DestinationPath 'playwright-artifacts\\allure-report.zip' -Force; Write-Host '✅ Allure report ZIP created' }" 2>nul || echo ⚠️ Allure ZIP not created
+                            
+                            powershell -Command "if (Test-Path 'reports') { Compress-Archive -Path 'reports\\*' -DestinationPath 'playwright-artifacts\\playwright-report.zip' -Force; Write-Host '✅ Playwright report ZIP created' }" 2>nul || echo ⚠️ Playwright ZIP not created
+
+                            echo.
+                            echo ==========================================
+                            echo Final Report Structure:
+                            echo ==========================================
+                            dir "playwright-artifacts" /B
+                            echo ==========================================
+                        '''
+                    }
+                }
+            }
+        }
+
+        stage('Publish Reports') {
+            steps {
+                script {
+                    catchError(buildResult: 'SUCCESS', stageResult: 'SUCCESS') {
+                        // Publish Playwright HTML Report
+                        if (fileExists("playwright-artifacts/playwright-report/index.html")) {
+                            publishHTML(target: [
+                                reportDir: "playwright-artifacts/playwright-report",
+                                reportFiles: 'index.html',
+                                reportName: 'Playwright Report',
+                                allowMissing: false,
+                                keepAll: true,
+                                alwaysLinkToLastBuild: true
+                            ])
+                            echo '✅ Playwright Report published'
+                        } else {
+                            echo '⚠️ Playwright HTML report not found'
+                        }
+
+                        // Publish Allure Report using Jenkins Plugin
+                        def allureResultsPaths = [
+                            "playwright-artifacts/allure-results",
+                            "allure-results"
+                        ]
+                        
+                        def allurePathFound = null
+                        for (path in allureResultsPaths) {
+                            if (fileExists(path)) {
+                                allurePathFound = path
+                                echo "✅ Found Allure results at: ${path}"
+                                break
+                            }
+                        }
+
+                        if (allurePathFound) {
+                            try {
+                                echo "🔍 Publishing Allure report from: ${allurePathFound}"
+                                
+                                allure([
+                                    includeProperties: false,
+                                    jdk: '',
+                                    properties: [],
+                                    reportBuildPolicy: 'ALWAYS',
+                                    results: [[path: allurePathFound]]
+                                ])
+                                echo '✅ Allure Report published via Jenkins Plugin'
+                                echo "📊 View at: ${env.BUILD_URL}allure"
+                            } catch (Exception e) {
+                                echo "⚠️ Allure Plugin error: ${e.message}"
+                                echo "💡 Install Allure plugin: Manage Jenkins > Plugins > Search 'Allure'"
+                                echo '📦 Allure ZIP available in Build Artifacts'
+                            }
+                        } else {
+                            echo '⚠️ Allure results not found for publishing'
+                        }
+                    }
+                }
+            }
+        }
+
+        stage('Archive Artifacts') {
+            steps {
+                script {
+                    catchError(buildResult: 'SUCCESS', stageResult: 'SUCCESS') {
+                        if (fileExists("playwright-artifacts")) {
+                            archiveArtifacts artifacts: "playwright-artifacts/**", allowEmptyArchive: true
+                            echo '✅ All reports archived as build artifacts'
+                        } else {
+                            echo '⚠️ No artifacts to archive'
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    post {
+        always {
+            script {
+                catchError(buildResult: 'SUCCESS', stageResult: 'SUCCESS') {
+                    // Get build duration
+                    env.BUILD_DURATION = currentBuild.durationString.replace(' and counting', '')
+
+                    def buildStatus = currentBuild.currentResult
+                    def testStatus = testStatusVar ?: 'UNKNOWN'
+                    def statusEmoji = (testStatus == 'PASSED') ? '✅' : (testStatus == 'FAILED') ? '❌' : '⚠️'
+                    def headerColor = (testStatus == 'PASSED') ? '#4CAF50' : (testStatus == 'FAILED') ? '#F44336' : '#FF9800'
+
+                    def testTotal = env.TEST_TOTAL ?: '0'
+                    def testPassed = env.TEST_PASSED ?: '0'
+                    def testFailed = env.TEST_FAILED ?: '0'
+                    def testSkipped = env.TEST_SKIPPED ?: '0'
+
+                    def buildUrl = env.BUILD_URL
+                    def playwrightReportLink = "${buildUrl}Playwright_20Report/"
+                    def allureReportLink = "${buildUrl}allure/"
+                    def allureZipLink = "${buildUrl}artifact/playwright-artifacts/allure-report.zip"
+                    def playwrightZipLink = "${buildUrl}artifact/playwright-artifacts/playwright-report.zip"
+                    def junitReportLink = "${buildUrl}artifact/playwright-artifacts/junit-results/results.xml"
+                    def artifactsLink = "${buildUrl}artifact/playwright-artifacts/"
+                    def consoleLogLink = "${buildUrl}console"
+
+                    def repoChangeStatus = (env.REPO_CHANGED == 'true') ?
+                        '✅ New changes detected and tested' :
+                        '⏭️ No changes - reused existing code'
+
+                    def buildTime = new Date().format('EEE MMM dd HH:mm:ss z yyyy')
+
+                    def emailBody = """
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Playwright Test Report</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Arial, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: #333;
+            padding: 20px;
+            margin: 0;
+        }
+        .email-container {
+            max-width: 700px;
+            margin: 0 auto;
+            background-color: #ffffff;
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.2);
+        }
+
+        .header {
+            background: ${headerColor};
+            padding: 40px 30px;
+            text-align: center;
+            color: #ffffff;
+        }
+        .header-icon {
+            font-size: 56px;
+            margin-bottom: 15px;
+        }
+        .header h1 {
+            font-size: 28px;
+            font-weight: 700;
+            margin: 10px 0;
+        }
+        .status-badge {
+            display: inline-block;
+            padding: 10px 24px;
+            background: rgba(255, 255, 255, 0.2);
+            border-radius: 25px;
+            font-size: 16px;
+            font-weight: 700;
+            margin-top: 12px;
+            letter-spacing: 1px;
+        }
+
+        .summary-section {
+            padding: 30px;
+        }
+        .section-title {
+            font-size: 20px;
+            font-weight: 700;
+            margin-bottom: 20px;
+            color: #333;
+            border-bottom: 3px solid #667eea;
+            padding-bottom: 10px;
+        }
+        .summary-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr 1fr;
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+        .summary-item {
+            background: #f8f9fa;
+            padding: 18px;
+            border-radius: 10px;
+            border-left: 5px solid #ddd;
+            text-align: center;
+        }
+        .summary-label {
+            font-size: 12px;
+            color: #666;
+            margin-bottom: 8px;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+        .summary-value {
+            font-size: 28px;
+            font-weight: 700;
+            color: #333;
+        }
+        .summary-item.highlight {
+            background: #e3f2fd;
+            border-left-color: #2196F3;
+        }
+        .summary-item.success {
+            background: #e8f5e9;
+            border-left-color: #4CAF50;
+        }
+        .summary-item.failure {
+            background: #ffebee;
+            border-left-color: #f44336;
+        }
+        .summary-item.warning {
+            background: #fff3e0;
+            border-left-color: #FF9800;
+        }
+
+        .test-details {
+            background: #f8f9fa;
+            padding: 20px;
+            border-radius: 10px;
+            margin-bottom: 20px;
+            border-left: 5px solid #667eea;
+        }
+        .detail-row {
+            display: flex;
+            justify-content: space-between;
+            padding: 10px 0;
+            border-bottom: 1px solid #e0e0e0;
+            font-size: 14px;
+        }
+        .detail-row:last-child {
+            border-bottom: none;
+        }
+        .detail-label {
+            font-weight: 600;
+            color: #555;
+        }
+        .detail-value {
+            color: #333;
+        }
+
+        .buttons-section {
+            padding: 30px;
+            background: #f8f9fa;
+        }
+        .button-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 12px;
+        }
+        .report-button {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 14px 16px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: #ffffff !important;
+            text-decoration: none;
+            border-radius: 8px;
+            font-weight: 600;
+            font-size: 13px;
+            transition: all 0.3s;
+            box-shadow: 0 4px 12px rgba(102, 126, 234, 0.3);
+        }
+        .report-button:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 6px 16px rgba(102, 126, 234, 0.4);
+        }
+        .button-icon {
+            margin-right: 8px;
+            font-size: 18px;
+        }
+
+        .footer {
+            padding: 25px;
+            text-align: center;
+            background: #f8f9fa;
+            border-top: 1px solid #e0e0e0;
+        }
+        .footer-text {
+            font-size: 12px;
+            color: #666;
+            margin: 6px 0;
+        }
+
+        @media only screen and (max-width: 600px) {
+            .summary-grid,
+            .button-grid {
+                grid-template-columns: 1fr;
+            }
+            .summary-grid {
+                grid-template-columns: 1fr 1fr;
+            }
+            .header {
+                padding: 30px 20px;
+            }
+            .summary-section,
+            .buttons-section,
+            .footer {
+                padding: 20px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="email-container">
+        <div class="header">
+            <div class="header-icon">${statusEmoji}</div>
+            <h1>Playwright Test Report</h1>
+            <div class="status-badge">${testStatus}</div>
+        </div>
+
+        <div class="summary-section">
+            <div class="section-title">📊 Test Execution Summary</div>
+            
+            <div class="summary-grid">
+                <div class="summary-item highlight">
+                    <div class="summary-label">Total Tests</div>
+                    <div class="summary-value">${testTotal}</div>
+                </div>
+                <div class="summary-item success">
+                    <div class="summary-label">Passed</div>
+                    <div class="summary-value">${testPassed}</div>
+                </div>
+                <div class="summary-item failure">
+                    <div class="summary-label">Failed</div>
+                    <div class="summary-value">${testFailed}</div>
+                </div>
+            </div>
+
+            <div class="test-details">
+                <div class="detail-row">
+                    <span class="detail-label">🏷️ Skipped Tests:</span>
+                    <span class="detail-value">${testSkipped}</span>
+                </div>
+                <div class="detail-row">
+                    <span class="detail-label">🔢 Build Number:</span>
+                    <span class="detail-value">#${env.BUILD_NUMBER}</span>
+                </div>
+                <div class="detail-row">
+                    <span class="detail-label">🌐 Browser:</span>
+                    <span class="detail-value">${params.BROWSER}</span>
+                </div>
+                <div class="detail-row">
+                    <span class="detail-label">🌿 Branch:</span>
+                    <span class="detail-value">${params.BRANCH}</span>
+                </div>
+                <div class="detail-row">
+                    <span class="detail-label">⏱️ Duration:</span>
+                    <span class="detail-value">${env.BUILD_DURATION}</span>
+                </div>
+                <div class="detail-row">
+                    <span class="detail-label">🔄 Repository Status:</span>
+                    <span class="detail-value" style="font-size: 12px;">${repoChangeStatus}</span>
+                </div>
+                <div class="detail-row">
+                    <span class="detail-label">🕐 Build Time:</span>
+                    <span class="detail-value">${buildTime}</span>
+                </div>
+            </div>
+        </div>
+
+        <div class="buttons-section">
+            <div class="section-title">📄 View Reports & Artifacts</div>
+            <div class="button-grid">
+                <a href="${playwrightReportLink}" class="report-button">
+                    <span class="button-icon">📊</span>
+                    Playwright Report
+                </a>
+                <a href="${allureReportLink}" class="report-button">
+                    <span class="button-icon">📈</span>
+                    Allure Report
+                </a>
+                <a href="${allureZipLink}" class="report-button">
+                    <span class="button-icon">📥</span>
+                    Allure ZIP
+                </a>
+                <a href="${playwrightZipLink}" class="report-button">
+                    <span class="button-icon">📥</span>
+                    Playwright ZIP
+                </a>
+                <a href="${artifactsLink}" class="report-button">
+                    <span class="button-icon">📁</span>
+                    All Artifacts
+                </a>
+                <a href="${consoleLogLink}" class="report-button">
+                    <span class="button-icon">💻</span>
+                    Console Log
+                </a>
+            </div>
+        </div>
+
+        <div class="footer">
+            <div class="footer-text">🤖 Automated Playwright CI/CD Pipeline on Windows Jenkins</div>
+            <div class="footer-text">📧 Build #${env.BUILD_NUMBER} - ${env.JOB_NAME}</div>
+            <div class="footer-text">Generated: ${buildTime}</div>
+        </div>
+    </div>
+</body>
+</html>
+                    """
+
+                    // Send email to multiple recipients
+                    emailext(
+                        to: params.EMAIL,
+                        subject: "${statusEmoji} Playwright ${testStatus} - Build #${env.BUILD_NUMBER} - Tests: ${testTotal} (✅ ${testPassed} | ❌ ${testFailed})",
+                        mimeType: 'text/html',
+                        body: emailBody,
+                        attachLog: (testStatus == 'FAILED'),
+                        compressLog: true
+                    )
+
+                    echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
+                    echo "✅ Email notification sent to: ${params.EMAIL}"
+                    echo "📊 Test Results:"
+                    echo "   Total: ${testTotal} | Passed: ${testPassed} | Failed: ${testFailed} | Skipped: ${testSkipped}"
+                    echo "🔗 Jenkins Build URL: ${buildUrl}"
+                    echo "📈 Reports: Playwright & Allure available in Build Reports"
+                    echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
+                }
+            }
+        }
+
+        success {
+            echo '🎉 Pipeline completed successfully!'
+            echo '✅ All tests passed - Build is healthy'
+        }
+
+        failure {
+            echo '💥 Pipeline failed!'
+            echo '❌ Check console logs for details'
+        }
+
+        unstable {
+            echo '⚠️ Pipeline unstable - some tests failed'
+            echo '❌ Review test results and fix failures'
+        }
+    }
+}

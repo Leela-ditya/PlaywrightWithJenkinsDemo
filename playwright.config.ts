@@ -18,11 +18,11 @@ export default defineConfig({
   reporter: [
     ['html', {
       outputFolder: 'reports',
-      open: "always"
+      open: "never"
     }],
-    // ['json', { 
-    //   outputFile: 'reports/json-results.json' 
-    // }],
+    ['json', { 
+      outputFile: 'reports/json-results.json' 
+    }],
     ['junit', { outputFile: 'reports/results.xml' }],
     ['allure-playwright', {
       detail: true,
